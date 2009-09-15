@@ -6,7 +6,9 @@ class Reader
   end
   
   def next
-    @file.getc.chr
+    char = @file.getc
+    return char.chr if char
+    nil
   end
   
   def method_missing(sym, *args, &block)

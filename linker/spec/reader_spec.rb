@@ -1,18 +1,10 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-FIXTURES = File.dirname(__FILE__) + '/fixtures/'
-
 describe Reader do
   
   before do
     @file_name = FIXTURES + '__fixture__.txt'
-    File.open(@file_name, 'w') {|f| f.write("a.txt") }
-    
-    @file = File.open(@file_name, 'w+')
-    @file.puts("1 xy 2\n")
-    @file.puts("2 z xy\n")
-    @file.puts("5 R 1004  I 5678  E 2000  R 8002  E 7001\n")
-    @file.rewind
+    @file = create_basic_file(@file_name)
   end
 
   after do
@@ -32,6 +24,21 @@ describe Reader do
     it "should return 1" do
       r = Reader.new(@file_name)
       r.next.should == "1"
+    end
+    
+    describe "end of file reached" do
+      before(:each) do
+        File.open(FIXTURES + "_a_.txt", 'w') {|f| f.write("a") }
+      end
+      after(:each) do
+        File.delete(FIXTURES + "_a_.txt")
+      end
+      it "should return nil" do
+        r = Reader.new(FIXTURES + "_a_.txt")
+        r.next
+        
+        r.next.should be_nil
+      end
     end
   end
   
