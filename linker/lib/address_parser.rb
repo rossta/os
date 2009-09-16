@@ -1,12 +1,14 @@
+require File.dirname(__FILE__) + '/parsing'
+
 class AddressParser
-  WHITE_SPACE = /[ \n\r]/
-  DIGIT       = /[0-9]/
-  WORD_CHAR   = /[A-Za-z0-9_]/
+  include Parsing
   
   attr_reader :reader
+  attr_accessor :base_address, :modules, :symbols, :errors
   
   def initialize(reader)
     @reader = reader
+    @base_address = 0
   end
   
   def symbols
@@ -17,44 +19,39 @@ class AddressParser
     @modules ||= []
   end
   
-  def base_address
-    @base_address ||= 0
+  def errors
+    @errors ||= {}
   end
   
   def parse
     while (@char = reader.next)
-      consume_module
+      detect_symbols
+      detect_base_addresses
     end
   end
 
 private
 
-  def consume_module
-    detect_symbols
-    detect_module_size
-  end
-  
   def detect_symbols
     parse_number.times do |i|
       symbol           = parse_word
-      symbols[symbol]  = parse_number + base_address
+      if symbols[symbol]
+        errors[symbol] = "This variable is multiply defined; first value used."
+      else
+        symbols[symbol] = parse_number + @base_address
+      end
     end
   end
   
-  def detect_module_size
+  def detect_base_addresses
     skip_use_list
-    module_size = parse_number
+    skip_program(module_size = parse_number)
     @base_address += module_size
-    skip_program(module_size)
-    modules << ObjectModule.new(module_size)
+    modules << ObjectModule.new(@base_address)
   end
   
   def skip_use_list
-    skip_words(parse_number)
-  end
-  
-  def skip_words(count = 1)
-    count.times { |i| parse_word }
+    parse_number.times { |i| parse_word }
   end
   
   def skip_program(count = 0)
@@ -63,31 +60,5 @@ private
       parse_number
     end
   end
-  
-  def parse_number
-    skip_white_space
-    num = ''
-    while DIGIT.match @char
-      num += @char
-      @char = reader.next
-    end
-    num.to_i
-  end
-  
-  def parse_word
-    skip_white_space
-    word = ''
-    while WORD_CHAR.match @char
-      word += @char
-      @char = reader.next
-    end
-    word
-  end
-  
-  def skip_white_space
-    while WHITE_SPACE.match @char
-      @char = reader.next
-    end
-  end
-  
+    
 end
