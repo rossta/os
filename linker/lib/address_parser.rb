@@ -1,22 +1,19 @@
-require File.dirname(__FILE__) + '/parsing'
+require File.dirname(__FILE__) + '/parser'
 
-class AddressParser
-  include Parsing
+class AddressParser < Parser
+  attr_accessor :base_address
   
-  attr_reader :reader
-  attr_accessor :base_address, :modules, :symbols, :errors
-  
-  def initialize(reader)
-    @reader = reader
+  def initialize(linker)
     @base_address = 0
+    super(linker)
   end
   
   def symbols
-    @symbols ||= {}
+    linker.symbols
   end
   
   def modules
-    @modules ||= []
+    linker.modules
   end
   
   def errors
@@ -28,6 +25,10 @@ class AddressParser
       detect_symbols
       detect_base_addresses
     end
+  end
+  
+  def reader
+    linker.reader
   end
 
 private

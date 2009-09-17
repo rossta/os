@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 module AddressParserHelper
   def parser_symbols_should_equal_symbols(input, symbols)
-    parser = AddressParser.new(Reader.new(FIXTURES + input))
+    parser = AddressParser.new(Linker.new(FIXTURES + input))
     parser.parse
     symbols.keys.each do |key|
       parser.symbols[key].should == symbols[key]
@@ -21,8 +21,8 @@ describe AddressParser do
   
   describe "initialize" do
     it "should set reader" do
-      parser = AddressParser.new(:reader)
-      parser.reader.should == :reader
+      parser = AddressParser.new(:linker)
+      parser.linker.should == :linker
     end
   end
   
@@ -60,7 +60,7 @@ describe AddressParser do
       
       describe "errors" do
         it "should return multiply defined error on symbols['X21']" do
-          parser = AddressParser.new(Reader.new(FIXTURES + 'input_4.txt'))
+          parser = AddressParser.new(Linker.new(FIXTURES + 'input_4.txt'))
           parser.parse
           parser.errors['X21'].should == "This variable is multiply defined; first value used."
         end
@@ -95,7 +95,7 @@ describe AddressParser do
       end
       describe "errors" do
         it "should be blank" do
-          parser = AddressParser.new(Reader.new(FIXTURES + 'input_7.txt'))
+          parser = AddressParser.new(Linker.new(FIXTURES + 'input_7.txt'))
           parser.parse
           parser.errors.should be_empty
         end
@@ -104,7 +104,7 @@ describe AddressParser do
 
     describe "input 8" do
       it "should return correct values for input 8 symbols" do
-        parser = AddressParser.new(Reader.new(FIXTURES + 'input_8.txt'))
+        parser = AddressParser.new(Linker.new(FIXTURES + 'input_8.txt'))
         parser.parse
         parser.symbols.should be_empty
       end
@@ -115,7 +115,7 @@ describe AddressParser do
   describe "modules" do
     describe "input 1.txt" do
       before(:each) do
-        @parser = AddressParser.new(Reader.new(FIXTURES + 'input_1.txt'))
+        @parser = AddressParser.new(Linker.new(FIXTURES + 'input_1.txt'))
         @parser.parse
       end
       it "should return 4 modules" do
@@ -127,7 +127,7 @@ describe AddressParser do
     end
     describe "input 2.txt" do
       before(:each) do
-        @parser = AddressParser.new(Reader.new(FIXTURES + 'input_2.txt'))
+        @parser = AddressParser.new(Linker.new(FIXTURES + 'input_2.txt'))
         @parser.parse
         @addrs = [5,11,13,16]
       end
@@ -140,7 +140,7 @@ describe AddressParser do
     end
     describe "input 3.txt" do
       before(:each) do
-        @parser = AddressParser.new(Reader.new(FIXTURES + 'input_3.txt'))
+        @parser = AddressParser.new(Linker.new(FIXTURES + 'input_3.txt'))
         @parser.parse
         @addrs = [10, 18, 21, 27, 30, 36]
       end
@@ -153,7 +153,7 @@ describe AddressParser do
     end
     describe "input 4.txt" do
       before(:each) do
-        @parser = AddressParser.new(Reader.new(FIXTURES + 'input_4.txt'))
+        @parser = AddressParser.new(Linker.new(FIXTURES + 'input_4.txt'))
         @parser.parse
         @addrs = [3, 4, 5]
       end

@@ -1,16 +1,7 @@
-require File.dirname(__FILE__) + '/parsing'
+require File.dirname(__FILE__) + '/parser'
 
-class MemoryParser
-  include Parsing
-  
-  attr_accessor :reader, :symbols, :modules
-  
-  def initialize(reader, symbols, modules)
-    @reader = reader
-    @symbols = symbols
-    @modules = modules
-  end
-  
+class MemoryParser < Parser
+
   def parse
     while(@char = reader.next)
       modules.each do |object_module|
@@ -31,8 +22,13 @@ private
   def detect_instructions(object_module)
     parse_number.times do |i|
       type = parse_word
-      address = parse_number
-      object_module.instructions << ObjectModule::Instruction.new(type, address) 
+      word = parse_word
+      
+      instruction = object_module.create_instruction(type, word)
+      if instruction.address > 600
+        instruction.errors << "Absolute address exceeds machine size; zero used."
+        instruction.address = 0
+      end
     end
   end
   
