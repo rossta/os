@@ -43,8 +43,10 @@ describe MemoryParser do
         end
         it "should set correct address first module" do
           %w[1004 5678 2000 8002 7001].each_with_index do |addr, i|
+            pending
             instruction = @first_module.instructions[i]
-            instruction.word.should == addr
+            word = instruction.word
+            word.should == addr
           end
         end
         it "should have size 6 for second module" do
