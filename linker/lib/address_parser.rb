@@ -7,28 +7,12 @@ class AddressParser < Parser
     @base_address = 0
     super(linker)
   end
-  
-  def symbols
-    linker.symbols
-  end
-  
-  def modules
-    linker.modules
-  end
-  
-  def errors
-    @errors ||= {}
-  end
-  
+   
   def parse
     while (@char = reader.next)
       detect_symbols
       detect_base_addresses
     end
-  end
-  
-  def reader
-    linker.reader
   end
 
 private
@@ -37,7 +21,7 @@ private
     parse_number.times do |i|
       symbol           = parse_word
       if symbols[symbol]
-        errors[symbol] = "This variable is multiply defined; first value used."
+        symbols.errors[symbol] = "Error: This variable is multiply defined; first value used."
       else
         symbols[symbol] = parse_number + @base_address
       end
@@ -48,7 +32,7 @@ private
     skip_use_list
     skip_program(module_size = parse_number)
     @base_address += module_size
-    modules << ObjectModule.new(@base_address)
+    memory_map << ProgramModule.new(@base_address)
   end
   
   def skip_use_list

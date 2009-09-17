@@ -1,4 +1,4 @@
-class ObjectModule
+class ProgramModule
   attr_reader :base_address
   
   def initialize(base_address = 0)
@@ -15,6 +15,10 @@ class ObjectModule
   
   def size
     instructions.size
+  end
+  
+  def errors
+    @errors ||= {}
   end
   
   def create_instruction(type, address)

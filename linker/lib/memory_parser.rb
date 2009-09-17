@@ -4,7 +4,7 @@ class MemoryParser < Parser
 
   def parse
     while(@char = reader.next)
-      modules.each do |object_module|
+      memory_map.each do |object_module|
         detect_uses(object_module)
         detect_instructions(object_module)
       end

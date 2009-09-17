@@ -13,8 +13,8 @@ class Parser
     linker.symbols
   end
   
-  def modules
-    linker.modules
+  def memory_map
+    linker.memory_map
   end
   
   def errors

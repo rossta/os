@@ -11,7 +11,7 @@ module AddressParserHelper
   
   def parser_base_addresses_should_equal(parser, addresses)
     addresses.each_with_index do |addr, i|
-      parser.modules[i].base_address.should == addr
+      parser.memory_map[i].base_address.should == addr
     end
   end
 end
@@ -62,7 +62,7 @@ describe AddressParser do
         it "should return multiply defined error on symbols['X21']" do
           parser = AddressParser.new(Linker.new(FIXTURES + 'input_4.txt'))
           parser.parse
-          parser.errors['X21'].should == "This variable is multiply defined; first value used."
+          parser.symbols.errors['X21'].should == "Error: This variable is multiply defined; first value used."
         end
       end
     end
@@ -112,14 +112,14 @@ describe AddressParser do
     
   end
   
-  describe "modules" do
+  describe "memory_map" do
     describe "input 1.txt" do
       before(:each) do
         @parser = AddressParser.new(Linker.new(FIXTURES + 'input_1.txt'))
         @parser.parse
       end
       it "should return 4 modules" do
-        @parser.modules.length.should == 4
+        @parser.memory_map.length.should == 4
       end
       it "should set correct module addrs" do
         parser_base_addresses_should_equal(@parser, [5,11,13,16])
@@ -132,7 +132,7 @@ describe AddressParser do
         @addrs = [5,11,13,16]
       end
       it "should return 4 modules" do
-        @parser.modules.length.should == @addrs.length
+        @parser.memory_map.length.should == @addrs.length
       end
       it "should set correct module addrs" do
         parser_base_addresses_should_equal(@parser, @addrs)
@@ -145,7 +145,7 @@ describe AddressParser do
         @addrs = [10, 18, 21, 27, 30, 36]
       end
       it "should return 4 modules" do
-        @parser.modules.length.should == @addrs.length
+        @parser.memory_map.length.should == @addrs.length
       end
       it "should set correct module addrs" do
         parser_base_addresses_should_equal(@parser, @addrs)
@@ -158,7 +158,7 @@ describe AddressParser do
         @addrs = [3, 4, 5]
       end
       it "should return 4 modules" do
-        @parser.modules.length.should == @addrs.length
+        @parser.memory_map.length.should == @addrs.length
       end
       it "should set correct module addrs" do
         parser_base_addresses_should_equal(@parser, @addrs)

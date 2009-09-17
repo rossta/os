@@ -7,15 +7,15 @@ describe MemoryParser do
     end
   end
 
-  describe "modules" do
+  describe "memory_map" do
     describe "input 1" do
       before(:each) do
         linker = Linker.new(FIXTURES + 'input_1.txt')
-        linker.modules = [ObjectModule.new,ObjectModule.new,ObjectModule.new,ObjectModule.new]
+        4.times { |i| linker.memory_map << ProgramModule.new }
         @parser = MemoryParser.new(linker)
         @parser.parse
-        @first_module = linker.modules[0]
-        @second_module = linker.modules[1]
+        @first_module = linker.memory_map[0]
+        @second_module = linker.memory_map[1]
       end
       describe "uses" do
         it "should return 2 uses for first module" do
@@ -67,9 +67,9 @@ describe MemoryParser do
     # describe "errors" do
     #   describe "input 4" do
     #     it "should validate address < MACHINE_SIZE" do
-    #       error_module = ObjectModule.new(1)
-    #       modules = [ObjectModule.new, error_module, ObjectModule.new]
-    #       parser = MemoryParser.new(Reader.new(FIXTURES + 'input_4.txt'), {}, modules)
+    #       error_module = ProgramModule.new(1)
+    #       memory_map = [ProgramModule.new, error_module, ProgramModule.new]
+    #       parser = MemoryParser.new(Reader.new(FIXTURES + 'input_4.txt'), {}, memory_map)
     #       parser.parse
     #     
     #       error_module.instructions[0].error_message.should == "Absolute address exceeds machine size; zero used."
@@ -77,17 +77,17 @@ describe MemoryParser do
     #   end
     #   describe "input 5" do
     #     it "should validate X21 not defined" do
-    #       error_module = ObjectModule.new(1)
-    #       modules = [error_module, ObjectModule.new, ObjectModule.new]
-    #       parser = MemoryParser.new(Reader.new(FIXTURES + 'input_5.txt'), { "X31" => 4 }, modules)
+    #       error_module = ProgramModule.new(1)
+    #       memory_map = [error_module, ProgramModule.new, ProgramModule.new]
+    #       parser = MemoryParser.new(Reader.new(FIXTURES + 'input_5.txt'), { "X31" => 4 }, memory_map)
     #       parser.parse
     # 
     #       error_module.instructions[0].error_message.should == "X21 is not defined; zero used."
     #     end
     #     it "should validate address < MACHINE_SIZE" do
-    #       error_module = ObjectModule.new(1)
-    #       modules = [ObjectModule.new, error_module, ObjectModule.new]
-    #       parser = MemoryParser.new(Reader.new(FIXTURES + 'input_5.txt'), {}, modules)
+    #       error_module = ProgramModule.new(1)
+    #       memory_map = [ProgramModule.new, error_module, ProgramModule.new]
+    #       parser = MemoryParser.new(Reader.new(FIXTURES + 'input_5.txt'), {}, memory_map)
     #       parser.parse
     #     
     #       error_module.instructions[0].error_message.should == "Absolute address exceeds machine size; zero used."

@@ -1,24 +1,23 @@
 class Linker
   attr_reader :reader
-  attr_accessor :symbols, :modules
   
   def initialize(file_name)
     @reader = Reader.new(file_name)
   end
   
   def link
-    parse_addresses
-    parse_memory
+    address_parser.parse
+    memory_parser.parse
     
-    map_memory
+    memory_map.map
   end
   
   def symbols
-    @symbols ||= {}
+    @symbols ||= SymbolTable.new
   end
   
-  def modules
-    @modules ||= []
+  def memory_map
+    @memory_map ||= MemoryMap.new
   end
   
   def errors
@@ -26,30 +25,17 @@ class Linker
   end
   
   def to_s
-    symbols_to_s + "\n" + modules_to_s + "\n"
+    symbols.to_s + memory_map.to_s
   end
   
 private
   
-  def parse_addresses
-    address_parser = AddressParser.new(linker)
-    address_parser.parse
+  def address_parser
+    @address_parser ||= AddressParser.new(self)
   end
   
-  def parse_memory
-    memory_parser = MemoryParser.new(linker)
-    memory_parser.parse
+  def memory_parser
+    @memory_parser ||= MemoryParser.new(self)
   end
   
-  def map_memory
-    
-  end
-  
-  def symbols_to_s
-    "Symbol Table"
-  end
-  
-  def modules_to_s
-    "Memory Map"
-  end
 end
