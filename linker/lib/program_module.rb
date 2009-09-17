@@ -27,15 +27,29 @@ class ProgramModule
     instruction
   end
   
+  def to_s
+    text = instructions.map do |inst|
+      "#{base_address + instructions.index(inst)}:  " + inst.to_s
+    end
+    text.join("\n") + "\n"
+  end
+  
   class Instruction
-    attr_accessor :type, :address, :word
+    attr_accessor :type, :address, :op_code
     def initialize(type, word)
       @type = type
-      @word = word
+      @op_code = word.slice(0, 1).to_i
+      @address = word.slice(1, 3).to_i
     end
     
-    def address
-      @address ||= word.slice(1, 3).to_i
+    def word
+      "#{op_code}#{format("%03d", address)}"
+    end
+    
+    def to_s
+      text = word
+      text += " " + errors.join(" ") if errors.any?
+      text
     end
     
     def errors
@@ -43,7 +57,7 @@ class ProgramModule
     end
     
     def error_message
-      errors.join(". ")
+      errors.join(" ")
     end
   end
 end
