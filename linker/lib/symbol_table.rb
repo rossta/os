@@ -1,7 +1,7 @@
 class SymbolTable
   
-  def initialize
-    @symbols = {}
+  def self.symbols
+    @@symbols ||= SymbolTable.new
   end
   
   def []=(key, value)
@@ -29,4 +29,9 @@ class SymbolTable
   def method_missing(sym, *args, &block)
     @symbols.send sym, *args, &block
   end
+  
+  def initialize
+    @symbols = {}
+  end
+  
 end

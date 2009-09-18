@@ -1,5 +1,11 @@
 class MemoryMap
   
+  def self.memory
+    @@memory ||= MemoryMap.new
+  end
+  
+  attr_reader :modules
+  
   def initialize
     @modules = []
   end
@@ -13,15 +19,15 @@ class MemoryMap
   end
   
   def map
-    
+    @modules.each { |m| m.map }
   end
   
   def to_s
-    result = ["Memory Map"]
+    result = ["Memory Map", "\n"]
     @modules.each do |program_module|
       result << program_module.to_s
     end
-    result.join("\n") + "\n"
+    result.join("")
   end
   
   def method_missing(sym, *args, &block)

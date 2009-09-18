@@ -13,6 +13,7 @@ class AddressParser < Parser
       detect_symbols
       detect_base_addresses
     end
+    reader.file.rewind
   end
 
 private
@@ -31,8 +32,8 @@ private
   def detect_base_addresses
     skip_use_list
     skip_program(module_size = parse_number)
-    @base_address += module_size
     memory_map << ProgramModule.new(@base_address)
+    @base_address += module_size
   end
   
   def skip_use_list

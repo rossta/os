@@ -3,32 +3,29 @@ require File.dirname(__FILE__) + '/parser'
 class MemoryParser < Parser
 
   def parse
-    while(@char = reader.next)
-      memory_map.each do |object_module|
-        detect_uses(object_module)
-        detect_instructions(object_module)
-      end
+    @char = reader.next
+    memory_map.modules.each do |program_module|
+      detect_uses(program_module)
+      detect_instructions(program_module)
     end
+    reader.file.rewind
   end
   
 private
-  def detect_uses(object_module)
+  def detect_uses(program_module)
     skip_symbols
     parse_number.times do |i|
-      object_module.uses << parse_word
+      program_module.uses << parse_word
     end
   end
   
-  def detect_instructions(object_module)
+  def detect_instructions(program_module)
     parse_number.times do |i|
       type = parse_word
-      word = parse_word
+      word = parse_number
       
-      instruction = object_module.create_instruction(type, word)
-      if instruction.address > 600
-        instruction.errors << "Absolute address exceeds machine size; zero used."
-        instruction.address = 0
-      end
+      instruction = program_module.create_instruction(type, word)
+      instruction.validate!
     end
   end
   

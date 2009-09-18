@@ -13,11 +13,11 @@ class Linker
   end
   
   def symbols
-    @symbols ||= SymbolTable.new
+    SymbolTable.symbols
   end
   
   def memory_map
-    @memory_map ||= MemoryMap.new
+    MemoryMap.memory
   end
   
   def errors
@@ -25,7 +25,7 @@ class Linker
   end
   
   def to_s
-    symbols.to_s + memory_map.to_s
+    symbols.to_s + "\n"+ memory_map.to_s
   end
   
 private

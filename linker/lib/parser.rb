@@ -10,11 +10,11 @@ class Parser
   end
   
   def symbols
-    linker.symbols
+    SymbolTable.symbols
   end
   
   def memory_map
-    linker.memory_map
+    MemoryMap.memory
   end
   
   def errors
