@@ -4,6 +4,10 @@ class SymbolTable
     @@symbols ||= SymbolTable.new
   end
   
+  def self.clear
+    @@symbols = SymbolTable.new
+  end
+  
   def []=(key, value)
     @symbols[key] = value
   end
@@ -19,7 +23,7 @@ class SymbolTable
       text += " " + errors[key] if !errors[key].nil?
       result << text
     end
-    result.join("\n") + "\n"
+    result.join("\n")
   end
   
   def errors

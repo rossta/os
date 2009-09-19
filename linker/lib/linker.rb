@@ -25,7 +25,7 @@ class Linker
   end
   
   def to_s
-    symbols.to_s + "\n"+ memory_map.to_s
+    symbols.to_s + "\n" + "\n"+ memory_map.to_s + "\n"
   end
   
 private

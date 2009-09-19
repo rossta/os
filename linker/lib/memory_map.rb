@@ -23,11 +23,11 @@ class MemoryMap
   end
   
   def to_s
-    result = ["Memory Map", "\n"]
+    result = ["Memory Map"]
     @modules.each do |program_module|
       result << program_module.to_s
     end
-    result.join("")
+    result.join("\n")
   end
   
   def method_missing(sym, *args, &block)

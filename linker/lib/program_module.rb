@@ -44,7 +44,7 @@ class ProgramModule
       t += (index > 9) ? ": " : ":  "
       t += instr.to_s
     end
-    text.join("\n") + "\n"
+    text.join("\n")
   end
   
 end

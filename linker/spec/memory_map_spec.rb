@@ -25,7 +25,7 @@ describe MemoryMap do
       map << mock(ProgramModule, :to_s => "1:  5678")
       map << mock(ProgramModule, :to_s => "2:  2015")
 
-      map.to_s.should == "Memory Map\n0:  1004\n1:  5678\n2:  2015\n"
+      map.to_s.should == "Memory Map\n0:  1004\n1:  5678\n2:  2015"
     end
   end
 end

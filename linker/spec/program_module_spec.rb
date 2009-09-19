@@ -84,14 +84,14 @@ describe ProgramModule do
       mod.instructions << mock(Instruction, :to_s => "1000")
       mod.instructions << mock(Instruction, :to_s => "1020")
       mod.instructions << mock(Instruction, :to_s => "1012")
-      mod.to_s.should == "0:  1000\n1:  1020\n2:  1012\n"
+      mod.to_s.should == "0:  1000\n1:  1020\n2:  1012"
     end
     it "should print instructions numbered from base address 3" do
       mod = ProgramModule.new(3)
       mod.instructions << mock(Instruction, :to_s => "1000")
       mod.instructions << mock(Instruction, :to_s => "1020")
       mod.instructions << mock(Instruction, :to_s => "1012")
-      mod.to_s.should == "3:  1000\n4:  1020\n5:  1012\n"
+      mod.to_s.should == "3:  1000\n4:  1020\n5:  1012"
     end
   end
 
