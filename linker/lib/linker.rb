@@ -6,6 +6,8 @@ class Linker
   end
   
   def link
+    clear!
+    
     address_parser.parse
     memory_parser.parse
     
@@ -22,6 +24,10 @@ class Linker
   
   def errors
     @errors ||= {}
+  end
+  
+  def clear!
+    [SymbolTable, MemoryMap].each { |clearable| clearable.clear! }
   end
   
   def to_s

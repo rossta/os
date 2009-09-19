@@ -4,7 +4,7 @@ class Instruction
   def initialize(type, word)
     @type = type
     @address = word % 1000
-    @op_code = (word - address) / 1000
+    @op_code = (word - @address) / 1000
   end
   
   def to_s

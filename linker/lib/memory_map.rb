@@ -4,6 +4,10 @@ class MemoryMap
     @@memory ||= MemoryMap.new
   end
   
+  def self.clear!
+    @@memory = MemoryMap.new
+  end
+  
   attr_reader :modules
   
   def initialize

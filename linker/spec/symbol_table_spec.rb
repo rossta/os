@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe SymbolTable do
   before(:each) do
-    SymbolTable.clear
+    SymbolTable.clear!
   end
   
   describe "self.symbols" do

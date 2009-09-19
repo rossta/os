@@ -4,7 +4,7 @@ class SymbolTable
     @@symbols ||= SymbolTable.new
   end
   
-  def self.clear
+  def self.clear!
     @@symbols = SymbolTable.new
   end
   

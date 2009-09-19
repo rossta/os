@@ -32,6 +32,12 @@ class ProgramModule
   end
   
   def create_instruction(type, address)
+    if address.nil?
+      puts "type " + type
+      puts "base address " + base_address
+      throw StandardError
+    end
+    
     instruction = Instruction.new(type, address)
     instructions << instruction
     instruction
