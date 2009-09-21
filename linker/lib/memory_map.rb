@@ -14,10 +14,6 @@ class MemoryMap
     MemoryMap.memory << program_module
   end
   
-  def self.all_uses
-    memory.modules.map { |m| m.uses }.flatten!.uniq!
-  end
-  
   def self.validate!
     uses = memory.modules.map { |m| m.uses }.flatten!.uniq
     unused_symbols = SymbolTable.symbols.keys.find_all { |sym| !uses.include?(sym) }
@@ -28,7 +24,7 @@ class MemoryMap
   end
   
   def self.warnings
-    @warnings ||= []
+    memory.warnings
   end
   
   attr_reader :modules
@@ -51,6 +47,10 @@ class MemoryMap
       result << program_module.to_s
     end
     result.join("\n")
+  end
+  
+  def warnings
+    @warnings ||= []
   end
   
   def method_missing(sym, *args, &block)

@@ -36,28 +36,6 @@ describe MemoryMap do
     end
   end
 
-  describe "all_uses" do
-    before(:each) do
-      MemoryMap.memory << mock(ProgramModule, :uses => [:x, :y])
-      MemoryMap.memory << mock(ProgramModule, :uses => [:y, :z])
-      MemoryMap.memory << mock(ProgramModule, :uses => [:a, :x])
-    end
-
-    it "should return one of each symbol" do
-      MemoryMap.all_uses.size.should == 4
-    end
-
-    it "should all symbols in program module use lists" do
-      # MemoryMap.all_uses.should include([:x, :y])
-      # MemoryMap.all_uses.should include([:y, :z])
-      # MemoryMap.all_uses.should include([:a, :x])
-      MemoryMap.all_uses.should include(:x)
-      MemoryMap.all_uses.should include(:y)
-      MemoryMap.all_uses.should include(:z)
-      MemoryMap.all_uses.should include(:a)
-    end
-  end
-
   describe "<<" do
     it "should append module" do
       map = MemoryMap.memory
