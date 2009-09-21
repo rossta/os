@@ -10,11 +10,7 @@ class Parser
   end
   
   def symbols
-    SymbolTable.symbols
-  end
-  
-  def memory_map
-    MemoryMap.memory
+    @symbols ||= {}
   end
   
   def errors

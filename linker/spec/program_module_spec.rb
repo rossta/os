@@ -30,7 +30,7 @@ describe ProgramModule do
     it "should set symbol address for instruction type E" do
       mod = ProgramModule.new
       mod.uses << "x"
-      SymbolTable.symbols["x"] = 15
+      SymbolTable.table["x"] = 15
       instr = mod.create_instruction("E", 2000)
       mod.map
       instr.address.should == 15
@@ -40,8 +40,8 @@ describe ProgramModule do
       mod = ProgramModule.new
       mod.uses << "x"
       mod.uses << "y"
-      SymbolTable.symbols["x"] = 15
-      SymbolTable.symbols["y"] = 4
+      SymbolTable.table["x"] = 15
+      SymbolTable.table["y"] = 4
       instr = mod.create_instruction("E", 2001)
       mod.map
       instr.address.should == 4
@@ -92,6 +92,20 @@ describe ProgramModule do
       mod.instructions << mock(Instruction, :to_s => "1020")
       mod.instructions << mock(Instruction, :to_s => "1012")
       mod.to_s.should == "3:  1000\n4:  1020\n5:  1012"
+    end
+  end
+  
+  describe "defines?" do
+    it "should return true if symbol is in module symbols" do
+      mod = ProgramModule.new
+      mod.symbols = { :x => 1, :y => 2 }
+      mod.defines?(:x).should be_true
+    end
+    
+    it "should return false if symbol is not in module symbols" do
+      mod = ProgramModule.new
+      mod.symbols = { :x => 1, :y => 2 }
+      mod.defines?(:z).should be_false
     end
   end
 

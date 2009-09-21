@@ -11,15 +11,8 @@ class Linker
     address_parser.parse
     memory_parser.parse
     
-    memory_map.map
-  end
-  
-  def symbols
-    SymbolTable.symbols
-  end
-  
-  def memory_map
-    MemoryMap.memory
+    MemoryMap.memory.map
+    MemoryMap.validate!
   end
   
   def errors
@@ -31,7 +24,20 @@ class Linker
   end
   
   def to_s
-    symbols.to_s + "\n" + "\n"+ memory_map.to_s + "\n"
+    output = SymbolTable.table.to_s
+    output += "\n" + "\n"
+    output += MemoryMap.memory.to_s
+    output += "\n"
+    output += "\n" + MemoryMap.warnings.join("\n") + "\n" if !MemoryMap.warnings.empty?
+    output
+  end
+  
+  def symbols
+    SymbolTable.table
+  end
+  
+  def memory_map
+    MemoryMap.memory
   end
   
 private

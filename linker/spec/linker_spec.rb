@@ -14,19 +14,22 @@ describe Linker do
     end
   end
   describe "link" do
-    describe "input 1" do
-      it "should match output 1" do
-        linker = Linker.new(FIXTURES + 'input_1.txt')
-        linker.link
-        linker.to_s.should == File.open(FIXTURES + 'output_1.txt').read
+    describe "inputs" do
+      it "should match output 1 for input 1" do
+        linker_output_should_match_expected_output_for("input_1")
       end
-    end
-    describe "input 2" do
-      it "should match output 2" do
-        linker = Linker.new(FIXTURES + 'input_2.txt')
-        linker.link
-        linker.to_s.should == File.open(FIXTURES + 'output_2.txt').read
+      it "should match output 2 for input 2" do
+        linker_output_should_match_expected_output_for("input_2")
+      end
+      it "should match output 3 for input 3" do
+        linker_output_should_match_expected_output_for("input_3")
       end
     end
   end
+end
+
+def linker_output_should_match_expected_output_for(input)
+  linker = Linker.new(FIXTURES + "#{input}.txt")
+  linker.link
+  linker.to_s.should == File.open(FIXTURES + "output_#{input.match(/[0-9]+/)[0]}.txt").read
 end

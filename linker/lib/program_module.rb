@@ -1,8 +1,12 @@
 class ProgramModule
-  attr_reader :base_address
+  attr_accessor :base_address, :symbols
   
   def initialize(base_address = 0)
     @base_address = base_address
+  end
+  
+  def symbols
+    @symbols ||= {}
   end
   
   def uses
@@ -22,9 +26,13 @@ class ProgramModule
       type = instr.type
       case type
       when InstructionType::R then instr.address += base_address
-      when InstructionType::E then instr.address = SymbolTable.symbols[uses[instr.address]]
+      when InstructionType::E then instr.address = SymbolTable.table[uses[instr.address]]
       end
     end
+  end
+  
+  def defines?(symbol)
+    symbols.keys.include?(symbol)
   end
   
   def errors
