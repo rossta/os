@@ -24,9 +24,9 @@ private
       type = parse_word
       word = parse_number
       
-      instruction = program_module.create_instruction(type, word)
-      instruction.validate!
+      program_module.create_instruction(type, word)
     end
+    program_module.map_instructions
   end
   
   def skip_symbols

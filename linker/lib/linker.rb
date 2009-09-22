@@ -11,7 +11,7 @@ class Linker
     address_parser.parse
     memory_parser.parse
     
-    MemoryMap.memory.map
+    # MemoryMap.memory.map
     MemoryMap.validate!
   end
   

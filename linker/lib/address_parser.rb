@@ -22,7 +22,7 @@ private
     module_symbols = {}
     parse_number.times do |i|
       symbol           = parse_word
-      if SymbolTable.contains?(symbol)
+      if SymbolTable.defines?(symbol)
         SymbolTable.errors[symbol] = "Error: This variable is multiply defined; first value used."
       else
         module_symbols[symbol] = parse_number + @base_address

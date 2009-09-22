@@ -21,20 +21,9 @@ class ProgramModule
     instructions.size
   end
   
-  def map
+  def map_instructions
     instructions.each do |instr|
-      type = instr.type
-      case type
-      when InstructionType::R then instr.address += base_address
-      when InstructionType::E then 
-        if addr = SymbolTable.table[uses[instr.address]]
-          instr.address = addr
-        else
-          instr.address = 0
-          instr.errors << "Error: #{uses[instr.address]} is not defined; zero used."
-        end
-        
-      end
+      instr.update_address(:symbol => uses[instr.address], :base_address => base_address, :size => size)
     end
   end
   

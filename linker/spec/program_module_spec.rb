@@ -19,69 +19,6 @@ describe ProgramModule do
     end
   end
 
-  describe "map" do
-    it "should add base address for instruction type R" do
-      mod = ProgramModule.new(4)
-      instr = mod.create_instruction("R", 1500)
-      mod.map
-      instr.address.should == 504
-      instr.word.should == 1504
-    end
-    it "should leave symbol address alone for instruction type A" do
-      mod = ProgramModule.new
-      instr = mod.create_instruction("A", 2007)
-      mod.map
-      instr.address.should == 7
-      instr.word.should == 2007
-    end
-    it "should leave symbol address alone for instruction type I" do
-      mod = ProgramModule.new
-      instr = mod.create_instruction("I", 2007)
-      mod.map
-      instr.address.should == 7
-      instr.word.should == 2007
-    end
-    describe "instruction type E" do
-      before(:each) do
-        @table = mock(SymbolTable)
-        SymbolTable.stub!(:table).and_return(@table)
-      end
-      it "should set symbol address from use list index 0" do
-        mod = ProgramModule.new
-        mod.uses << "x"
-        @table.stub!("[]").with("x").and_return(15)
-        instr = mod.create_instruction("E", 2000)
-        mod.map
-        instr.address.should == 15
-        instr.word.should == 2015
-      end
-      it "should set symbol address from use list index 1" do
-        mod = ProgramModule.new
-        mod.uses << "x"
-        mod.uses << "y"
-        @table.stub!("[]").with("x").and_return(15)
-        @table.stub!("[]").with("y").and_return(4)
-        instr = mod.create_instruction("E", 2001)
-        mod.map
-        instr.address.should == 4
-        instr.word.should == 2004
-      end
-      it "should set symbol address to 0, add error if symbol not in table" do
-        mod = ProgramModule.new
-        mod.uses << "x"
-        @table.stub!("[]").with("y").and_return(15)
-        @table.stub!("[]").with("x").and_return(nil)
-        instr = mod.create_instruction("E", 2000)
-        
-        mod.map
-        
-        instr.address.should == 0
-        instr.word.should == 2000
-        instr.errors.should_not be_empty
-        instr.errors[0].should == "Error: x is not defined; zero used."
-      end
-    end
-  end
 
   describe "create_instruction" do
     it "should return new Instruction" do

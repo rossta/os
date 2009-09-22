@@ -12,8 +12,12 @@ class SymbolTable
     table.symbols
   end
   
-  def self.contains?(symbol)
-    !table[symbol].nil?
+  def self.defines?(symbol)
+    !address(symbol).nil?
+  end
+  
+  def self.address(symbol)
+    table[symbol]
   end
   
   def self.errors
