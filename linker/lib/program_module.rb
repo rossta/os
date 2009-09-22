@@ -51,13 +51,13 @@ class ProgramModule
     text.join("\n")
   end
   
-  def unused_uses
-    unused_uses = uses
+  def unused_symbols
+    unused_symbols = uses
     e_instructions = instructions.find_all { |instr| instr.type == InstructionType::E && instr.valid? }
-    return [] if e_instructions.empty?
     e_instructions.each do |instr|
-      unused_uses[instr.address] = nil if unused_uses[instr.address]
+      unused_symbols[instr.original_address] = nil if unused_symbols[instr.original_address]
     end
-    unused_uses.compact
+    unused_symbols.map! { |sym| SymbolTable.defines?(sym) ? sym : nil }
+    unused_symbols.compact
   end
 end

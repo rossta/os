@@ -20,11 +20,10 @@ class MemoryMap
     unused_definitions.sort.each do |sym|
       warnings << "Warning: #{sym} was defined in module #{definition_index(sym)} but never used."
     end
-    
-    unused_uses = memory.modules.map { |m| m.unused_uses }.flatten
-    
-    unused_uses.each do |sym|
-      # warnings << "Warning: In module #{use_index(sym)} #{sym} appeared in the use list but was not actually used."
+    memory.modules.each_with_index do |m, i|
+      m.unused_symbols.each do |sym|
+        warnings << "Warning: In module #{i + 1} #{sym} appeared in the use list but was not actually used."
+      end
     end
   end
   
@@ -66,10 +65,6 @@ protected
   
   def self.definition_index(symbol)
     module_index( memory.modules.detect { |pm| pm.defines?(symbol) } )
-  end
-  
-  def self.use_index(symbol)
-    module_index( memory.modules.detect { |pm| pm.uses.include?(symbol) })
   end
   
   def self.module_index(program_module)

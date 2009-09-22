@@ -9,7 +9,6 @@ class LinkerRunner
     @stdin = stdin
   end
 
-  # Parse options, check arguments, then process the command
   def run
     if arguments_valid? 
       process_arguments

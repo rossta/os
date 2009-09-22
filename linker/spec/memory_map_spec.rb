@@ -22,9 +22,9 @@ describe MemoryMap do
     
     describe "unused definition warnings" do
       before(:each) do
-        warning_module = mock(ProgramModule, :uses => ["X24"], :unused_uses => [])
+        warning_module = mock(ProgramModule, :uses => ["X24"], :unused_symbols => [])
         warning_module.stub!(:defines?).with("Unused").and_return(true)
-        MemoryMap.memory << mock(ProgramModule, :uses => ["X23"], :defines? => false, :unused_uses => [])
+        MemoryMap.memory << mock(ProgramModule, :uses => ["X23"], :defines? => false, :unused_symbols => [])
         MemoryMap.memory << warning_module
         SymbolTable.stub!(:symbols).and_return({"X23" => 23, "X24" => 24, "Unused" => 0})
       end
@@ -42,10 +42,10 @@ describe MemoryMap do
     
     describe "unused uses warnings" do
       before(:each) do
-        warning_module = mock(ProgramModule, :uses => ["Unused"], :unused_uses => ["Unused"])
+        warning_module = mock(ProgramModule, :uses => ["Unused"], :unused_symbols => ["Unused"])
         warning_module.stub!(:defines?).with("Unused").and_return(true)
         
-        MemoryMap.memory << mock(ProgramModule, :uses => ["X24"], :unused_uses => [], :defines? => false)
+        MemoryMap.memory << mock(ProgramModule, :uses => ["X24"], :unused_symbols => [], :defines? => false)
         MemoryMap.memory << warning_module
         SymbolTable.stub!(:symbols).and_return({"X24" => 24, "Unused" => 1})
       end
