@@ -55,6 +55,11 @@ protected
   end
   
   def validate_and_update_external_address(symbol)
+    if symbol.nil?
+      errors << "Error: External address exceeds length of use list; treated as immediate."
+      return
+    end
+      
     if addr = SymbolTable.address(symbol)
       @address = addr
     else

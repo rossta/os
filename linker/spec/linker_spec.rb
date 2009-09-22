@@ -33,15 +33,12 @@ describe Linker do
       it "should match output 6 for input 6" do
         linker_output_should_match_expected_output_for("input_6")
       end
-      # it "should match output 7 for input 7" do
-      #   pending 
-      #   linker_output_should_match_expected_output_for("input_7")
-      # end
-      # it "should match output 8 for input 8" do
-      #   # Relative exceeds mem size error
-      #   pending 
-      #   linker_output_should_match_expected_output_for("input_8")
-      # end
+      it "should match output 7 for input 7" do
+        linker_output_should_match_expected_output_for("input_7")
+      end
+      it "should match output 8 for input 8" do
+        linker_output_should_match_expected_output_for("input_8")
+      end
       # it "should match output 9 for input 9" do
       #   # Relative exceeds mem size error
       #   pending 

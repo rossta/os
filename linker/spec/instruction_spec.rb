@@ -87,7 +87,7 @@ describe "Instruction" do
         it "should add error if relative address > module size" do
           instr = Instruction.new("R", 5006)
           instr.update_address(:symbol => "x", :base_address => 1, :size => 5)
-          instr.errors[0].should == "Error: Relative address exceeds module size; zero used."
+          instr.errors.first.should == "Error: Relative address exceeds module size; zero used."
         end
       end
     end
@@ -96,17 +96,34 @@ describe "Instruction" do
         SymbolTable.stub!(:address).with("x").and_return(15)
         SymbolTable.stub!(:address).with("y").and_return(4)
         instr = Instruction.new("E", 5005)
-        instr.update_address(:symbol => "x", :base_address => 3)
+        instr.update_address(:symbol => "x")
         instr.address.should == 15
       end
       it "should set to external address, non-zero index" do
         SymbolTable.stub!(:address).with("x").and_return(15)
         SymbolTable.stub!(:address).with("y").and_return(4)
         instr = Instruction.new("E", 2001)
-        instr.update_address(:symbol => "y", :base_address => 3)
+        instr.update_address(:symbol => "y")
         instr.address.should == 4
       end
-      describe "symbol not defined" do
+      describe "symbol nil" do
+        it "should treat address as immediate" do
+          instr = Instruction.new("E", 5006)
+          instr.update_address(:symbol => nil)
+          instr.address.should == 6
+        end
+        it "should add error" do
+          instr = Instruction.new("E", 5006)
+          instr.update_address(:symbol => nil)
+          instr.errors.should_not be_empty
+        end
+        it "should show error text" do
+          instr = Instruction.new("E", 5006)
+          instr.update_address(:symbol => nil)
+          instr.errors.first.should == "Error: External address exceeds length of use list; treated as immediate."
+        end
+      end
+      describe "symbol not defined in table" do
         before(:each) do
           SymbolTable.stub!(:address).with("x").and_return(nil)
           SymbolTable.stub!(:address).with("y").and_return(15)
@@ -117,7 +134,7 @@ describe "Instruction" do
           @instr.errors.size.should == 1
         end
         it "should have correct error text" do
-          @instr.errors[0].should == "Error: x is not defined; zero used."
+          @instr.errors.first.should == "Error: x is not defined; zero used."
         end
         it "should set address to 0" do
           @instr.address.should == 0
