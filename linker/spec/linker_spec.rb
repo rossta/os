@@ -28,7 +28,6 @@ describe Linker do
         linker_output_should_match_expected_output_for("input_4")
       end
       it "should match output 5 for input 5" do
-        pending
         linker_output_should_match_expected_output_for("input_5")
       end
       it "should match output 6 for input 6" do

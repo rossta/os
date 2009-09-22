@@ -9,7 +9,7 @@ class SymbolTable
   end
   
   def self.symbols
-    @@table.symbols
+    table.symbols
   end
   
   def self.contains?(symbol)
@@ -19,7 +19,7 @@ class SymbolTable
   def self.errors
     table.errors
   end
-  
+
   attr_accessor :symbols
 
   def []=(key, value)
