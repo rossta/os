@@ -1,9 +1,11 @@
 class Instruction
   attr_accessor :type, :address, :op_code, :word
+  attr_reader :original_address
   
   def initialize(type, word)
     @type = type
     @address = word % 1000
+    @original_address = @address
     @op_code = (word - @address) / 1000
   end
   
@@ -35,6 +37,10 @@ class Instruction
   def error_message
     errors.join(" ")
   end
+  
+  def valid?
+    errors.empty?
+  end
 
 protected
 
@@ -59,7 +65,7 @@ protected
       errors << "Error: External address exceeds length of use list; treated as immediate."
       return
     end
-      
+    
     if addr = SymbolTable.address(symbol)
       @address = addr
     else

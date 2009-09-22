@@ -51,4 +51,13 @@ class ProgramModule
     text.join("\n")
   end
   
+  def unused_uses
+    unused_uses = uses
+    e_instructions = instructions.find_all { |instr| instr.type == InstructionType::E && instr.valid? }
+    return [] if e_instructions.empty?
+    e_instructions.each do |instr|
+      unused_uses[instr.address] = nil if unused_uses[instr.address]
+    end
+    unused_uses.compact
+  end
 end

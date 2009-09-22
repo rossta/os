@@ -15,11 +15,16 @@ class MemoryMap
   end
   
   def self.validate!
-    uses = memory.modules.map { |m| m.uses }.flatten!.uniq
-    unused_symbols = SymbolTable.symbols.keys.find_all { |sym| !uses.include?(sym) }
+    uses = memory.modules.map { |m| m.uses }.flatten.uniq
+    unused_definitions = SymbolTable.symbols.keys.find_all { |sym| !uses.include?(sym) }
+    unused_definitions.sort.each do |sym|
+      warnings << "Warning: #{sym} was defined in module #{definition_index(sym)} but never used."
+    end
     
-    unused_symbols.sort.each do |sym|
-      warnings << "Warning: #{sym} was defined in module #{module_index(sym)} but never used."
+    unused_uses = memory.modules.map { |m| m.unused_uses }.flatten
+    
+    unused_uses.each do |sym|
+      # warnings << "Warning: In module #{use_index(sym)} #{sym} appeared in the use list but was not actually used."
     end
   end
   
@@ -59,8 +64,15 @@ class MemoryMap
   
 protected
   
-  def self.module_index(symbol)
-    program_module = memory.modules.detect { |pm| pm.defines?(symbol) }
+  def self.definition_index(symbol)
+    module_index( memory.modules.detect { |pm| pm.defines?(symbol) } )
+  end
+  
+  def self.use_index(symbol)
+    module_index( memory.modules.detect { |pm| pm.uses.include?(symbol) })
+  end
+  
+  def self.module_index(program_module)
     memory.modules.index(program_module) + 1
   end
   

@@ -140,6 +140,20 @@ describe "Instruction" do
           @instr.address.should == 0
         end
       end
+      
+      describe "valid?" do
+        it "should be false if errors" do
+          instr = Instruction.new(:type, 7999)
+          instr.update_address
+          instr.valid?.should be_false
+        end
+        
+        it "should be true if no errors" do
+          instr = Instruction.new(:type, 5000)
+          instr.update_address
+          instr.valid?.should be_true
+        end
+      end
     end
     
   end

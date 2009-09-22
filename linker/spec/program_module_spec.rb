@@ -18,7 +18,34 @@ describe ProgramModule do
       mod.uses == ['a', 'b']
     end
   end
-
+  
+  describe "unused_uses" do
+    it "should return symbols in use list not instruction" do
+      mod = ProgramModule.new
+      mod.uses << 'a'
+      mod.uses << 'b'
+      mod.uses << 'c'
+      mod.uses << 'd'
+      
+      mod.create_instruction("E", 1000)
+      mod.create_instruction("E", 2001)
+      mod.create_instruction("E", 3001)
+      
+      mod.unused_uses.size.should == 2
+      mod.unused_uses.should include('c')
+      mod.unused_uses.should include('d')
+    end
+    it "should return empty if no valid e instructions" do
+      mod = ProgramModule.new
+      mod.uses << 'a'
+      mod.uses << 'b'
+      
+      mod.create_instruction("R", 1000)
+      mod.create_instruction("I", 2001)
+      
+      mod.unused_uses.size.should == 0
+    end
+  end
 
   describe "create_instruction" do
     it "should return new Instruction" do
