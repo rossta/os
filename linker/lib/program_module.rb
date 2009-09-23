@@ -36,9 +36,7 @@ class ProgramModule
   end
   
   def create_instruction(type, address)
-    instruction = Instruction.new(type, address)
-    instructions << instruction
-    instruction
+    instructions << Instruction.new(type, address)
   end
   
   def to_s
@@ -52,12 +50,9 @@ class ProgramModule
   end
   
   def unused_symbols
-    unused_symbols = uses
-    e_instructions = instructions.find_all { |instr| instr.type == InstructionType::E && instr.valid? }
-    e_instructions.each do |instr|
-      unused_symbols[instr.original_address] = nil if unused_symbols[instr.original_address]
-    end
-    unused_symbols.map! { |sym| SymbolTable.defines?(sym) ? sym : nil }
-    unused_symbols.compact
+    return [] if !instructions.inject { |memo, instr| instr.valid? }
+    used_symbols = instructions.map { |instr| instr.type == InstructionType::E ? instr.symbol : nil }.compact
+    unused_symbols = uses - used_symbols
+    unused_symbols
   end
 end

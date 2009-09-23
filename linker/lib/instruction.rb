@@ -1,6 +1,6 @@
 class Instruction
   attr_accessor :type, :address, :op_code, :word
-  attr_reader :original_address
+  attr_reader :original_address, :symbol
   
   def initialize(type, word)
     @type = type
@@ -41,7 +41,7 @@ class Instruction
   def valid?
     errors.empty?
   end
-
+  
 protected
 
   def validate_machine_size
@@ -67,7 +67,8 @@ protected
     end
     
     if addr = SymbolTable.address(symbol)
-      @address = addr
+      @symbol   = symbol
+      @address  = addr
     else
       @address = 0
       errors << "Error: #{symbol} is not defined; zero used."

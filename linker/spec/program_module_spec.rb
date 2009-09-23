@@ -20,45 +20,61 @@ describe ProgramModule do
   end
   
   describe "unused_symbols" do
-    it "should return symbols in use list not instruction" do
+    it "should return symbols not used by e instructions" do
       mod = ProgramModule.new
       mod.uses << 'a'
       mod.uses << 'b'
       mod.uses << 'c'
       mod.uses << 'd'
       
-      mod.create_instruction("E", 1000)
-      mod.create_instruction("E", 2001)
-      mod.create_instruction("E", 3001)
+      mod.instructions << mock(Instruction, :type => "E", :symbol => "a", :valid? => true)
+      mod.instructions << mock(Instruction, :type => "E", :symbol => "b", :valid? => true)
+      mod.instructions << mock(Instruction, :type => "E", :symbol => "b", :valid? => true)
       
       mod.unused_symbols.size.should == 2
       mod.unused_symbols.should include('c')
       mod.unused_symbols.should include('d')
     end
-    it "should return empty if no valid e instructions" do
+    it "should not return symbols for invalid Es" do
+      mod = ProgramModule.new
+      mod.uses << 'a'
+      mod.uses << 'b'
+      mod.uses << 'c'
+      
+      mod.instructions << mock(Instruction, :type => "E", :symbol => "a", :valid? => false)
+      mod.instructions << mock(Instruction, :type => "E", :symbol => "b", :valid? => false)
+      mod.instructions << mock(Instruction, :type => "E", :symbol => "b", :valid? => false)
+      
+      mod.unused_symbols.size.should == 0
+    end
+    it "should return symbols e instructions" do
       mod = ProgramModule.new
       mod.uses << 'a'
       mod.uses << 'b'
       
-      mod.create_instruction("R", 1000)
-      mod.create_instruction("I", 2001)
+      mod.instructions << mock(Instruction, :type => "R", :symbol => "a", :valid? => true)
+      mod.instructions << mock(Instruction, :type => "I", :symbol => "b", :valid? => true)
       
-      mod.unused_symbols.size.should == 0
+      mod.unused_symbols.size.should == 2
     end
   end
 
   describe "create_instruction" do
+    before(:each) do
+      @mod = ProgramModule.new
+    end
     it "should return new Instruction" do
-      ProgramModule.new.create_instruction("R", 1234).should be_an_instance_of(Instruction)
+      @mod.create_instruction("R", 1234)
+      @mod.instructions.first.should be_an_instance_of(Instruction)
     end
 
     it "should return instruction with type" do
-      instruction = ProgramModule.new.create_instruction("R", 1234)
-      instruction.type.should == "R"
+      @mod.create_instruction("R", 1234)
+      @mod.instructions.first.type.should == "R"
     end
     it "should return instruction with address" do
-      instruction = ProgramModule.new.create_instruction("R", 1234)
-      instruction.word.should == 1234
+      @mod.create_instruction("R", 1234)
+      @mod.instructions.first.word.should == 1234
     end
   end
 
