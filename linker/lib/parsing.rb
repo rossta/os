@@ -1,7 +1,7 @@
 module Parsing
-  WHITE_SPACE = /[ \n\r]/
-  DIGIT       = /[0-9]/
-  WORD_CHAR   = /[A-Za-z0-9_]/
+  WHITE_SPACE = /[\s]/
+  DIGIT       = /[\d]/
+  WORD_CHAR   = /[\w]/
   
   def parse_number
     skip_white_space

@@ -50,7 +50,7 @@ class ProgramModule
   end
   
   def unused_symbols
-    return [] if !instructions.inject { |memo, instr| instr.valid? }
+    return [] if !instructions.all? { |instr| instr.valid? }
     used_symbols = instructions.map { |instr| instr.type == InstructionType::E ? instr.symbol : nil }.compact
     unused_symbols = uses - used_symbols
     unused_symbols
