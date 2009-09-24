@@ -6,3 +6,8 @@ task :spec do
     ruby file
   end
 end
+
+desc "Run linker"
+task :link do
+  ruby("link.rb", ARGV[1])
+end
