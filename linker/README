@@ -1,0 +1,105 @@
+############################################################################
+
+  Ross Kaffenberger
+  N19663559
+  
+  Lab #1 Linker (Ruby version)
+  Operating Systems | NYU
+  9.23.09
+
+############################################################################
+
+
+1. Compilation command
+  
+  None. This version of the linker lab is written in Ruby which interpreted.
+  
+2. Running Program
+  
+  Setup: Unzip the archive, cd into os/linker/
+  
+  Using ruby
+  -within linker/
+
+      $ ruby link.rb spec/fixtures/input_1.txt
+
+  -from arbitrary DIR with arbitrary FILE_PATH
+
+      $ ruby DIR/link.rb FILE_PATH
+
+  Using rake
+  -within linker/
+      
+      $ rake link FILE_PATH
+
+3. Directory Structure
+
+  linker/
+    - contains link.rb, which loads all the classes in lib/ and passes the first command line 
+      argument (the file name) to the application. 
+    - easiest directory from which to run linker and tests.
+    - contains Rakefile defining rake link and spec commands
+    
+    lib/
+    - contains the application classes and modules. Each lib file contains one application class 
+      or module of the name corresponding to its filename.
+    spec/
+    - contains the rspec unit tests that describe and test the functionality of the application 
+      classes. Each spec file corresponds to an application file in lib/. The spec/ dir contains 
+      all 9 input files in the fixtures/ dir. These can be passed to the program, running from the
+      linker/ dir as spec/fixtures/input_1.txt and so on. The output files are also present so they
+      can be read for assertions in the test suite.
+
+4. Description
+
+  The program flow is as follows:
+  
+    When the program is run, the first file, link.rb, loads the class files in lib. A new Runner is created with the arguments available in ARGV, a global variable available from the Ruby process, similar to Perl or Shell scripting.
+
+    Runner checks the arguments: if valid, it creates a new Linker with the filename, calls its link method and prints the linker output. If invalid, it will print the usage.
+
+    The Linker creates a new Reader with the file name. The Reader exposes the method #next, which acts as the buffer for retrieving single character strings from the file, one at a time. Reader uses the core ruby class File to open the file. 
+
+    Linker#link clears the global instances of the SymbolTable and MemoryMap. It initiates the first pass over the input with the AddressParser#parse and the second pass with MemoryParser#parse. When the two passes are finished, calling Linker#to_s will construct the output from the SymbolTable and MemoryMap #to_s methods. SymbolTable#to_s prints the key/value pairs in the SymbolTable instance and MemoryMap#to_s joins the output of each of its ProgramModules and its warnings if any.
+
+    AddressParser and MemoryParser are both subclasses of Parser. The Parser classes respond to #parse and maintain a hash table of errors to add to the output and symbols to copy to the SymbolTable. The AddressParser detects the symbols to add to the SymbolTable and base addresses for each ProgramModule. It skips the use list and program instructions for each module. It creates a ProgramModule class for each set of iteration of a definition list, use list and program instruction set. The list of ProgramModules are stored in the MemoryMap. The AddressParser tracks and incrementes a base address with which to instantiate each ProgramModule. For the second pass, the MemoryParser processes the use list and instruction set (both skipped by the AddressParser) for each ProgramModule. The MemoryParser then calls on the MemoryMap to validate its instructions, when it will add errors and warnings. Methods for parsing the text are made available in the Parsing module: #parse_word and #parse_number use regular expressions to consume program words and numbers.
+    
+    The ProgramModule maintains an Instruction list. The ProgramModule calls #update_address on each of its Instruction and passes data such as symbol, base address to perform the memory mapping. Each Instruction calculates is equipped to calculate its address based on its type and the data passed by the ProgramModule. When the Instruction is mapped, it also runs validations for machine size, relative and external address errors. The ProgramModule#to_s joins the output of each of its Instructions. Instruction#to_s prints its InstructionType and Opcode/Address plus its errors if any. 
+
+5. Extra credit
+
+  None assigned. A Java version of this lab for comparison.
+
+6. Running Tests (optional)
+
+  I created this program using test-driven development: Write a failing unit test. Write code to make it pass. Refactor. Repeat. The test library is RSpec, which is included in the zip file. The RSpec code is open source and is not used at any time during the execution of the program.
+  
+  Using ruby
+  -individual test, SPEC_NAME, from linker/
+    
+      $ ruby spec/SPEC_NAME
+  
+  Using rake
+  -within linker/
+  
+      $ rake spec
+
+
+7. Dependencies
+  
+  Running the program
+    
+    Ruby >= version 1.8.6. The school servers on which I've run this program have all had ruby installations.
+
+  Running tests (optional)
+    
+    Rspec
+    $ gem install rspec --no-rdoc
+      
+    Diff-lcs
+    $ gem install diff-lcs --no-rdoc
+    
+  Using rake (optional)
+    
+    Rake
+    $ gem install rake --no-rdoc

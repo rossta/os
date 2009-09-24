@@ -20,13 +20,13 @@ private
   def detect_symbols_and_base_addresses
     # symbols
     module_symbols = {}
-    parse_number.times do |i|
-      symbol           = parse_word
+    parse_number.times do |i|                 # Start of definition list, parse_number is ND
+      symbol           = parse_word           
       if SymbolTable.defines?(symbol)
         SymbolTable.errors[symbol] = "Error: This variable is multiply defined; first value used."
       else
-        module_symbols[symbol] = parse_number + @base_address
-        SymbolTable.instance[symbol] = module_symbols[symbol]
+        module_symbols[symbol] = parse_number + @base_address  # Set pair: symbol, external address of symbol
+        SymbolTable.instance[symbol] = module_symbols[symbol]  # Copy to SymbolTable
       end
     end
     

@@ -50,7 +50,9 @@ class MemoryMap
     @modules.each do |program_module|
       result << program_module.to_s
     end
-    result.join("\n")
+    result = result.join("\n")
+    result += "\n\n" + warnings.join("\n") if !warnings.empty?
+    result
   end
   
   def warnings

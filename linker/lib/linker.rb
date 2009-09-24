@@ -10,9 +10,6 @@ class Linker
     
     address_parser.parse
     memory_parser.parse
-    
-    # MemoryMap.instance.map
-    MemoryMap.validate!
   end
   
   def errors
@@ -25,10 +22,9 @@ class Linker
   
   def to_s
     output = SymbolTable.instance.to_s
-    output += "\n" + "\n"
+    output += "\n\n"
     output += MemoryMap.instance.to_s
     output += "\n"
-    output += "\n" + MemoryMap.warnings.join("\n") + "\n" if !MemoryMap.warnings.empty?
     output
   end
   
