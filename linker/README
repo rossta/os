@@ -35,20 +35,15 @@
 3. Directory Structure
 
   linker/
-    - contains link.rb, which loads all the classes in lib/ and passes the first command line 
-      argument (the file name) to the application. 
+    - contains link.rb, which loads all the classes in lib/ and passes the first command line argument (the file name) to the application. 
     - easiest directory from which to run linker and tests.
     - contains Rakefile defining rake link and spec commands
     
     lib/
-    - contains the application classes and modules. Each lib file contains one application class 
-      or module of the name corresponding to its filename.
+    - contains the application classes and modules. Each lib file contains one application class or module of the name corresponding to its filename.
+    
     spec/
-    - contains the rspec unit tests that describe and test the functionality of the application 
-      classes. Each spec file corresponds to an application file in lib/. The spec/ dir contains 
-      all 9 input files in the fixtures/ dir. These can be passed to the program, running from the
-      linker/ dir as spec/fixtures/input_1.txt and so on. The output files are also present so they
-      can be read for assertions in the test suite.
+    - contains the rspec unit tests that describe and test the functionality of the application classes. Each spec file corresponds to an application file in lib/. The spec/ dir contains all 9 input files in the fixtures/ dir. These can be passed to the program, running from the linker/ dir as spec/fixtures/input_1.txt and so on. The output files are also present so they can be read for assertions in the test suite.
 
 4. Description
 
@@ -70,20 +65,9 @@
 
   None assigned. A Java version of this lab for comparison.
 
-6. Running Tests (optional)
+6. Spec tests
 
-  I created this program using test-driven development: Write a failing unit test. Write code to make it pass. Refactor. Repeat. The test library is RSpec, which is included in the zip file. The RSpec code is open source and is not used at any time during the execution of the program.
-  
-  Using ruby
-  -individual test, SPEC_NAME, from linker/
-    
-      $ ruby spec/SPEC_NAME
-  
-  Using rake
-  -within linker/
-  
-      $ rake spec
-
+  I created this program using test-driven development: Write a failing unit test. Write code to make it pass. Refactor. Repeat. The test library is RSpec, which is included in the zip file. The RSpec code is open source and is not used at any time during the execution of the program. I've left the tests in for inspection. The Rspec library is several MB, so I've not included in the zip archive.
 
 7. Dependencies
   
@@ -91,14 +75,6 @@
     
     Ruby >= version 1.8.6. The school servers on which I've run this program have all had ruby installations.
 
-  Running tests (optional)
-    
-    Rspec
-    $ gem install rspec --no-rdoc
-      
-    Diff-lcs
-    $ gem install diff-lcs --no-rdoc
-    
   Using rake (optional)
     
     Rake
