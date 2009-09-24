@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe SymbolTable do
   before(:each) do
-    @table = SymbolTable.table
+    @table = SymbolTable.instance
   end
   
   after(:each) do
@@ -11,7 +11,7 @@ describe SymbolTable do
   
   describe "self.symbols" do
     it "should return same instance of symbol table" do
-      SymbolTable.table.should == SymbolTable.table
+      SymbolTable.instance.should == SymbolTable.instance
     end
   end
   

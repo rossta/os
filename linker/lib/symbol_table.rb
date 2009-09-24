@@ -1,6 +1,6 @@
 class SymbolTable
 
-  def self.table
+  def self.instance
     @@table ||= SymbolTable.new
   end
 
@@ -9,7 +9,7 @@ class SymbolTable
   end
   
   def self.symbols
-    table.symbols
+    instance.symbols
   end
   
   def self.defines?(symbol)
@@ -17,11 +17,11 @@ class SymbolTable
   end
   
   def self.address(symbol)
-    table[symbol]
+    instance[symbol]
   end
   
   def self.errors
-    table.errors
+    instance.errors
   end
 
   attr_accessor :symbols

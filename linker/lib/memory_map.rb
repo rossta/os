@@ -1,6 +1,6 @@
 class MemoryMap
   
-  def self.memory
+  def self.instance
     @@memory ||= MemoryMap.new
   end
   
@@ -11,16 +11,16 @@ class MemoryMap
   def self.create_program_module(base_address, symbols = {})
     program_module = ProgramModule.new(base_address)
     program_module.symbols = symbols
-    MemoryMap.memory << program_module
+    MemoryMap.instance << program_module
   end
   
   def self.validate!
-    uses = memory.modules.map { |m| m.uses }.flatten.uniq
+    uses = instance.modules.map { |m| m.uses }.flatten.uniq
     unused_definitions = SymbolTable.symbols.keys.find_all { |sym| !uses.include?(sym) }
     unused_definitions.sort.each do |sym|
       warnings << "Warning: #{sym} was defined in module #{definition_index(sym)} but never used."
     end
-    memory.modules.each_with_index do |m, i|
+    instance.modules.each_with_index do |m, i|
       m.unused_symbols.each do |sym|
         warnings << "Warning: In module #{i + 1} #{sym} appeared in the use list but was not actually used."
       end
@@ -28,7 +28,7 @@ class MemoryMap
   end
   
   def self.warnings
-    memory.warnings
+    instance.warnings
   end
   
   attr_reader :modules
@@ -64,11 +64,11 @@ class MemoryMap
 protected
   
   def self.definition_index(symbol)
-    module_index( memory.modules.detect { |pm| pm.defines?(symbol) } )
+    module_index( instance.modules.detect { |pm| pm.defines?(symbol) } )
   end
   
   def self.module_index(program_module)
-    memory.modules.index(program_module) + 1
+    instance.modules.index(program_module) + 1
   end
   
 end

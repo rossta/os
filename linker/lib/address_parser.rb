@@ -26,7 +26,7 @@ private
         SymbolTable.errors[symbol] = "Error: This variable is multiply defined; first value used."
       else
         module_symbols[symbol] = parse_number + @base_address
-        SymbolTable.table[symbol] = module_symbols[symbol]
+        SymbolTable.instance[symbol] = module_symbols[symbol]
       end
     end
     

@@ -11,7 +11,7 @@ class Linker
     address_parser.parse
     memory_parser.parse
     
-    # MemoryMap.memory.map
+    # MemoryMap.instance.map
     MemoryMap.validate!
   end
   
@@ -24,20 +24,20 @@ class Linker
   end
   
   def to_s
-    output = SymbolTable.table.to_s
+    output = SymbolTable.instance.to_s
     output += "\n" + "\n"
-    output += MemoryMap.memory.to_s
+    output += MemoryMap.instance.to_s
     output += "\n"
     output += "\n" + MemoryMap.warnings.join("\n") + "\n" if !MemoryMap.warnings.empty?
     output
   end
   
   def symbols
-    SymbolTable.table
+    SymbolTable.instance
   end
   
   def memory_map
-    MemoryMap.memory
+    MemoryMap.instance
   end
   
 private
