@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 class Runner
   VERSION = '0.0.1'
   
