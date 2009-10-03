@@ -1,8 +1,9 @@
 class Runner
   VERSION = '0.0.1'
   
-  def initialize(arguments)
+  def initialize(arguments, command)
     @arguments = arguments
+    @command = command
   end
 
   def run
@@ -33,9 +34,7 @@ protected
   end
   
   def process_command
-    linker = Linker.new(@arguments.first)
-    linker.link
-    puts linker.to_s
+    @command.run(@arguments)
   end
 
 end

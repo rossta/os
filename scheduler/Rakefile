@@ -7,8 +7,8 @@ task :spec do
   end
 end
 
-namespace :linker do
-  desc "Run linker"
+namespace :scheduler do
+  desc "Run scheduler"
   task :run do
     ruby("run.rb", ARGV[1])
   end
