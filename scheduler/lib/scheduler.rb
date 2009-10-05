@@ -1,7 +1,13 @@
 class Scheduler
+  attr_reader :parser
   
   def initialize(file_name)
-    @reader = Reader.new(file_name)
+    @parser = ProcessParser.new(file_name)
+    @processes = parse_processes
+  end
+  
+  def schedule
+    raise "Subclass must implement"
   end
   
   def to_s
@@ -10,8 +16,9 @@ class Scheduler
   
 protected
 
-  def process_parser
-    @parser = ProcessParser.new(@reader)
+  def parse_processes
+    parser.parse
+    parser.processes
   end
 
 end

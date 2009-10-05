@@ -1,11 +1,11 @@
 class ProcessParser
   include Parsing
   attr_reader :reader
-  
-  def initialize(reader = nil)
-    @reader = reader
+
+  def initialize(file_name = nil)
+    @file_name = file_name
   end
-  
+
   def parse
     reader.rewind
     @char = reader.next
@@ -16,10 +16,10 @@ class ProcessParser
       c = parse_number
       io = parse_number
       skip_symbol       # )
-      processes << Process.new(a, b, c, io)
+      processes << Scheduling::Process.new(a, b, c, io)
     end
   end
-  
+
   def processes
     @processes ||= []
   end
@@ -32,4 +32,8 @@ protected
     text.join(" ")
   end
   
+  def reader
+    @reader ||= Reader.new(@file_name)
+  end
+
 end
