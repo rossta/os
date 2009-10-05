@@ -1,8 +1,8 @@
 class ProcessParser
   include Parsing
-  attr_accessor :reader
+  attr_reader :reader
   
-  def initialize(reader)
+  def initialize(reader = nil)
     @reader = reader
   end
   
@@ -20,19 +20,16 @@ class ProcessParser
     end
   end
   
-  def original_input
-    @original_input ||= normalize_input
-  end
-  
   def processes
     @processes ||= []
   end
-  
+
 protected
-  
-  def normalize_input
-    reader.rewind
-    input = reader.read
-    input.match(/(.*\))/)[0]
+
+  def original_input
+    text = [processes.size]
+    text += processes.map { |p| p.to_s }
+    text.join(" ")
   end
+  
 end

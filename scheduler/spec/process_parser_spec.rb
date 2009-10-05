@@ -16,13 +16,16 @@ describe ProcessParser do
   end
   
   describe "original_input" do
-    it "should ignore comments" do
-      parser = ProcessParser.new(mock(Reader, :read => "1 ( 0 1 5 1 )   comment", :rewind => nil))
-      parser.original_input.should == "1 ( 0 1 5 1 )"
+    it "should print one process" do
+      parser = ProcessParser.new
+      parser.processes << mock(Process, :to_s => '( 0 1 5 1 )')
+      parser.send(:original_input).should == "1 ( 0 1 5 1 )"
     end
-    it "should return original input" do
-      parser = ProcessParser.new(mock(Reader, :read => "1 ( 0 1 5 1 )", :rewind => nil))
-      parser.original_input.should == "1 ( 0 1 5 1 )"
+    it "should print multiple processes" do
+      parser = ProcessParser.new
+      parser.processes << mock(Process, :to_s => '( 0 1 5 1 )')
+      parser.processes << mock(Process, :to_s => '( 0 1 5 1 )')
+      parser.send(:original_input).should == "2 ( 0 1 5 1 ) ( 0 1 5 1 )"
     end
   end
 end
