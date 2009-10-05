@@ -1,5 +1,3 @@
-require File.dirname(__FILE__) + '/parsing'
-
 class Parser
   include Parsing
 

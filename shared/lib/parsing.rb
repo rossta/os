@@ -2,6 +2,7 @@ module Parsing
   WHITE_SPACE = /[\s]/
   DIGIT       = /[\d]/
   WORD_CHAR   = /[\w]/
+  SYMBOL      = /[\(\)]/
   
   def parse_number
     skip_white_space
@@ -25,6 +26,13 @@ module Parsing
   
   def skip_white_space
     while WHITE_SPACE.match @char
+      @char = reader.next
+    end
+  end
+  
+  def skip_symbol
+    skip_white_space
+    while SYMBOL.match @char
       @char = reader.next
     end
   end

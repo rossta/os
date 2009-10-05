@@ -1,10 +1,17 @@
 class Scheduler
   
   def initialize(file_name)
-    @file_name = file_name
+    @reader = Reader.new(file_name)
   end
   
   def to_s
-    @file_name
+    "The original input was: " + process_parser.original_input
   end
+  
+protected
+
+  def process_parser
+    @parser = ProcessParser.new(@reader)
+  end
+
 end
