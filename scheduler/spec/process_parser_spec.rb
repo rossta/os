@@ -15,17 +15,17 @@ describe ProcessParser do
     end
   end
   
-  describe "original_input" do
+  describe "to_s" do
     it "should print one process" do
       parser = ProcessParser.new
       parser.processes << mock(Process, :to_s => '( 0 1 5 1 )')
-      parser.send(:original_input).should == "1 ( 0 1 5 1 )"
+      parser.send(:to_s).should == "1 ( 0 1 5 1 )"
     end
     it "should print multiple processes" do
       parser = ProcessParser.new
       parser.processes << mock(Process, :to_s => '( 0 1 5 1 )')
       parser.processes << mock(Process, :to_s => '( 0 1 5 1 )')
-      parser.send(:original_input).should == "2 ( 0 1 5 1 ) ( 0 1 5 1 )"
+      parser.to_s.should == "2 ( 0 1 5 1 ) ( 0 1 5 1 )"
     end
   end
 end

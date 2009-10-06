@@ -24,14 +24,14 @@ class ProcessParser
     @processes ||= []
   end
 
-protected
-
-  def original_input
+  def to_s
     text = [processes.size]
     text += processes.map { |p| p.to_s }
     text.join(" ")
   end
   
+protected
+
   def reader
     @reader ||= Reader.new(@file_name)
   end

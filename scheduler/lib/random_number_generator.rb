@@ -6,13 +6,7 @@ class RandomNumberGenerator
   end
   
   def number
-    number = @reader.readlines[rand(count)].strip.to_i
-    @reader.rewind
-    number
+    @reader.readline.strip.to_i
   end
   
-  def count
-    @reader.line_count
-  end
-
 end
