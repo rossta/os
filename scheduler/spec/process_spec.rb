@@ -22,7 +22,7 @@ describe Scheduling::Process do
       it "should switch to running if cpu burst > 0" do
         @process.state = Scheduling::ProcessState::Ready
         @process.cpu_burst = 2
-        Scheduling::ProcessState::Running.should_receive(:cycle)
+        Scheduling::ProcessState::Running.should_receive(:cycle).and_return(Scheduling::ProcessState::Running)
         @process.cycle
         @process.state.should == Scheduling::ProcessState::Running
       end
@@ -106,23 +106,6 @@ describe Scheduling::Process do
   describe "to_s" do
     it "should return (a b c io)" do
       Scheduling::Process.new(2, 3, 5, 1).to_s.should == "( 2 3 5 1 )"
-    end
-  end
-  
-  describe "data" do
-    it "should print process data" do
-      pending
-      expected_output = "(A,B,C,IO) = (0,1,5,1)\n" +
-                        "Finishing time: 9\n" +
-                        "Turnaround time: 9\n" +
-                        "I/O time: 4\n" +
-                        "Waiting time: 0"
-      process = Scheduling::Process.new(0,1,5,1)
-      process.finishing_time  = 9
-      process.turnaround_time = 9
-      process.io_time         = 4
-      process.wait_time       = 0
-      process.data.should == expected_output
     end
   end
   

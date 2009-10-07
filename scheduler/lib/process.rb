@@ -8,10 +8,10 @@ module Scheduling
       @max_cpu        = b
       @cpu_time       = c
       @max_io         = io
-      @state          = Scheduling::ProcessState::Unstarted
       @wait_time      = 0
       @io_time        = 0
       @remaining_time = cpu_time
+      @state          = Scheduling::ProcessState::Unstarted
     end
     
     def cycle
@@ -20,15 +20,6 @@ module Scheduling
     
     def to_s
       text = "( #{arrival_time} #{max_cpu} #{cpu_time} #{max_io} )"
-    end
-    
-    def data
-      text = ["(A,B,C,IO) = #{data_params}"]
-      text << "Finishing time: #{finishing_time}"
-      text << "Turnaround time: #{turnaround_time}"
-      text << "I/O time: #{io_time}"
-      text << "Waiting time: #{wait_time}"
-      text.join("\n    ")
     end
     
     def turnaround_time
@@ -47,41 +38,15 @@ module Scheduling
       @io_burst ||= 0
     end
     
-    def running?
-      @state == ProcessState::Running
-    end
-    
-    def terminated?
-      @state == ProcessState::Terminated
-    end
-    
-    def blocked?
-      @state == ProcessState::Blocked
-    end
-
-    def ready?
-      @state == ProcessState::Ready
-    end
-    
     def method_missing(sym, *args, &block)
       state_methods = [:ready?, :terminated?, :running?, :blocked?]
-      if state_methods include(sym)
+      if state_methods.include?(sym)
         @state.to_sym == sym
       else
         raise NoMethodError, sym.to_s
       end
     end
     
-    def method_missing(sym, *args, &block)
-      @file.send sym, *args, &block
-    end
-    
-    
-    protected
-    
-    def data_params
-      text = "(#{arrival_time},#{max_cpu},#{cpu_time},#{max_io})"
-    end
   end
 
   module ProcessState
@@ -95,11 +60,10 @@ module Scheduling
       end
     end
     
-    class Ready
+    class Ready #TODO 
       def self.cycle(process)
         if process.cpu_burst > 0
           Running.cycle(process)
-          Running
         else
           process.wait_time += 1
           Ready
