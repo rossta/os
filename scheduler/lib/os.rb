@@ -60,7 +60,7 @@ module Scheduling
     end
     
     def ready_processes
-      processes.select { |p| p.ready? || p.unstarted? }
+      processes.select { |p| p.ready? || p.arrival_time == cycles }
     end
     
     def finishing_time

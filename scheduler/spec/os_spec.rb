@@ -109,4 +109,22 @@ describe Scheduling::OS do
     end
   end
   
+  describe "ready_processes" do
+    it "should return collection including processes in ready state" do
+      os = Scheduling::OS.new
+      ready_process = mock(Scheduling::Process, :ready? => true)
+      os.processes << mock(Scheduling::Process, :ready? => false, :arrival_time => 100)
+      os.processes << ready_process
+      os.ready_processes.should == [ready_process]
+    end
+    
+    it "should return unstarted processes with current arrival time" do
+      os = Scheduling::OS.new
+      os.cycles = 3
+      created_process = mock(Scheduling::Process, :ready? => false, :arrival_time => 3)
+      os.processes << mock(Scheduling::Process, :ready? => false, :arrival_time => 100)
+      os.processes << created_process
+      os.ready_processes.should == [created_process]
+    end
+  end
 end
