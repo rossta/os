@@ -38,8 +38,13 @@ module Scheduling
       @io_burst ||= 0
     end
     
+    def start_run(os)
+      self.cpu_burst = os.random_os(self.max_cpu)
+      @state = ProcessState::Running
+    end
+    
     def method_missing(sym, *args, &block)
-      state_methods = [:ready?, :terminated?, :running?, :blocked?]
+      state_methods = [:ready?, :terminated?, :running?, :blocked?, :unstarted?]
       if state_methods.include?(sym)
         @state.to_sym == sym
       else

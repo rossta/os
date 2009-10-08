@@ -14,24 +14,37 @@ module Scheduling
     end
 
     def run
-      cycles = 0
+      @cycles = 0
       while !terminated? do
-        processes.each do |p|
+        blocked = blocked_processes
+        running = running_process
+        ready   = ready_processes
+        
+        blocked.each do |p|
           p.cycle
+        end
+        
+        if running
+          running.cycle
+          running.io_burst = random_os(running.max_io) if running.blocked?
+        end
+        
+        ready.each do |p|
+          p.cycle
+        end
+        
+        ready_processes.each do |p|
           scheduler.schedule(p)
         end
-        
-        if running_process.nil? || running_process.terminated?
-          next_running_process = scheduler.next_ready_process
-          next_running_process.cpu_burst  = random_os(next_running_process.max_cpu) if next_running_process
+
+        if running.nil? && (running = scheduler.next_ready_process)
+          running.start_run(self)
         end
-        
-        if !blocked_process.nil?
-          blocked_process.io_burst      = random_os(blocked_process.max_io)
-        end
-        
-        cycles += 1
+
+        @cycles += 1
       end
+      
+      @cycles -= 1
     end
 
     def terminated?
@@ -42,14 +55,45 @@ module Scheduling
       processes.detect { |p| p.running? }
     end
     
-    def blocked_process
-      processes.detect { |p| p.blocked? }
+    def blocked_processes
+      processes.select { |p| p.blocked? }
     end
     
+    def ready_processes
+      processes.select { |p| p.ready? || p.unstarted? }
+    end
+    
+    def finishing_time
+      @cycles
+    end
+    
+    def cpu_utilization
+      process_sum(:cpu_time).to_f / finishing_time
+    end
+
+    def io_utilization
+      process_sum(:io_time).to_f / finishing_time
+    end
+    
+    def throughput
+      100.0 / (processes.size * finishing_time.to_f)
+    end
+    
+    def turnaround_time
+      process_sum(:turnaround_time).to_f / processes.size
+    end
+    
+    def wait_time
+      process_sum(:wait_time).to_f / processes.size
+    end
 
   protected
     def generator
       @generator ||= RandomNumberGenerator.new
+    end
+    
+    def process_sum(sym)
+      processes.map { |p| p.send(sym) }.inject {|sum, n| sum + n }
     end
   end
 end

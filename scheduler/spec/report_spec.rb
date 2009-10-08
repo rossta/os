@@ -23,7 +23,11 @@ describe Scheduling::Report do
       report.processes_summary.should == "Process 0:\nprocess 0 report\nProcess 1:\nprocess 1 report"
     end
     
-    it "should report each overall summary"
+    it "should report os summary" do
+      Scheduling::OSReport.should_receive(:new).and_return(mock(Scheduling::OSReport, :report => "os report"))
+      report = Scheduling::Report.new(mock(Scheduling::OS), mock(ProcessParser))
+      report.os_summary.should == "Summary Data:\nos report"
+    end
     
     describe "verbose" do
       it "should also report process state for each cycle"
@@ -41,7 +45,7 @@ describe "Scheduling::ProcessReport" do
                         "Turnaround time: 9\n" +
                         "I/O time: 4\n" +
                         "Waiting time: 0"
-      process = mock(Scheduling::Process,
+      process = mock(Scheduling::OS,
         :arrival_time    => 0,
         :max_cpu         => 1,
         :cpu_time        => 5,
@@ -54,5 +58,27 @@ describe "Scheduling::ProcessReport" do
       Scheduling::ProcessReport.new(process).report.should == expected_output
     end
   end
-  
+end
+
+describe "Scheduling::OSReport" do
+  describe "report" do
+    it "should print process report" do
+      expected_output = "Finishing time: 9\n" +
+                        "CPU Utilization: 0.550000\n" +
+                        "I/O Utilization: 0.440000\n" +
+                        "Throughput: 11.110000 processes per hundred cycles\n" +
+                        "Average turnaround time: 9.000000\n" +
+                        "Average waiting time: 0.000000"
+
+      process = mock(Scheduling::OS,
+        :finishing_time   => 9,
+        :cpu_utilization  => 0.55,
+        :io_utilization   => 0.44,
+        :throughput       => 11.11,
+        :turnaround_time  => 9.0,
+        :wait_time        => 0.0
+      )
+      Scheduling::OSReport.new(process).report.should == expected_output
+    end
+  end
 end

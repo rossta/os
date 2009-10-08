@@ -53,4 +53,60 @@ describe Scheduling::OS do
     end
   end
   
+  describe "finishing_time" do
+    it "should return number of cycles" do
+      os = Scheduling::OS.new
+      os.cycles = 9
+      os.finishing_time.should == 9
+    end
+  end
+  
+  describe "cpu_utilization" do
+    it "should return floating point total cpu time / finishing time" do
+      os = Scheduling::OS.new
+      os.processes << mock(Scheduling::Process, :cpu_time => 3)
+      os.processes << mock(Scheduling::Process, :cpu_time => 5)
+      os.cycles = 10
+      os.cpu_utilization.should == 0.8
+    end
+  end
+
+  describe "io_utilization" do
+    it "should return floating point total io time / finishing time" do
+      os = Scheduling::OS.new
+      os.processes << mock(Scheduling::Process, :io_time => 3)
+      os.processes << mock(Scheduling::Process, :io_time => 5)
+      os.cycles = 10
+      os.io_utilization.should == 0.8
+    end
+  end
+  
+  describe "throughput" do
+    it "should return number of 100 / processes * finishing time" do
+      os = Scheduling::OS.new
+      os.processes << mock(Scheduling::Process)
+      os.processes << mock(Scheduling::Process)
+      os.cycles = 10
+      os.throughput.should == 5.0
+    end
+  end
+  
+  describe "turnaround_time" do
+    it "should return avg process turnaround time" do
+      os = Scheduling::OS.new
+      os.processes << mock(Scheduling::Process, :turnaround_time => 9)
+      os.processes << mock(Scheduling::Process, :turnaround_time => 10)
+      os.turnaround_time.should == 9.5
+    end
+  end
+  
+  describe "wait_time" do
+    it "should return avg process wait time" do
+      os = Scheduling::OS.new
+      os.processes << mock(Scheduling::Process, :wait_time => 1)
+      os.processes << mock(Scheduling::Process, :wait_time => 4)
+      os.wait_time.should == 2.5
+    end
+  end
+  
 end

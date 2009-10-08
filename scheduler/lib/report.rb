@@ -6,19 +6,20 @@ module Scheduling
       @os = os
       @parser = parser
     end
-    
+
     def report
       text = [original_input]
       text << "The (sorted) input is: " + parser.to_s
       text << "\n"
-      text << processes_summary
+      text << processes_summary + "\n"
+      text << os_summary
       text.join("\n")
     end
-    
+
     def original_input
       "The original input was: #{@parser.to_s}"
     end
-    
+
     def processes_summary
       text = []
       os.processes.each_with_index do |p, i|
@@ -28,28 +29,56 @@ module Scheduling
       end
       text.join("\n")
     end
-    
-  end
-  
-  class ProcessReport
-    def initialize(process)
-      @process = process
+
+    def os_summary
+      "Summary Data:\n" + OSReport.new(os).report(INDENT)
     end
-    
+
+  end
+
+  class OSReport
+    def initialize(os)
+      @os = os
+    end
+
     def report(indent = "")
-      text = ["#{indent}(A,B,C,IO) = #{process_params}"]
-      text << "#{indent}Finishing time: #{@process.finishing_time}"
-      text << "#{indent}Turnaround time: #{@process.turnaround_time}"
-      text << "#{indent}I/O time: #{@process.io_time}"
-      text << "#{indent}Waiting time: #{@process.wait_time}"
-      text.join("\n")
+      text = []
+      text << "Finishing time: #{@os.finishing_time}"
+      text << "CPU Utilization: #{num_format @os.cpu_utilization}"
+      text << "I/O Utilization: #{num_format @os.io_utilization}"
+      text << "Throughput: #{num_format @os.throughput} processes per hundred cycles"
+      text << "Average turnaround time: #{num_format @os.turnaround_time}"
+      text << "Average waiting time: #{num_format @os.wait_time}"
+      indent + text.join("\n" + indent)
     end
     
     protected
     
+    def num_format(f)
+      format("%f", f)
+    end
+  end
+
+  class ProcessReport
+    def initialize(process)
+      @process = process
+    end
+
+    def report(indent = "")
+      text = []
+      text << "(A,B,C,IO) = #{process_params}"
+      text << "Finishing time: #{@process.finishing_time}"
+      text << "Turnaround time: #{@process.turnaround_time}"
+      text << "I/O time: #{@process.io_time}"
+      text << "Waiting time: #{@process.wait_time}"
+      indent + text.join("\n" + indent)
+    end
+
+    protected
+
     def process_params
       text = "(#{@process.arrival_time},#{@process.max_cpu},#{@process.cpu_time},#{@process.max_io})"
     end
-    
+
   end
 end
