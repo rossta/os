@@ -11,7 +11,7 @@ module Scheduling
       text = [original_input]
       text << "The (sorted) input is: " + parser.to_s
       text << "\n"
-      text << processes_summary + "\n"
+      text << processes_summary
       text << os_summary
       text.join("\n")
     end
@@ -25,7 +25,7 @@ module Scheduling
       os.processes.each_with_index do |p, i|
         process_text = ["Process #{i}:"]
         process_text << ProcessReport.new(p).report(INDENT)
-        text << process_text.join("\n")
+        text << process_text.join("\n") + "\n"
       end
       text.join("\n")
     end

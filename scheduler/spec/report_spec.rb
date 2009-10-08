@@ -20,7 +20,7 @@ describe Scheduling::Report do
       Scheduling::ProcessReport.should_receive(:new).with(p0).and_return(mock(Scheduling::ProcessReport, :report => "process 0 report"))
       Scheduling::ProcessReport.should_receive(:new).with(p1).and_return(mock(Scheduling::ProcessReport, :report => "process 1 report"))
       report = Scheduling::Report.new(mock(Scheduling::OS, :processes => processes), mock(ProcessParser))
-      report.processes_summary.should == "Process 0:\nprocess 0 report\nProcess 1:\nprocess 1 report"
+      report.processes_summary.should == "Process 0:\nprocess 0 report\n\nProcess 1:\nprocess 1 report\n"
     end
     
     it "should report os summary" do

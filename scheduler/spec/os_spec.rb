@@ -82,12 +82,12 @@ describe Scheduling::OS do
   end
   
   describe "throughput" do
-    it "should return number of 100 / processes * finishing time" do
+    it "should return number of processes * 100 / finishing time" do
       os = Scheduling::OS.new
       os.processes << mock(Scheduling::Process)
       os.processes << mock(Scheduling::Process)
       os.cycles = 10
-      os.throughput.should == 5.0
+      os.throughput.should == 20.0
     end
   end
   

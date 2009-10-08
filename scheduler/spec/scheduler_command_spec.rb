@@ -2,11 +2,21 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe SchedulerCommand do
   describe "run" do
-    it "should parse input file" do
-      # pending
-      command = SchedulerCommand.new
-      command.run([FIXTURES + "input_1.txt"])
-      command.report.should == File.open(FIXTURES + "fifo/output_1.txt").read.strip
+    it "should process input file 1" do
+      command_report_should_match_output_file(1)
+    end
+    it "should process input file 2" do
+      command_report_should_match_output_file(2)
+    end
+    it "should process input file 3" do
+      pending
+      command_report_should_match_output_file(3)
     end
   end
+end
+
+def command_report_should_match_output_file(index)
+  command = SchedulerCommand.new
+  command.run([FIXTURES + "input_#{index}.txt"])
+  command.report.should == File.open(FIXTURES + "fifo/output_#{index}.txt").read.strip
 end

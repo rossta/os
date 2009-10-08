@@ -37,7 +37,7 @@ module Scheduling
           scheduler.schedule(p)
         end
 
-        if running.nil? && (running = scheduler.next_ready_process)
+        if running_process.nil? && (running = scheduler.next_ready_process)
           running.start_run(self)
         end
 
@@ -76,7 +76,7 @@ module Scheduling
     end
     
     def throughput
-      100.0 / (processes.size * finishing_time.to_f)
+      processes.size * 100.0 / finishing_time.to_f
     end
     
     def turnaround_time
