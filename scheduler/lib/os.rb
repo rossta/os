@@ -2,7 +2,7 @@ module Scheduling
   class OS
   
     attr_reader :parser, :scheduler
-    attr_accessor :cpu_burst, :io_burst, :processes, :running_process, :ready_queue, :cycles
+    attr_accessor :cpu_burst, :io_burst, :processes, :running_process, :ready_queue, :cycles, :io_cycles
 
     def initialize(scheduler = nil, processes = [])
       @scheduler  = scheduler
@@ -15,6 +15,7 @@ module Scheduling
 
     def run
       @cycles = 0
+      @io_cycles = 0
       while !terminated? do
         blocked = blocked_processes
         running = running_process
@@ -41,10 +42,9 @@ module Scheduling
           running.start_run(self)
         end
 
-        @cycles += 1
+        @io_cycles += 1 if blocked_processes.any?
+        @cycles += 1    unless terminated?
       end
-      
-      @cycles -= 1
     end
 
     def terminated?
@@ -72,7 +72,7 @@ module Scheduling
     end
 
     def io_utilization
-      process_sum(:io_time).to_f / finishing_time
+      io_cycles.to_f / finishing_time
     end
     
     def throughput

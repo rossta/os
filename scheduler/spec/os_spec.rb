@@ -74,8 +74,7 @@ describe Scheduling::OS do
   describe "io_utilization" do
     it "should return floating point total io time / finishing time" do
       os = Scheduling::OS.new
-      os.processes << mock(Scheduling::Process, :io_time => 3)
-      os.processes << mock(Scheduling::Process, :io_time => 5)
+      os.io_cycles = 8
       os.cycles = 10
       os.io_utilization.should == 0.8
     end
