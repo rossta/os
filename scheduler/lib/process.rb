@@ -43,6 +43,16 @@ module Scheduling
       @state = ProcessState::Running
     end
     
+    def current_state
+      @state.current(self)
+    end
+
+    def <=>(other)
+      return -1 if self.arrival_time < other.arrival_time
+      return 1 if self.arrival_time > other.arrival_time
+      return 0
+    end
+    
     def method_missing(sym, *args, &block)
       state_methods = [:ready?, :terminated?, :running?, :blocked?, :unstarted?]
       if state_methods.include?(sym)
@@ -63,6 +73,11 @@ module Scheduling
       def self.to_sym
         :unstarted?
       end
+
+      def self.current(process)
+        " unstarted 0"
+      end
+      
     end
     
     class Ready #TODO 
@@ -77,6 +92,10 @@ module Scheduling
 
       def self.to_sym
         :ready?
+      end
+      
+      def self.current(process)
+        "     ready 0"
       end
     end
     
@@ -96,7 +115,10 @@ module Scheduling
       def self.to_sym
         :running?
       end
-
+      
+      def self.current(process)
+        "   running #{process.cpu_burst}"
+      end
     end
     
     class Blocked
@@ -114,6 +136,10 @@ module Scheduling
         :blocked?
       end
 
+      def self.current(process)
+        "   blocked #{process.io_burst}"
+      end
+      
     end
 
     class Terminated
@@ -124,7 +150,10 @@ module Scheduling
       def self.to_sym
         :terminated?
       end
-
+      
+      def self.current(process)
+        "terminated 0"
+      end
     end
   end
 

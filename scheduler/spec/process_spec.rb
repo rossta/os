@@ -173,4 +173,52 @@ describe Scheduling::Process do
       process.finishing_time.should == (3 + 5 + 2 + 1)
     end
   end
+  
+  describe "<=>" do
+    describe "sort based on arrival time" do
+      it "should return -1 if arrival time later" do
+        process = Scheduling::Process.new(10,0,0,0)
+        (process <=> Scheduling::Process.new(0,0,0,0)).should == 1
+      end
+      
+      it "should return 0 if arrival time equal" do
+        process = Scheduling::Process.new(10,0,0,0)
+        (process <=> Scheduling::Process.new(10,0,0,0)).should == 0
+      end
+      
+      it "should return +1 if arrival time earlier" do
+        process = Scheduling::Process.new(0,0,0,0)
+        (process <=> Scheduling::Process.new(10,0,0,0)).should == -1
+      end
+    end
+  end
+  
+  describe "process_state" do
+    before(:each) do
+      @process = Scheduling::Process.new(0, 0, 0, 0)
+      @process.io_burst = 3
+      @process.cpu_burst = 2
+    end
+
+    it "should return blocked and io_burst if blocked" do
+      @process.state = Scheduling::ProcessState::Blocked
+      @process.current_state.should == "   blocked 3"
+    end
+    it "should return running and cpu_burst if running" do
+      @process.state = Scheduling::ProcessState::Running
+      @process.current_state.should == "   running 2"
+    end
+    it "should return ready and 0 if ready" do
+      @process.state = Scheduling::ProcessState::Ready
+      @process.current_state.should == "     ready 0"
+    end
+    it "should return unstarted and 0 if unstarted" do
+      @process.state = Scheduling::ProcessState::Unstarted
+      @process.current_state.should == " unstarted 0"
+    end
+    it "should return terminated and 0 if terminated" do
+      @process.state = Scheduling::ProcessState::Terminated
+      @process.current_state.should == "terminated 0"
+    end
+  end
 end

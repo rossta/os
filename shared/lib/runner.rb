@@ -18,11 +18,7 @@ class Runner
 protected
 
   def arguments_valid?
-    if @arguments.length == 1
-      return File.exists?(@arguments.first)
-    else
-      false
-    end
+    return File.exists?(@arguments.first)
   end
   
   def output_version

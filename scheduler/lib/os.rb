@@ -2,7 +2,7 @@ module Scheduling
   class OS
   
     attr_reader :parser, :scheduler
-    attr_accessor :cpu_burst, :io_burst, :processes, :running_process, :ready_queue, :cycles, :io_cycles
+    attr_accessor :cpu_burst, :io_burst, :processes, :running_process, :ready_queue, :cycles, :io_cycles, :details
 
     def initialize(scheduler = nil, processes = [])
       @scheduler  = scheduler
@@ -18,6 +18,7 @@ module Scheduling
       @cycles = 0
       @io_cycles = 0
       while !terminated? do
+        record_details
         blocked = blocked_processes
         running = running_process
         ready   = ready_processes
@@ -87,11 +88,25 @@ module Scheduling
     def wait_time
       process_sum(:wait_time).to_f / processes.size
     end
+    
+    def record_details
+      process_state = sorted_processes.map { |p| p.current_state }
+      details << "Before cycle #{cycles}:  " + process_state.join("\t")
+    end
+
+    def details
+      @details ||= []
+    end
+    
+    def sorted_processes
+      processes.sort { |a,b| a <=> b }
+    end
 
   protected
     
     def process_sum(sym)
       processes.map { |p| p.send(sym) }.inject {|sum, n| sum + n }
     end
+    
   end
 end
