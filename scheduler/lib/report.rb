@@ -1,6 +1,6 @@
 module Scheduling
   class Report
-    INDENT = "    "
+    INDENT = "\t"
     attr_reader :os, :parser
     def initialize(os, parser, detailed = false)
       @os = os
@@ -9,22 +9,14 @@ module Scheduling
     end
 
     def report
-      text = [original_input]
-      text << "The (sorted) input is: " + parser.to_s
+      text = [parser.to_s]
       text << "\n"
       text << os.details.join("\n") + "\n" if detailed?
       text << processes_summary
       text << os_summary
       text.join("\n")
     end
-    
-    def to_s
-      report
-    end
-
-    def original_input
-      "The original input was: #{@parser.to_s}"
-    end
+    alias_method :to_s, :report
 
     def processes_summary
       text = []

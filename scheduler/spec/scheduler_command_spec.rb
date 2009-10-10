@@ -5,19 +5,21 @@ describe SchedulerCommand do
     it "should process input file 1" do
       command_report_should_match_output_file(1)
     end
-    # it "should process input file 2" do
-    #   command_report_should_match_output_file(2)
-    # end
-    # it "should process input file 3" do
-    #   command_report_should_match_output_file(3)
-    # end
-    # it "should process input file 4" do
-    #   command_report_should_match_output_file(4)
-    # end
-    # it "should process input file 5" do
-    #   pending
-    #   command_report_should_match_output_file(5)
-    # end
+    it "should process input file 2" do
+      command_report_should_match_output_file(2)
+    end
+    it "should process input file 3" do
+      command_report_should_match_output_file(3)
+    end
+    it "should process input file 4" do
+      command_report_should_match_output_file(4)
+    end
+    it "should process input file 5" do
+      command_report_should_match_output_file(5)
+    end
+    it "should process input file 6" do
+      command_report_should_match_output_file(6)
+    end
   end
 end
 

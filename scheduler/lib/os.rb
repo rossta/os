@@ -1,49 +1,49 @@
 module Scheduling
   class OS
-  
+    def self.boot(scheduler, processes)
+      @@instance = Scheduling::OS.new(scheduler, processes)
+    end
+    
+    def self.instance
+      @@instance ||= Scheduling::OS.new
+    end
+
+    def self.run
+      instance.run
+    end
+
+    def self.random_os(interval, state = nil)
+      random = RandomNumberGenerator.number
+      instance.details << "Burst when choosing #{state.to_s} process to run: #{random}"
+      1 + (random % interval)
+    end
+    
     attr_reader :parser, :scheduler
-    attr_accessor :cpu_burst, :io_burst, :processes, :running_process, :ready_queue, :cycles, :io_cycles, :details
+    attr_accessor :cpu_burst, :io_burst, :processes, :ready_queue, :cycles, :io_cycles, :details
 
     def initialize(scheduler = nil, processes = [])
       @scheduler  = scheduler
       @processes  = processes
       RandomNumberGenerator.clear!
     end
-
-    def self.random_os(interval)
-      1 + (RandomNumberGenerator.number % interval)
-    end
-
+    
     def run
       @cycles = 0
       @io_cycles = 0
       while !terminated? do
         record_details
-        blocked = blocked_processes
-        running = running_process
-        ready   = ready_processes
+        ready_at_start = ready_processes
         
-        blocked.each do |p|
-          p.cycle
-        end
+        blocked_processes.each { |p| p.cycle }
         
-        if running
-          running.cycle
-          running.io_burst = self.class.random_os(running.max_io) if running.blocked?
-        end
+        running_process.cycle if running_process
         
-        ready.each do |p|
-          p.cycle
-        end
+        ready_at_start.each { |p| p.cycle }
         
-        ready_processes.each do |p|
-          scheduler.schedule(p)
-        end
+        ready_processes.each { |p| scheduler.schedule(p) } 
 
-        if running_process.nil? && (running = scheduler.next_ready_process)
-          running.start_run
-        end
-
+        scheduler.run_next_process if running_process.nil?
+        
         @io_cycles += 1 if blocked_processes.any?
         @cycles += 1    unless terminated?
       end
@@ -90,16 +90,12 @@ module Scheduling
     end
     
     def record_details
-      process_state = sorted_processes.map { |p| p.current_state }
+      process_state = processes.map { |p| p.current_state }
       details << "Before cycle #{cycles}:  " + process_state.join("\t")
     end
 
     def details
       @details ||= []
-    end
-    
-    def sorted_processes
-      processes.sort { |a,b| a <=> b }
     end
 
   protected

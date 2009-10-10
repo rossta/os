@@ -10,8 +10,8 @@ class SchedulerCommand
     parser = ProcessParser.new(arguments.first)
     parser.parse
     
-    os = Scheduling::OS.new(FifoScheduler.new, parser.processes)
-    os.run
-    @report = Scheduling::Report.new(os, parser, arguments[1]).report
+    Scheduling::OS.boot(FifoScheduler.new, parser.sorted_processes)
+    Scheduling::OS.run
+    @report = Scheduling::Report.new(Scheduling::OS.instance, parser, arguments[1]).report
   end
 end

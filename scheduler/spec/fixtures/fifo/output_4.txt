@@ -1,46 +1,46 @@
 The original input was: 5 ( 0 3 200 3 ) ( 0 9 500 3 ) ( 0 20 500 3 ) ( 100 1 100 3 ) ( 100 100 500 3 )
-The (sorted) input is: 5 ( 0 3 200 3 ) ( 0 9 500 3 ) ( 0 20 500 3 ) ( 100 1 100 3 ) ( 100 100 500 3 )
+The (sorted) input is:  5 ( 0 3 200 3 ) ( 0 9 500 3 ) ( 0 20 500 3 ) ( 100 1 100 3 ) ( 100 100 500 3 )
 
 
 Process 0:
-    (A,B,C,IO) = (0,3,200,3)
-    Finishing time: 1713
-    Turnaround time: 1713
-    I/O time: 180
-    Waiting time: 1333
+	(A,B,C,IO) = (0,3,200,3)
+	Finishing time: 1713
+	Turnaround time: 1713
+	I/O time: 180
+	Waiting time: 1333
 
 Process 1:
-    (A,B,C,IO) = (0,9,500,3)
-    Finishing time: 1821
-    Turnaround time: 1821
-    I/O time: 204
-    Waiting time: 1117
+	(A,B,C,IO) = (0,9,500,3)
+	Finishing time: 1821
+	Turnaround time: 1821
+	I/O time: 204
+	Waiting time: 1117
 
 Process 2:
-    (A,B,C,IO) = (0,20,500,3)
-    Finishing time: 1404
-    Turnaround time: 1404
-    I/O time: 92
-    Waiting time: 812
+	(A,B,C,IO) = (0,20,500,3)
+	Finishing time: 1404
+	Turnaround time: 1404
+	I/O time: 92
+	Waiting time: 812
 
 Process 3:
-    (A,B,C,IO) = (100,1,100,3)
-    Finishing time: 1818
-    Turnaround time: 1718
-    I/O time: 199
-    Waiting time: 1419
+	(A,B,C,IO) = (100,1,100,3)
+	Finishing time: 1818
+	Turnaround time: 1718
+	I/O time: 199
+	Waiting time: 1419
 
 Process 4:
-    (A,B,C,IO) = (100,100,500,3)
-    Finishing time: 757
-    Turnaround time: 657
-    I/O time: 20
-    Waiting time: 137
+	(A,B,C,IO) = (100,100,500,3)
+	Finishing time: 757
+	Turnaround time: 657
+	I/O time: 20
+	Waiting time: 137
 
 Summary Data:
-    Finishing time: 1821
-    CPU Utilization: 0.988468
-    I/O Utilization: 0.312466
-    Throughput: 0.274574 processes per hundred cycles
-    Average turnaround time: 1462.600000
-    Average waiting time: 963.600000
+	Finishing time: 1821
+	CPU Utilization: 0.988468
+	I/O Utilization: 0.312466
+	Throughput: 0.274574 processes per hundred cycles
+	Average turnaround time: 1462.600000
+	Average waiting time: 963.600000

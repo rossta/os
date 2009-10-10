@@ -3,13 +3,6 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe Scheduling::Report do
   
   describe "report" do
-    it "should report original input" do
-      parser = mock(ProcessParser, :to_s => "original_input")
-      report = Scheduling::Report.new(mock(Scheduling::OS), parser)
-      report.original_input.should == "The original input was: " + parser.to_s
-    end
-    
-    it "should report sorted input"
     
     it "should report each process summary" do
       processes = []

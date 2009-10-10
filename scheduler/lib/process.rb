@@ -1,15 +1,16 @@
 module Scheduling
   class Process
-    attr_reader   :arrival_time,   :max_cpu,  :cpu_time,  :max_io, :finishing_time
+    attr_reader   :arrival_time,   :max_cpu,  :cpu_time,  :max_io, :finishing_time, :index
     attr_accessor :io_time,  :wait_time, :state, :cpu_burst, :io_burst, :remaining_time
 
-    def initialize(a, b, c, io)
+    def initialize(a, b, c, io, index = nil)
       @arrival_time   = a
       @max_cpu        = b
       @cpu_time       = c
       @max_io         = io
       @wait_time      = 0
       @io_time        = 0
+      @index          = index
       @remaining_time = cpu_time
       @state          = Scheduling::ProcessState::Unstarted
     end
@@ -39,7 +40,8 @@ module Scheduling
     end
     
     def start_run
-      self.cpu_burst = Scheduling::OS.random_os(self.max_cpu)
+      Scheduling::OS.instance.details << to_s
+      self.cpu_burst = Scheduling::OS.random_os(self.max_cpu, self.state)
       @state = ProcessState::Running
     end
     
@@ -49,8 +51,9 @@ module Scheduling
 
     def <=>(other)
       return -1 if self.arrival_time < other.arrival_time
-      return 1 if self.arrival_time > other.arrival_time
-      return 0
+      return 1  if self.arrival_time > other.arrival_time
+      return -1 if self.index < other.index
+      return 1  if self.index > other.index
     end
     
     def method_missing(sym, *args, &block)
@@ -75,7 +78,11 @@ module Scheduling
       end
 
       def self.current(process)
-        " unstarted 0"
+        " #{to_s} 0"
+      end
+      
+      def self.to_s
+        "unstarted"
       end
       
     end
@@ -95,7 +102,11 @@ module Scheduling
       end
       
       def self.current(process)
-        "     ready 0"
+        "     #{to_s} 0"
+      end
+      
+      def self.to_s
+        "ready"
       end
     end
     
@@ -106,6 +117,8 @@ module Scheduling
         if process.remaining_time == 0
           Terminated
         elsif process.cpu_burst   == 0
+          Scheduling::OS.instance.details << process.to_s
+          process.io_burst = Scheduling::OS.random_os(process.max_io, process.state)
           Blocked
         else
           Running
@@ -117,7 +130,11 @@ module Scheduling
       end
       
       def self.current(process)
-        "   running #{process.cpu_burst}"
+        "   #{to_s} #{process.cpu_burst}"
+      end
+      
+      def self.to_s
+        "running"
       end
     end
     
@@ -137,7 +154,11 @@ module Scheduling
       end
 
       def self.current(process)
-        "   blocked #{process.io_burst}"
+        "   #{to_s} #{process.io_burst}"
+      end
+      
+      def self.to_s
+        "blocked"
       end
       
     end
@@ -152,7 +173,11 @@ module Scheduling
       end
       
       def self.current(process)
-        "terminated 0"
+        "#{to_s} 0"
+      end
+      
+      def self.to_s
+        "terminated"
       end
     end
   end

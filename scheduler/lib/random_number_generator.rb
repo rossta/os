@@ -18,7 +18,8 @@ class RandomNumberGenerator
   end
   
   def number
-    @reader.readline.strip.to_i
+    number = @reader.readline.strip.to_i
+    number
   end
   
 end

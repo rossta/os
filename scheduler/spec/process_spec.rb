@@ -29,6 +29,9 @@ describe Scheduling::Process do
     end
     
     describe "running" do
+      before(:each) do
+        Scheduling::OS.stub!(:random_os).and_return(1)
+      end
       it "should decrement cpu burst" do
         @process.state = Scheduling::ProcessState::Running
         @process.cpu_burst = 2
@@ -46,6 +49,13 @@ describe Scheduling::Process do
         @process.cpu_burst = 1
         @process.cycle
         @process.state.should == Scheduling::ProcessState::Blocked
+      end
+      it "should switch to get io_burst if cpu burst == 0" do
+        @process.state = Scheduling::ProcessState::Running
+        Scheduling::OS.stub!(:random_os).and_return(3)
+        @process.cpu_burst = 1
+        @process.cycle
+        @process.io_burst.should == 3
       end
       it "should switch to terminated if remaining time == 0" do
         @process.state = Scheduling::ProcessState::Running
@@ -181,14 +191,20 @@ describe Scheduling::Process do
         (process <=> Scheduling::Process.new(0,0,0,0)).should == 1
       end
       
-      it "should return 0 if arrival time equal" do
-        process = Scheduling::Process.new(10,0,0,0)
-        (process <=> Scheduling::Process.new(10,0,0,0)).should == 0
-      end
-      
       it "should return +1 if arrival time earlier" do
         process = Scheduling::Process.new(0,0,0,0)
         (process <=> Scheduling::Process.new(10,0,0,0)).should == -1
+      end
+      
+      describe "same arrival time" do
+        it "should return -1 if index lower" do
+          process = Scheduling::Process.new(10,0,0,0,0)
+          (process <=> Scheduling::Process.new(10,0,0,0,10)).should == -1
+        end
+        it "should return +1 if index higher" do
+          process = Scheduling::Process.new(10,0,0,0,10)
+          (process <=> Scheduling::Process.new(10,0,0,0,0)).should == 1
+        end
       end
     end
   end
