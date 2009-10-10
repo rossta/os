@@ -38,8 +38,8 @@ module Scheduling
       @io_burst ||= 0
     end
     
-    def start_run(os)
-      self.cpu_burst = os.random_os(self.max_cpu)
+    def start_run
+      self.cpu_burst = Scheduling::OS.random_os(self.max_cpu)
       @state = ProcessState::Running
     end
     

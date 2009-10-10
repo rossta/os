@@ -10,7 +10,7 @@ module Scheduling
       RandomNumberGenerator.clear!
     end
 
-    def random_os(interval)
+    def self.random_os(interval)
       1 + (RandomNumberGenerator.number % interval)
     end
 
@@ -28,7 +28,7 @@ module Scheduling
         
         if running
           running.cycle
-          running.io_burst = random_os(running.max_io) if running.blocked?
+          running.io_burst = self.class.random_os(running.max_io) if running.blocked?
         end
         
         ready.each do |p|
@@ -40,7 +40,7 @@ module Scheduling
         end
 
         if running_process.nil? && (running = scheduler.next_ready_process)
-          running.start_run(self)
+          running.start_run
         end
 
         @io_cycles += 1 if blocked_processes.any?
