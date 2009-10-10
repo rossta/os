@@ -7,10 +7,11 @@ module Scheduling
     def initialize(scheduler = nil, processes = [])
       @scheduler  = scheduler
       @processes  = processes
+      RandomNumberGenerator.clear!
     end
 
     def random_os(interval)
-      1 + (generator.number % interval)
+      1 + (RandomNumberGenerator.number % interval)
     end
 
     def run
@@ -88,9 +89,6 @@ module Scheduling
     end
 
   protected
-    def generator
-      @generator ||= RandomNumberGenerator.new
-    end
     
     def process_sum(sym)
       processes.map { |p| p.send(sym) }.inject {|sum, n| sum + n }
