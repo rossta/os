@@ -20,6 +20,9 @@ describe SchedulerCommand do
     it "should process input file 6" do
       command_report_should_match_output_file(6)
     end
+    it "should process input file 7" do
+      command_report_should_match_output_file(7)
+    end
   end
 end
 
