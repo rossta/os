@@ -19,7 +19,7 @@ module Scheduling
     end
     
     attr_reader :parser, :scheduler
-    attr_accessor :cpu_burst, :io_burst, :processes, :ready_queue, :cycles, :io_cycles, :details
+    attr_accessor :cpu_burst, :io_burst, :processes, :ready_queue, :details
 
     def initialize(scheduler = nil, processes = [])
       @scheduler  = scheduler
@@ -28,8 +28,7 @@ module Scheduling
     end
     
     def run
-      @cycles = 0
-      @io_cycles = 0
+      Clock.start
       while !terminated? do
         record_details
         ready_at_start = ready_processes
@@ -44,8 +43,8 @@ module Scheduling
 
         scheduler.run_next_process if running_process.nil?
         
-        @io_cycles += 1 if blocked_processes.any?
-        @cycles += 1    unless terminated?
+        Clock.cycle_io    if blocked_processes.any?
+        Clock.cycle       unless terminated?
       end
     end
 
@@ -62,23 +61,19 @@ module Scheduling
     end
     
     def ready_processes
-      processes.select { |p| p.ready? || p.arrival_time == cycles }
-    end
-    
-    def finishing_time
-      @cycles
+      processes.select { |p| p.ready? || p.arrival_time == Clock.time }
     end
     
     def cpu_utilization
-      process_sum(:cpu_time).to_f / finishing_time
+      process_sum(:cpu_time).to_f / Clock.time
     end
 
     def io_utilization
-      io_cycles.to_f / finishing_time
+      Clock.io_time.to_f / Clock.time
     end
     
     def throughput
-      processes.size * 100.0 / finishing_time.to_f
+      processes.size * 100.0 / Clock.time.to_f
     end
     
     def turnaround_time
@@ -91,7 +86,7 @@ module Scheduling
     
     def record_details
       process_state = processes.map { |p| p.current_state }
-      details << "Before cycle #{cycles}:  " + process_state.join("\t")
+      details << "Before cycle #{Clock.time}:  " + process_state.join("\t")
     end
 
     def details

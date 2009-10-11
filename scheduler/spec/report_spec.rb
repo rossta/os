@@ -63,7 +63,7 @@ describe "Scheduling::OSReport" do
                         "Average turnaround time: 9.000000\n" +
                         "Average waiting time: 0.000000"
 
-      process = mock(Scheduling::OS,
+      os = mock(Scheduling::OS,
         :finishing_time   => 9,
         :cpu_utilization  => 0.55,
         :io_utilization   => 0.44,
@@ -71,7 +71,8 @@ describe "Scheduling::OSReport" do
         :turnaround_time  => 9.0,
         :wait_time        => 0.0
       )
-      Scheduling::OSReport.new(process).report.should == expected_output
+      Scheduling::Clock.stub!(:time).and_return(9)
+      Scheduling::OSReport.new(os).report.should == expected_output
     end
   end
 end

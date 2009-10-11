@@ -45,7 +45,7 @@ module Scheduling
 
     def report(indent = "")
       text = []
-      text << "Finishing time: #{@os.finishing_time}"
+      text << "Finishing time: #{Clock.time}"
       text << "CPU Utilization: #{num_format @os.cpu_utilization}"
       text << "I/O Utilization: #{num_format @os.io_utilization}"
       text << "Throughput: #{num_format @os.throughput} processes per hundred cycles"

@@ -52,20 +52,12 @@ describe Scheduling::OS do
     end
   end
   
-  describe "finishing_time" do
-    it "should return number of cycles" do
-      os = Scheduling::OS.new
-      os.cycles = 9
-      os.finishing_time.should == 9
-    end
-  end
-  
   describe "cpu_utilization" do
     it "should return floating point total cpu time / finishing time" do
       os = Scheduling::OS.new
       os.processes << mock(Scheduling::Process, :cpu_time => 3)
       os.processes << mock(Scheduling::Process, :cpu_time => 5)
-      os.cycles = 10
+      Scheduling::Clock.stub!(:time).and_return(10)
       os.cpu_utilization.should == 0.8
     end
   end
@@ -73,8 +65,8 @@ describe Scheduling::OS do
   describe "io_utilization" do
     it "should return floating point total io time / finishing time" do
       os = Scheduling::OS.new
-      os.io_cycles = 8
-      os.cycles = 10
+      Scheduling::Clock.stub!(:io_time).and_return(8)
+      Scheduling::Clock.stub!(:time).and_return(10)
       os.io_utilization.should == 0.8
     end
   end
@@ -84,7 +76,7 @@ describe Scheduling::OS do
       os = Scheduling::OS.new
       os.processes << mock(Scheduling::Process)
       os.processes << mock(Scheduling::Process)
-      os.cycles = 10
+      Scheduling::Clock.stub!(:time).and_return(10)
       os.throughput.should == 20.0
     end
   end
@@ -110,6 +102,7 @@ describe Scheduling::OS do
   describe "ready_processes" do
     it "should return collection including processes in ready state" do
       os = Scheduling::OS.new
+      Scheduling::Clock.stub!(:time).and_return(0)
       ready_process = mock(Scheduling::Process, :ready? => true)
       os.processes << mock(Scheduling::Process, :ready? => false, :arrival_time => 100)
       os.processes << ready_process
@@ -118,7 +111,7 @@ describe Scheduling::OS do
     
     it "should return unstarted processes with current arrival time" do
       os = Scheduling::OS.new
-      os.cycles = 3
+      Scheduling::Clock.stub!(:time).and_return(3)
       created_process = mock(Scheduling::Process, :ready? => false, :arrival_time => 3)
       os.processes << mock(Scheduling::Process, :ready? => false, :arrival_time => 100)
       os.processes << created_process
