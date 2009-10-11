@@ -8,20 +8,12 @@ module Scheduling
       @@instance ||= new
     end
     
-    def self.time
-      instance.time
-    end
-    
-    def self.io_time
-      instance.io_time
-    end
-    
-    def self.cycle
-      instance.cycle
-    end
-    
-    def self.cycle_io
-      instance.cycle_io
+    def self.method_missing(sym, *args, &block)
+      if (instance.methods - instance.class.methods).map { |m| m.to_sym }.include?(sym)
+        instance.send(sym)
+      else
+        raise NoMethodError, sym.to_s
+      end
     end
     
     def initialize
