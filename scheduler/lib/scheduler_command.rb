@@ -3,6 +3,7 @@ class SchedulerCommand
 
   def run(arguments)
     simulate(arguments)
+    Scheduling::Report.new(Scheduling::OS.instance, parser, flag).report
     puts report.to_s
   end
 
@@ -13,7 +14,7 @@ class SchedulerCommand
 
     parser = parse_processes(file_name)
     scheduler = get_scheduler(strategy)
-
+    
     Scheduling::OS.boot(scheduler, parser.sorted_processes)
     Scheduling::OS.run
     @report = Scheduling::Report.new(Scheduling::OS.instance, parser, flag).report

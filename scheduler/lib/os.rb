@@ -19,11 +19,11 @@ module Scheduling
     end
 
     attr_reader :scheduler
-    attr_accessor :processes, :details
+    attr_accessor :details
 
     def initialize(scheduler = nil, processes = [])
       @scheduler  = scheduler
-      @processes  = processes
+      ProcessTable.load_processes(processes)
       RandomNumberGenerator.clear!
     end
 
@@ -32,7 +32,7 @@ module Scheduling
       while !terminated? do
         record_details
 
-        (blocked_processes + [running_process] + ready_processes).compact.each { |p| p.cycle }
+        processes_to_cycle.each { |p| p.cycle }
 
         ready_processes.each { |p| scheduler.schedule(p) }
 
@@ -42,21 +42,39 @@ module Scheduling
         Clock.cycle       unless terminated?
       end
     end
-
+    
+    def processes_to_cycle
+      (blocked_processes + [running_process] + ready_processes).compact
+    end
+    
+    # def self.included
+    #   [:processes, :terminated?, :running_process, :blocked_processes, :ready_processes].each do |sym|
+    #     class_eval <<-SRC
+    #       def #{sym.to_s}
+    #         ProcessTable.send(#{sym})
+    #       end
+    #     SRC
+    #   end
+    # end
+    
+    def processes
+      ProcessTable.processes
+    end
+    
     def terminated?
-      processes.all? { |p| p.terminated? }
+      ProcessTable.terminated?
     end
-
+    
     def running_process
-      processes.detect { |p| p.running? }
+      ProcessTable.running_process
     end
-
+    
     def blocked_processes
-      processes.select { |p| p.blocked? }
+      ProcessTable.blocked_processes
     end
 
     def ready_processes
-      processes.select { |p| p.ready? || p.arrival_time == Clock.time }
+      ProcessTable.ready_processes
     end
 
     def cpu_utilization
