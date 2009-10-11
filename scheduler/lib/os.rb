@@ -3,7 +3,7 @@ module Scheduling
     def self.boot(scheduler, processes)
       @@instance = Scheduling::OS.new(scheduler, processes)
     end
-    
+
     def self.instance
       @@instance ||= Scheduling::OS.new
     end
@@ -17,7 +17,7 @@ module Scheduling
       # instance.details << "Burst when choosing #{state.to_s} process to run: #{random}"
       1 + (random % interval)
     end
-    
+
     attr_reader :scheduler
     attr_accessor :processes, :details
 
@@ -26,18 +26,18 @@ module Scheduling
       @processes  = processes
       RandomNumberGenerator.clear!
     end
-    
+
     def run
       Clock.start
       while !terminated? do
         record_details
-        
+
         (blocked_processes + [running_process] + ready_processes).compact.each { |p| p.cycle }
-        
-        ready_processes.each { |p| scheduler.schedule(p) } 
+
+        ready_processes.each { |p| scheduler.schedule(p) }
 
         scheduler.run_next_process if running_process.nil?
-        
+
         Clock.cycle_io    if blocked_processes.any?
         Clock.cycle       unless terminated?
       end
@@ -50,15 +50,15 @@ module Scheduling
     def running_process
       processes.detect { |p| p.running? }
     end
-    
+
     def blocked_processes
       processes.select { |p| p.blocked? }
     end
-    
+
     def ready_processes
       processes.select { |p| p.ready? || p.arrival_time == Clock.time }
     end
-    
+
     def cpu_utilization
       process_sum(:cpu_time).to_f / Clock.time
     end
@@ -66,19 +66,19 @@ module Scheduling
     def io_utilization
       Clock.io_time.to_f / Clock.time
     end
-    
+
     def throughput
       processes.size * 100.0 / Clock.time.to_f
     end
-    
+
     def turnaround_time
       process_sum(:turnaround_time).to_f / processes.size
     end
-    
+
     def wait_time
       process_sum(:wait_time).to_f / processes.size
     end
-    
+
     def record_details
       process_state = processes.map { |p| p.current_state }
       details << "Before cycle #{Clock.time}:\t\t" + process_state.join("\t")
@@ -89,10 +89,10 @@ module Scheduling
     end
 
   protected
-    
+
     def process_sum(sym)
       processes.map { |p| p.send(sym) }.inject {|sum, n| sum + n }
     end
-    
+
   end
 end

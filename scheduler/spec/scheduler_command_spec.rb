@@ -2,32 +2,26 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe SchedulerCommand do
   describe "run" do
-    it "should process input file 1" do
-      command_report_should_match_output_file(1)
+    describe "FIFO" do
+      [1,2,3,4,5,6,7].each do |num|
+        it "should process input file #{num}" do
+          command_report_should_match_output_file(num)
+        end
+      end
     end
-    it "should process input file 2" do
-      command_report_should_match_output_file(2)
-    end
-    it "should process input file 3" do
-      command_report_should_match_output_file(3)
-    end
-    it "should process input file 4" do
-      command_report_should_match_output_file(4)
-    end
-    it "should process input file 5" do
-      command_report_should_match_output_file(5)
-    end
-    it "should process input file 6" do
-      command_report_should_match_output_file(6)
-    end
-    it "should process input file 7" do
-      command_report_should_match_output_file(7)
+    describe "RR" do
+      [1,2,3,4].each do |num|
+        it "should process input file #{num}" do
+          pending
+          command_report_should_match_output_file(num, "rr")
+        end
+      end
     end
   end
 end
 
-def command_report_should_match_output_file(index)
+def command_report_should_match_output_file(index, strategy = "fifo")
   command = SchedulerCommand.new
-  command.simulate([FIXTURES + "input_#{index}.txt"])
-  command.report.should == File.open(FIXTURES + "fifo/output_#{index}.txt").read.strip
+  command.simulate([FIXTURES + "input_#{index}.txt", strategy])
+  command.report.should == File.open(FIXTURES + "#{strategy}/output_#{index}.txt").read.strip
 end

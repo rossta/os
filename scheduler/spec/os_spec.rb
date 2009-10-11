@@ -38,20 +38,6 @@ describe Scheduling::OS do
     end
   end
   
-  describe "running_process" do
-    before(:each) do
-      ProcessParser.stub!(:new).and_return(mock(ProcessParser, :parse => nil, :processes => []))
-    end
-    it "should return process in running state" do
-      os = Scheduling::OS.new
-      running_process = mock(Scheduling::Process, :running? => true)
-      os.processes << mock(Scheduling::Process, :running? => false)
-      os.processes << running_process
-      os.processes << mock(Scheduling::Process, :running? => false)
-      os.running_process.should == running_process
-    end
-  end
-  
   describe "cpu_utilization" do
     it "should return floating point total cpu time / finishing time" do
       os = Scheduling::OS.new
