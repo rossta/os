@@ -40,7 +40,6 @@ module Scheduling
     end
     
     def start_run
-      Scheduling::OS.instance.details << to_s
       self.cpu_burst = Scheduling::OS.random_os(self.max_cpu, self.state)
       @state = ProcessState::Running
     end
@@ -117,7 +116,6 @@ module Scheduling
         if process.remaining_time == 0
           Terminated
         elsif process.cpu_burst   == 0
-          Scheduling::OS.instance.details << process.to_s
           process.io_burst = Scheduling::OS.random_os(process.max_io, process.state)
           Blocked
         else

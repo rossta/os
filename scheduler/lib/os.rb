@@ -14,7 +14,7 @@ module Scheduling
 
     def self.random_os(interval, state = nil)
       random = RandomNumberGenerator.number
-      instance.details << "Burst when choosing #{state.to_s} process to run: #{random}"
+      # instance.details << "Burst when choosing #{state.to_s} process to run: #{random}"
       1 + (random % interval)
     end
     
@@ -86,7 +86,7 @@ module Scheduling
     
     def record_details
       process_state = processes.map { |p| p.current_state }
-      details << "Before cycle #{Clock.time}:  " + process_state.join("\t")
+      details << "Before cycle #{Clock.time}:\t\t" + process_state.join("\t")
     end
 
     def details
