@@ -18,8 +18,8 @@ module Scheduling
       1 + (random % interval)
     end
     
-    attr_reader :parser, :scheduler
-    attr_accessor :cpu_burst, :io_burst, :processes, :ready_queue, :details
+    attr_reader :scheduler
+    attr_accessor :processes, :details
 
     def initialize(scheduler = nil, processes = [])
       @scheduler  = scheduler
@@ -31,13 +31,8 @@ module Scheduling
       Clock.start
       while !terminated? do
         record_details
-        ready_at_start = ready_processes
         
-        blocked_processes.each { |p| p.cycle }
-        
-        running_process.cycle if running_process
-        
-        ready_at_start.each { |p| p.cycle }
+        (blocked_processes + [running_process] + ready_processes).compact.each { |p| p.cycle }
         
         ready_processes.each { |p| scheduler.schedule(p) } 
 
