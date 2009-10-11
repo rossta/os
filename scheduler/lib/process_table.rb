@@ -31,6 +31,18 @@ module Scheduling
     def self.ready_processes
       processes.select { |p| p.ready? || p.arrival_time == Clock.time }
     end
+    
+    def self.sum(sym)
+      processes.map { |p| p.send(sym) }.inject {|sum, n| sum + n }
+    end
+    
+    def self.size
+      processes.size
+    end
+    
+    def self.current_state
+      processes.map { |p| p.current_state }
+    end
 
     attr_accessor :processes
     def initialize(processes = [])

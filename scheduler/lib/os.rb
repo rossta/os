@@ -43,22 +43,18 @@ module Scheduling
       end
     end
     
-    def processes_to_cycle
-      (blocked_processes + [running_process] + ready_processes).compact
+    def details
+      @details ||= []
     end
     
-    # def self.included
-    #   [:processes, :terminated?, :running_process, :blocked_processes, :ready_processes].each do |sym|
-    #     class_eval <<-SRC
-    #       def #{sym.to_s}
-    #         ProcessTable.send(#{sym})
-    #       end
-    #     SRC
-    #   end
-    # end
+    protected
     
-    def processes
-      ProcessTable.processes
+    def record_details
+      details << "Before cycle #{Clock.time}:\t\t" + ProcessTable.current_state.join("\t")
+    end
+
+    def processes_to_cycle
+      (blocked_processes + [running_process] + ready_processes).compact
     end
     
     def terminated?
@@ -72,45 +68,20 @@ module Scheduling
     def blocked_processes
       ProcessTable.blocked_processes
     end
-
+    
     def ready_processes
       ProcessTable.ready_processes
     end
 
-    def cpu_utilization
-      process_sum(:cpu_time).to_f / Clock.time
-    end
-
-    def io_utilization
-      Clock.io_time.to_f / Clock.time
-    end
-
-    def throughput
-      processes.size * 100.0 / Clock.time.to_f
-    end
-
-    def turnaround_time
-      process_sum(:turnaround_time).to_f / processes.size
-    end
-
-    def wait_time
-      process_sum(:wait_time).to_f / processes.size
-    end
-
-    def record_details
-      process_state = processes.map { |p| p.current_state }
-      details << "Before cycle #{Clock.time}:\t\t" + process_state.join("\t")
-    end
-
-    def details
-      @details ||= []
-    end
-
-  protected
-
-    def process_sum(sym)
-      processes.map { |p| p.send(sym) }.inject {|sum, n| sum + n }
-    end
-
+    # def self.included
+    #   [:processes, :terminated?, :running_process, :blocked_processes, :ready_processes].each do |sym|
+    #     class_eval <<-SRC
+    #       def #{sym.to_s}
+    #         return ProcessTable.send(#{sym})
+    #       end
+    #     SRC
+    #   end
+    # end
+    # 
   end
 end

@@ -20,7 +20,7 @@ module Scheduling
 
     def processes_summary
       text = []
-      os.processes.each_with_index do |p, i|
+      ProcessTable.processes.each_with_index do |p, i|
         process_text = ["Process #{i}:"]
         process_text << ProcessReport.new(p).report(INDENT)
         text << process_text.join("\n") + "\n"
@@ -29,7 +29,7 @@ module Scheduling
     end
 
     def os_summary
-      "Summary Data:\n" + OSReport.new(os).report(INDENT)
+      "Summary Data:\n" + OSReport.new.report(INDENT)
     end
     
     def detailed?
@@ -39,26 +39,43 @@ module Scheduling
   end
 
   class OSReport
-    def initialize(os)
-      @os = os
-    end
-
     def report(indent = "")
       text = []
       text << "Finishing time: #{Clock.time}"
-      text << "CPU Utilization: #{num_format @os.cpu_utilization}"
-      text << "I/O Utilization: #{num_format @os.io_utilization}"
-      text << "Throughput: #{num_format @os.throughput} processes per hundred cycles"
-      text << "Average turnaround time: #{num_format @os.turnaround_time}"
-      text << "Average waiting time: #{num_format @os.wait_time}"
+      text << "CPU Utilization: #{num_format cpu_utilization}"
+      text << "I/O Utilization: #{num_format io_utilization}"
+      text << "Throughput: #{num_format throughput} processes per hundred cycles"
+      text << "Average turnaround time: #{num_format turnaround_time}"
+      text << "Average waiting time: #{num_format wait_time}"
       indent + text.join("\n" + indent)
     end
     
+    def cpu_utilization
+      ProcessTable.sum(:cpu_time).to_f / Clock.time
+    end
+
+    def io_utilization
+      Clock.io_time.to_f / Clock.time
+    end
+
+    def throughput
+      ProcessTable.size * 100.0 / Clock.time.to_f
+    end
+
+    def turnaround_time
+      ProcessTable.sum(:turnaround_time).to_f / ProcessTable.size
+    end
+
+    def wait_time
+      ProcessTable.sum(:wait_time).to_f / ProcessTable.size
+    end
+
     protected
     
     def num_format(f)
       format("%f", f)
     end
+    
   end
 
   class ProcessReport
