@@ -14,7 +14,7 @@ module Scheduling
 
     def self.random_os(interval, state = nil)
       random = RandomNumberGenerator.number
-      # instance.details << "Burst when choosing #{state.to_s} process to run: #{random}"
+      instance.details << "Burst when choosing #{state.to_s} process to run: #{random}"
       1 + (random % interval)
     end
 
@@ -36,10 +36,9 @@ module Scheduling
 
         ready_processes.each { |p| scheduler.schedule(p) }
 
-        scheduler.run_next_process if running_process.nil?
+        scheduler.run_next_process
 
-        Clock.cycle_io    if blocked_processes.any?
-        Clock.cycle       unless terminated?
+        cycle_clock
       end
     end
     
@@ -55,6 +54,11 @@ module Scheduling
 
     def processes_to_cycle
       (blocked_processes + [running_process] + ready_processes).compact
+    end
+    
+    def cycle_clock
+      Clock.cycle_io    if blocked_processes.any?
+      Clock.cycle       unless terminated?
     end
     
     def terminated?
@@ -77,7 +81,7 @@ module Scheduling
     #   [:processes, :terminated?, :running_process, :blocked_processes, :ready_processes].each do |sym|
     #     class_eval <<-SRC
     #       def #{sym.to_s}
-    #         return ProcessTable.send(#{sym})
+    #         ProcessTable.send(#{sym})
     #       end
     #     SRC
     #   end

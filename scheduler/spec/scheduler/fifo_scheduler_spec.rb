@@ -5,21 +5,6 @@ describe FifoScheduler do
     @scheduler = FifoScheduler.new
   end
   
-  describe "next_ready_process" do
-
-    it "should return first if no running process" do
-      first = mock(Scheduling::Process)
-      second = mock(Scheduling::Process)
-      @scheduler.queue << first
-      @scheduler.queue << second
-      @scheduler.next_ready_process.should == first
-    end
-
-    it "should return nil if queue empty" do
-      @scheduler.next_ready_process.should be_nil
-    end
-  end
-  
   describe "schedule" do
     it "should add ready process to queue if not on queue" do
       first = mock(Scheduling::Process, :ready? => true)
@@ -43,14 +28,15 @@ describe FifoScheduler do
     end
   end
   
-  describe "to_s" do
-    describe "input_1" do
-      it "should match output_1" do
-        pending
-        scheduler = FifoScheduler.new(FIXTURES + "input_1.txt")
-        scheduler.run
-        scheduler.to_s.should == File.open(FIXTURES + "fifo/output_1.txt").read
-      end
+  describe "switch?" do
+    it "should return true if running_process is nil" do
+      Scheduling::ProcessTable.stub!(:running_process).and_return(nil)
+      @scheduler.switch?.should be_true
+    end
+    
+    it "should return false if running_process is present" do
+      Scheduling::ProcessTable.stub!(:running_process).and_return(:process)
+      @scheduler.switch?.should be_false
     end
   end
 end

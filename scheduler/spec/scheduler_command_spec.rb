@@ -12,7 +12,7 @@ describe SchedulerCommand do
     describe "RR" do
       [1,2,3,4].each do |num|
         it "should process input file #{num}" do
-          pending if num == 4
+          # pending if num == 4
           command_report_should_match_output_file(num, "rr")
         end
       end

@@ -3,7 +3,6 @@ class SchedulerCommand
 
   def run(arguments)
     simulate(arguments)
-    Scheduling::Report.new(Scheduling::OS.instance, parser, flag).report
     puts report.to_s
   end
 
