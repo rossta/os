@@ -30,6 +30,7 @@ module Scheduling
     def run
       Clock.start
       while !terminated? do
+        
         record_details
 
         processes_to_cycle.each { |p| p.cycle }
@@ -49,7 +50,7 @@ module Scheduling
     protected
     
     def record_details
-      details << "Before cycle #{Clock.time}:\t\t" + ProcessTable.current_state.join("\t")
+      details << format("%-24s", "Before cycle #{Clock.time}:") + ProcessTable.current_state.join("\t")
     end
 
     def processes_to_cycle

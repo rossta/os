@@ -6,17 +6,17 @@ class Scheduler
   end
 
   def run_next_process
-    run_cycle
+    before_next_process
     return unless switch?
-    return unless ready_process = queue.shift
-    ready_process.start_run
+    return unless (ready_process = queue.shift)
+    Scheduling::ProcessTable.run(ready_process)
   end
 
   def running_process
     Scheduling::ProcessTable.running_process
   end
   
-  def run_cycle
+  def before_next_process
     # record scheduler cycle if necessary
   end
 

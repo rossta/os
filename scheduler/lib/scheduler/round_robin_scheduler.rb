@@ -12,15 +12,17 @@ class RoundRobinScheduler < Scheduler
     queue << process if !queue.include?(process)
   end
   
-  def switch?
-    running_process.nil? || @cycle == 0
+  def before_next_process
+    if self.cycle == QUANTUM || switch?
+      self.cycle = 0
+      queue << Scheduling::ProcessTable.preempt
+      queue.compact!
+    end
+    self.cycle += 1
   end
 
-  def run_cycle
-    if @cycle == 0
-      @cycle = QUANTUM
-    else
-      @cycle -= 1
-    end
+  def switch?
+    running_process.nil?
   end
+
 end

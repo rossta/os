@@ -41,7 +41,23 @@ module Scheduling
     end
     
     def self.current_state
-      processes.map { |p| p.current_state }
+      processes.map { |p| format("%12s", p.current_state) }
+    end
+    
+    def self.preempt
+      if (preempted = running_process)
+        preempted.state = ProcessState::Ready
+        raise "More than one running process" if !running_process.nil?
+        preempted
+      end
+    end
+    
+    def self.run(process)
+      process.start_run
+    end
+    
+    def self.running_size
+      ProcessTable.processes.select { |p| p.running? }.size
     end
 
     attr_accessor :processes

@@ -40,8 +40,8 @@ module Scheduling
     end
     
     def start_run
-      self.cpu_burst = Scheduling::OS.random_os(self.max_cpu, self.state)
-      @state = ProcessState::Running
+      self.cpu_burst = Scheduling::OS.random_os(self.max_cpu, self.state) if self.cpu_burst == 0
+      self.state = ProcessState::Running
     end
     
     def current_state
@@ -77,7 +77,7 @@ module Scheduling
       end
 
       def self.current(process)
-        " #{to_s} 0"
+        "#{to_s} 0"
       end
       
       def self.to_s
@@ -88,12 +88,8 @@ module Scheduling
     
     class Ready #TODO 
       def self.cycle(process)
-        if process.cpu_burst > 0
-          Running.cycle(process)
-        else
-          process.wait_time += 1
-          Ready
-        end
+        process.wait_time += 1
+        Ready
       end
 
       def self.to_sym
@@ -101,7 +97,7 @@ module Scheduling
       end
       
       def self.current(process)
-        "     #{to_s} 0"
+        "#{to_s} 0"
       end
       
       def self.to_s
@@ -128,7 +124,7 @@ module Scheduling
       end
       
       def self.current(process)
-        "   #{to_s} #{process.cpu_burst}"
+        "#{to_s} #{process.cpu_burst}"
       end
       
       def self.to_s
@@ -152,7 +148,7 @@ module Scheduling
       end
 
       def self.current(process)
-        "   #{to_s} #{process.io_burst}"
+        "#{to_s} #{process.io_burst}"
       end
       
       def self.to_s
