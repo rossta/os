@@ -39,7 +39,9 @@ class SchedulerCommand
     case strategy.to_sym
     when :rr
       Scheduling::RoundRobinScheduler.new
-    when :fifo
+    when :psjf
+      Scheduling::ShortestProcessScheduler.new
+    when :fifo || :fcfs
       Scheduling::FifoScheduler.new
     else
       Scheduling::FifoScheduler.new
