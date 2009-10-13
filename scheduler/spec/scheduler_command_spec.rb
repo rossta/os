@@ -17,8 +17,9 @@ describe SchedulerCommand do
       end
     end
     describe "shortest process next" do
-      [1,2,3].each do |num|
+      [1,2,3,4,5,6,7].each do |num|
         it "should process input file #{num}" do
+          pending if num == 4 || num == 5
           command_report_should_match_output_file(num, "psjf")
         end
       end
