@@ -1,8 +1,19 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/spec_helper'
 
-describe FifoScheduler do
+describe Scheduling::Scheduler do
   before(:each) do
-    @scheduler = FifoScheduler.new
+    @scheduler = Scheduling::Scheduler.new
+  end
+  describe "switch?" do
+    it "should return true if running process is nil" do
+      Scheduling::ProcessTable.stub!(:running_process).and_return(nil)
+      @scheduler.switch?.should be_true
+    end
+    
+    it "should return false running_process not nil" do
+      Scheduling::ProcessTable.stub!(:running_process).and_return(:process)
+      @scheduler.switch?.should be_false
+    end
   end
   
   describe "schedule" do
@@ -28,15 +39,4 @@ describe FifoScheduler do
     end
   end
   
-  describe "switch?" do
-    it "should return true if running_process is nil" do
-      Scheduling::ProcessTable.stub!(:running_process).and_return(nil)
-      @scheduler.switch?.should be_true
-    end
-    
-    it "should return false if running_process is present" do
-      Scheduling::ProcessTable.stub!(:running_process).and_return(:process)
-      @scheduler.switch?.should be_false
-    end
-  end
 end

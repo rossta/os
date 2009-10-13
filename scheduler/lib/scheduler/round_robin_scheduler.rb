@@ -9,9 +9,13 @@ module Scheduling
     end
 
     def schedule_processes
-      preempt! if self.quantum == QUANTUM || switch?
+      preempt! if preempt?
       ProcessTable::ready_processes.each { |p| schedule(p) }
       self.quantum += 1
+    end
+    
+    def preempt?
+      self.quantum == QUANTUM || switch?
     end
 
     def preempt!
