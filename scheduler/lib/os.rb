@@ -1,11 +1,11 @@
 module Scheduling
   class OS
     def self.boot(scheduler, processes)
-      @@instance = Scheduling::OS.new(scheduler, processes)
+      @@instance = new(scheduler, processes)
     end
 
     def self.instance
-      @@instance ||= Scheduling::OS.new
+      @@instance ||= new
     end
 
     def self.run
@@ -36,8 +36,7 @@ module Scheduling
 
         processes_to_cycle.each { |p| p.cycle }
         
-        # scheduler.schedule_processes
-        ready_processes.each { |p| scheduler.schedule(p) }
+        scheduler.schedule_processes
 
         scheduler.run_next_process
 

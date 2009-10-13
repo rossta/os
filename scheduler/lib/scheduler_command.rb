@@ -38,11 +38,11 @@ class SchedulerCommand
   def get_scheduler(strategy)
     case strategy.to_sym
     when :rr
-      RoundRobinScheduler.new
+      Scheduling::RoundRobinScheduler.new
     when :fifo
-      FifoScheduler.new
+      Scheduling::FifoScheduler.new
     else
-      FifoScheduler.new
+      Scheduling::FifoScheduler.new
     end
   end
 end
