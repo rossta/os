@@ -17,7 +17,6 @@ describe SchedulerCommand do
       end
       [4].each do |num|
         it "should process input file #{num}" do
-          pending
           command_report_should_match_output_file(num, "rr")
         end
       end
@@ -25,8 +24,9 @@ describe SchedulerCommand do
   end
   
   describe "details" do
-    [3].each do |num|
+    [3,4].each do |num|
       it "should process input file #{num}" do
+        pending
         command = simulate_command(num, "rr")
         File.open(FIXTURES + "rr/cycles/output_#{num}.txt").readlines.each_with_index do |line, i|
           
