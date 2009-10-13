@@ -12,21 +12,21 @@ module Scheduling
       ProcessTable.run(ready_process)
     end
     
-    protected
+    def switch?
+      running_process.nil?
+    end
     
     def schedule(process)
       return unless process.ready?
       queue << process if !queue.include?(process)
     end
 
+    protected
+    
     def running_process
       ProcessTable.running_process
     end
 
-    def switch?
-      running_process.nil?
-    end
-    
     def next_process
       queue.shift
     end
