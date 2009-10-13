@@ -11,7 +11,7 @@ module Scheduling
     def report
       text = [parser.to_s]
       text << "\n"
-      text << os.details.join("\n") + "\n" if detailed?
+      text << details + "\n" if detailed?
       text << processes_summary
       text << os_summary
       text.join("\n")
@@ -34,6 +34,14 @@ module Scheduling
     
     def detailed?
       !@detailed.nil?
+    end
+    
+    def details
+      os.details.join("\n")
+    end
+    
+    def states
+      os.states
     end
 
   end

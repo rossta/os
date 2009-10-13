@@ -8,5 +8,9 @@ class FifoScheduler < Scheduler
   def switch?
     running_process.nil?
   end
+  
+  def schedule_processes
+    Scheduling::ProcessTable.ready_processes.each { |p| schedule(p) }
+  end
 
 end

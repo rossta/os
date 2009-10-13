@@ -19,7 +19,7 @@ module Scheduling
     end
 
     attr_reader :scheduler
-    attr_accessor :details
+    attr_accessor :details, :states
 
     def initialize(scheduler = nil, processes = [])
       @scheduler  = scheduler
@@ -30,11 +30,13 @@ module Scheduling
     def run
       Clock.start
       while !terminated? do
+        # require "ruby-debug"; debugger if Clock.time >= 66
         
         record_details
 
         processes_to_cycle.each { |p| p.cycle }
-
+        
+        # scheduler.schedule_processes
         ready_processes.each { |p| scheduler.schedule(p) }
 
         scheduler.run_next_process
@@ -46,13 +48,18 @@ module Scheduling
     def details
       @details ||= []
     end
+
+    def states
+      @states ||= []
+    end
     
     protected
     
     def record_details
-      details << format("%-24s", "Before cycle #{Clock.time}:") + ProcessTable.current_state.join("\t")
+      states << ProcessTable.current_state.join("")
+      details << format("%-24s", "Before cycle #{Clock.time}:") + states.last
     end
-
+    
     def processes_to_cycle
       (blocked_processes + [running_process] + ready_processes).compact
     end

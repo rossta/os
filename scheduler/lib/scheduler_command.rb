@@ -3,7 +3,7 @@ class SchedulerCommand
 
   def run(arguments)
     simulate(arguments)
-    puts report.to_s
+    puts report_display
   end
 
   def simulate(arguments)
@@ -16,7 +16,15 @@ class SchedulerCommand
     
     Scheduling::OS.boot(scheduler, parser.sorted_processes)
     Scheduling::OS.run
-    @report = Scheduling::Report.new(Scheduling::OS.instance, parser, flag).report
+    self.report = Scheduling::Report.new(Scheduling::OS.instance, parser, flag)
+  end
+  
+  def report_display
+    report.report
+  end
+  
+  def states
+    report.states
   end
 
   protected
