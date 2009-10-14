@@ -30,7 +30,7 @@ module Scheduling
     def run
       Clock.start
       while !terminated? do
-        # require "ruby-debug"; debugger if Clock.time >= 66
+        # require "ruby-debug"; debugger if Clock.time >= 91
         
         record_details
 

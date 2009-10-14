@@ -5,9 +5,11 @@ module Scheduling
     end
     
     def next_process
-      highest_r           = self.queue.map { |p| p.r_value }.max
-      highest_r_processes = self.queue.find_all { |p| p.r_value == highest_r }
-      self.queue.delete(highest_r_processes.first)
+      high_r                = self.queue.map { |p| p.r_value }.max
+      high_r_processes      = self.queue.find_all { |p| p.r_value == high_r }
+      first_high_r_process  = high_r_processes.sort_by { |p| p.index }.first
+
+      self.queue.delete(first_high_r_process)
     end
     
   end

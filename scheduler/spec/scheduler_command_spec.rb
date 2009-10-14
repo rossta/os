@@ -24,7 +24,7 @@ describe SchedulerCommand do
       end
     end
     describe "HPRN" do
-      [1,2,3,6,7].each do |num|
+      [1,2,3,4,5,6,7].each do |num|
         it "should process input file #{num}" do
           command_report_should_match_output_file(num, "hprn")
         end
@@ -47,6 +47,18 @@ describe SchedulerCommand do
         end
       end
     end
+    describe "hprn" do
+      [1,2,3,4,7].each do |num|
+        it "should process input file #{num}" do
+          command_details_should_match_output_file(num, "hprn")
+        end
+      end
+      [5,6].each do |num|
+        it "should process input file #{num}" do
+          # command_details_should_match_output_file(num, "hprn")
+        end
+      end
+    end
   end
 end
 
@@ -58,7 +70,6 @@ def command_details_should_match_output_file(index, strategy = "rr")
     if !line.nil? && !state.nil?
       line = line.gsub(/^.*:/, "").gsub(/\.$/, "").gsub(/ /, "").gsub(/\d+/, "").chomp
       state = state.gsub(/ /, "").gsub(/\d+/, "")
-      # puts i if index == 4
       state.should == line
     end
   end
