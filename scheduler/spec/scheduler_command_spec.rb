@@ -16,10 +16,17 @@ describe SchedulerCommand do
         end
       end
     end
-    describe "shortest process next" do
+    describe "PSJF" do
       [1,2,3,4,5,6,7].each do |num|
         it "should process input file #{num}" do
           command_report_should_match_output_file(num, "psjf")
+        end
+      end
+    end
+    describe "HPRN" do
+      [1,2,3,6,7].each do |num|
+        it "should process input file #{num}" do
+          command_report_should_match_output_file(num, "hprn")
         end
       end
     end

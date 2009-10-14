@@ -1,0 +1,17 @@
+Before cycle    0:   unstarted  0  unstarted  0  unstarted  0.
+Before cycle    1:     running  1      ready  0  unstarted  0.
+Before cycle    2:     blocked  1    running  1  unstarted  0.
+Before cycle    3:     running  1    blocked  1  unstarted  0.
+Before cycle    4:     blocked  1    running  1      ready  0.
+Before cycle    5:       ready  0    blocked  1    running  1.
+Before cycle    6:     running  1      ready  0    blocked  1.
+Before cycle    7:     blocked  1    running  1      ready  0.
+Before cycle    8:       ready  0    blocked  1    running  1.
+Before cycle    9:     running  1      ready  0    blocked  1.
+Before cycle   10:     blocked  1    running  1      ready  0.
+Before cycle   11:       ready  0    blocked  1    running  1.
+Before cycle   12:     running  1      ready  0    blocked  1.
+Before cycle   13:  terminated  0    running  1      ready  0.
+Before cycle   14:  terminated  0 terminated  0    running  1.
+Before cycle   15:  terminated  0 terminated  0    blocked  1.
+Before cycle   16:  terminated  0 terminated  0    running  1.

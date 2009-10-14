@@ -87,6 +87,37 @@ describe Scheduling::Process do
       end
     end
   end
+  
+  describe "r_value" do
+    describe "arrival_time = 0" do
+      it "should return (Clock.time) / running time" do
+        Scheduling::Clock.stub!(:time).and_return(10)
+        process = Scheduling::Process.new(0, 1, 20, 1)
+        process.remaining_time = 15
+        expected_r_value = (10.0 / (20.0 - 15.0))
+        process.r_value.should == expected_r_value
+      end
+      it "should return Clock.time if running time is 0" do
+        Scheduling::Clock.stub!(:time).and_return(10)
+        process = Scheduling::Process.new(0, 1, 20, 1)
+        process.r_value.should == 10
+      end
+    end
+    describe "arrival_time > 0" do
+      it "should return (Clock.time - arrival_time) / running time" do
+        Scheduling::Clock.stub!(:time).and_return(10)
+        process = Scheduling::Process.new(5, 1, 20, 1)
+        process.remaining_time = 18
+        expected_r_value = ((10.0 - 5.0) / (20.0 - 18.0))
+        process.r_value.should == expected_r_value
+      end
+      it "should return (Clock.time - arrival_time) if running time is 0" do
+        Scheduling::Clock.stub!(:time).and_return(10)
+        process = Scheduling::Process.new(5, 1, 20, 1)
+        process.r_value.should == 5
+      end
+    end
+  end
   describe "initialize" do
     it "should set arrival time = a" do
       Scheduling::Process.new(2, 0, 0, 0).arrival_time.should == 2

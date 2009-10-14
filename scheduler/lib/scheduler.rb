@@ -30,14 +30,15 @@ module Scheduling
       ProcessTable.preempt
     end
 
+    def next_process
+      queue.shift
+    end
+
     protected
     
     def running_process
       ProcessTable.running_process
     end
 
-    def next_process
-      queue.shift
-    end
   end
 end

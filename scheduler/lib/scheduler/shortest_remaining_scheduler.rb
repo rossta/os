@@ -1,5 +1,5 @@
 module Scheduling
-  class ShortestProcessScheduler < Scheduler
+  class ShortestRemainingScheduler < Scheduler
     
     def preempt?
       return false if running_process.nil?
@@ -11,15 +11,13 @@ module Scheduling
       preempt! if preempt?
     end
     
-    protected
-    
     def next_process
       self.queue = queue_sorted_by_remaining_time
       self.queue.shift
     end
     
     def queue_sorted_by_remaining_time
-      queue.sort_by { |p| p.remaining_time }
+      self.queue.sort_by { |p| p.remaining_time }
     end
     
     def shortest_remaining_time_on_queue

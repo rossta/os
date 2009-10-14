@@ -1,9 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Scheduling::ShortestProcessScheduler do
+describe Scheduling::ShortestRemainingScheduler do
   describe "preempt?" do
     before(:each) do
-      @scheduler = Scheduling::ShortestProcessScheduler.new
+      @scheduler = Scheduling::ShortestRemainingScheduler.new
     end
     it "should be false if running process nil" do
       Scheduling::ProcessTable.stub!(:running_process).and_return(nil)
@@ -32,23 +32,23 @@ describe Scheduling::ShortestProcessScheduler do
   end
   describe "next_process" do
     it "should return the process with least remaining time" do
-      scheduler       = Scheduling::ShortestProcessScheduler.new
+      scheduler       = Scheduling::ShortestRemainingScheduler.new
       shortest        = mock(Scheduling::Process, :remaining_time => 2)
       scheduler.queue << mock(Scheduling::Process, :remaining_time => 5)
       scheduler.queue << shortest
       scheduler.queue << mock(Scheduling::Process, :remaining_time => 4)
       
-      scheduler.send(:next_process).should == shortest
+      scheduler.next_process.should == shortest
     end
     it "should return next shorted process next time" do
-      scheduler       = Scheduling::ShortestProcessScheduler.new
+      scheduler       = Scheduling::ShortestRemainingScheduler.new
       next_shortest   = mock(Scheduling::Process, :remaining_time => 3)
       scheduler.queue << mock(Scheduling::Process, :remaining_time => 5)
       scheduler.queue << next_shortest
       scheduler.queue << mock(Scheduling::Process, :remaining_time => 2)
       
-      scheduler.send(:next_process)
-      scheduler.send(:next_process).should == next_shortest
+      scheduler.next_process
+      scheduler.next_process.should == next_shortest
     end
   end
 end

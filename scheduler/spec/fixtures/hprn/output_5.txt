@@ -1,0 +1,32 @@
+The original input was: 3 ( 1 5 30 3 ) ( 1 5 30 4 ) ( 0 5 30 3 )
+The (sorted) input is:  3 ( 0 5 30 3 ) ( 1 5 30 3 ) ( 1 5 30 4 )
+
+
+Process 0:
+	(A,B,C,IO) = (0,5,30,3)
+	Finishing time: 89
+	Turnaround time: 89
+	I/O time: 13
+	Waiting time: 46
+
+Process 1:
+	(A,B,C,IO) = (1,5,30,3)
+	Finishing time: 92
+	Turnaround time: 91
+	I/O time: 22
+	Waiting time: 39
+
+Process 2:
+	(A,B,C,IO) = (1,5,30,4)
+	Finishing time: 84
+	Turnaround time: 83
+	I/O time: 22
+	Waiting time: 31
+
+Summary Data:
+	Finishing time: 92
+	CPU Utilization: 0.978261
+	I/O Utilization: 0.565217
+	Throughput: 3.260870 processes per hundred cycles
+	Average turnaround time: 87.666667
+	Average waiting time: 38.666667

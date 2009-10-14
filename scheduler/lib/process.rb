@@ -47,6 +47,11 @@ module Scheduling
     def current_state
       @state.current(self)
     end
+    
+    def r_value
+      t = [1, (cpu_time - remaining_time)].max
+      (Clock.time - arrival_time).to_f / t
+    end
 
     def <=>(other)
       return -1 if self.arrival_time < other.arrival_time

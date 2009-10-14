@@ -40,7 +40,9 @@ class SchedulerCommand
     when :rr
       Scheduling::RoundRobinScheduler.new
     when :psjf
-      Scheduling::ShortestProcessScheduler.new
+      Scheduling::ShortestRemainingScheduler.new
+    when :hprn
+      Scheduling::HighestPenaltyScheduler.new
     when :fifo || :fcfs
       Scheduling::FifoScheduler.new
     else
