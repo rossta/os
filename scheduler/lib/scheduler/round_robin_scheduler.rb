@@ -8,7 +8,7 @@ module Scheduling
       @quantum = 0
     end
 
-    def schedule_processes
+    def schedule_ready_processes
       preempt! if preempt?
       ProcessTable::ready_processes.each { |p| schedule(p) }
       self.quantum += 1
@@ -20,7 +20,7 @@ module Scheduling
 
     def preempt!
       self.quantum = 0
-      ProcessTable.preempt
+      super
     end
 
   end

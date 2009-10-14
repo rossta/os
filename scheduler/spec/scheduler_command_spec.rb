@@ -19,7 +19,6 @@ describe SchedulerCommand do
     describe "shortest process next" do
       [1,2,3,4,5,6,7].each do |num|
         it "should process input file #{num}" do
-          pending if num == 4 || num == 5
           command_report_should_match_output_file(num, "psjf")
         end
       end
@@ -27,21 +26,33 @@ describe SchedulerCommand do
   end
   
   describe "details" do
-    [3,4].each do |num|
-      it "should process input file #{num}" do
-        pending
-        command = simulate_command(num, "rr")
-        File.open(FIXTURES + "rr/cycles/output_#{num}.txt").readlines.each_with_index do |line, i|
-          
-          state = command.states.shift
-          if !line.nil? && !state.nil?
-            line = line.gsub(/^.*:/, "").gsub(/\.$/, "").gsub(/ /, "").gsub(/\d+/, "").chomp
-            state = state.gsub(/ /, "").gsub(/\d+/, "")
-            # puts i
-            state.should == line
-          end
+    describe "rr" do
+      [1,2,3,4,5,6,7].each do |num|
+        it "should process input file #{num}" do
+          command_details_should_match_output_file(num, "rr")
         end
       end
+    end
+    describe "psjf" do
+      [1,2,3,4,5,6,7].each do |num|
+        it "should process input file #{num}" do
+          command_details_should_match_output_file(num, "psjf")
+        end
+      end
+    end
+  end
+end
+
+def command_details_should_match_output_file(index, strategy = "rr")
+  command = simulate_command(index, strategy)
+  File.open(FIXTURES + "#{strategy}/details/output_#{index}.txt").readlines.each_with_index do |line, i|
+    
+    state = command.states.shift
+    if !line.nil? && !state.nil?
+      line = line.gsub(/^.*:/, "").gsub(/\.$/, "").gsub(/ /, "").gsub(/\d+/, "").chomp
+      state = state.gsub(/ /, "").gsub(/\d+/, "")
+      # puts i if index == 4
+      state.should == line
     end
   end
 end

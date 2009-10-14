@@ -20,6 +20,15 @@ module Scheduling
       return unless process.ready?
       queue << process if !queue.include?(process)
     end
+    
+    def schedule_ready_processes
+      preempt! if preempt?
+      ProcessTable::ready_processes.each { |p| schedule(p) }
+    end
+    
+    def preempt!
+      ProcessTable.preempt
+    end
 
     protected
     

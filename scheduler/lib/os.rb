@@ -36,7 +36,7 @@ module Scheduling
 
         processes_to_cycle.each { |p| p.cycle }
         
-        scheduler.schedule_processes
+        scheduler.schedule_ready_processes
 
         scheduler.run_next_process
 

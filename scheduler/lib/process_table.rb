@@ -48,8 +48,9 @@ module Scheduling
       if (preempted = running_process)
         preempted.state = ProcessState::Ready
         raise "More than one running process" if !running_process.nil?
-        preempted
+        return preempted
       end
+      nil
     end
     
     def self.run(process)

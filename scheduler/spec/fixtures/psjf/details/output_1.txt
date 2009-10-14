@@ -1,0 +1,10 @@
+Before cycle    0:   unstarted  0.
+Before cycle    1:     running  1.
+Before cycle    2:     blocked  1.
+Before cycle    3:     running  1.
+Before cycle    4:     blocked  1.
+Before cycle    5:     running  1.
+Before cycle    6:     blocked  1.
+Before cycle    7:     running  1.
+Before cycle    8:     blocked  1.
+Before cycle    9:     running  1.
