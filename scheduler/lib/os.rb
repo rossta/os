@@ -14,7 +14,7 @@ module Scheduling
 
     def self.random_os(interval, state = nil)
       random = RandomNumberGenerator.number
-      instance.details << "Burst when choosing #{state.to_s} process to run: #{random}"
+      # instance.details << "Burst when choosing #{state.to_s} process to run: #{random}"
       1 + (random % interval)
     end
 

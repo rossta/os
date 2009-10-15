@@ -7,7 +7,7 @@ module Scheduling
     end
     
     def schedule_ready_processes
-      ProcessTable::ready_processes.each { |p| schedule(p) }
+      ProcessTable::ready_processes.each { |p| add_to_queue(p) }
       preempt! if preempt?
     end
     

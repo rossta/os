@@ -10,7 +10,7 @@ module Scheduling
 
     def schedule_ready_processes
       preempt! if preempt?
-      ProcessTable::ready_processes.each { |p| schedule(p) }
+      ProcessTable::ready_processes.each { |p| add_to_queue(p) }
       self.quantum += 1
     end
     

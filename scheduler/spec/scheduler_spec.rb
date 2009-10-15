@@ -16,25 +16,25 @@ describe Scheduling::Scheduler do
     end
   end
   
-  describe "schedule" do
+  describe "add_to_queue" do
     it "should add ready process to queue if not on queue" do
       first = mock(Scheduling::Process, :ready? => true)
       second = mock(Scheduling::Process, :ready? => true)
       @scheduler.queue << first
-      @scheduler.schedule(second)
+      @scheduler.send(:add_to_queue,second)
       @scheduler.queue.should == [first, second]
     end
     
     it "should not add ready process to queue if already on queue" do
       first = mock(Scheduling::Process, :ready? => true)
       @scheduler.queue << first
-      @scheduler.schedule(first)
+      @scheduler.send(:add_to_queue,first)
       @scheduler.queue.should == [first]
     end
     
     it "should should not add unready process" do
       first = mock(Scheduling::Process, :ready? => false)
-      @scheduler.schedule(first)
+      @scheduler.send(:add_to_queue,first)
       @scheduler.queue.should == []
     end
   end

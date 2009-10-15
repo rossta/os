@@ -16,14 +16,9 @@ module Scheduling
       running_process.nil?
     end
     
-    def schedule(process)
-      return unless process.ready?
-      queue << process if !queue.include?(process)
-    end
-    
     def schedule_ready_processes
       preempt! if preempt?
-      ProcessTable::ready_processes.each { |p| schedule(p) }
+      ProcessTable::ready_processes.each { |p| add_to_queue(p) }
     end
     
     def preempt!
@@ -38,6 +33,11 @@ module Scheduling
     
     def running_process
       ProcessTable.running_process
+    end
+    
+    def add_to_queue(process)
+      return unless process.ready? && !queue.include?(process)
+      queue << process
     end
 
   end
