@@ -98,20 +98,20 @@ describe Scheduling::ProcessTable do
       Scheduling::ProcessTable.load_processes([@p1,@p2])
     end
     it "should transition running process to ready" do
-      Scheduling::ProcessTable.preempt
+      Scheduling::ProcessTable.preempt_running_process
       @p1.ready?.should be_true
     end
     it "should transition stop running process" do
-      Scheduling::ProcessTable.preempt
+      Scheduling::ProcessTable.preempt_running_process
       @p1.running?.should be_false
     end
     it "should return preempted process" do
-      Scheduling::ProcessTable.preempt.should == @p1
+      Scheduling::ProcessTable.preempt_running_process.should == @p1
     end
 
     it "should throw error if any other running process" do
       @p2.state = Scheduling::ProcessState::Running
-      lambda { Scheduling::ProcessTable.preempt }.should raise_error
+      lambda { Scheduling::ProcessTable.preempt_running_process }.should raise_error
     end
   end
 end

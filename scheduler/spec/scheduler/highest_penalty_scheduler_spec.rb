@@ -7,7 +7,7 @@ describe Scheduling::HighestPenaltyScheduler do
     end
   end
   
-  describe "next_process" do
+  describe "choose_next" do
     it "should return the process with highest r value" do
       scheduler       = Scheduling::HighestPenaltyScheduler.new
       highest_r_process = mock(Scheduling::Process, :r_value => 12, :index => 1)
@@ -15,7 +15,7 @@ describe Scheduling::HighestPenaltyScheduler do
       scheduler.queue << highest_r_process
       scheduler.queue << mock(Scheduling::Process, :r_value => 4, :index => 2)
       
-      scheduler.next_process.should == highest_r_process
+      scheduler.choose_next.should == highest_r_process
     end
     it "should return next highest r value process next time" do
       scheduler       = Scheduling::HighestPenaltyScheduler.new
@@ -24,8 +24,8 @@ describe Scheduling::HighestPenaltyScheduler do
       scheduler.queue << mock(Scheduling::Process, :r_value => 2, :index => 1)
       scheduler.queue << next_highest
       
-      scheduler.next_process
-      scheduler.next_process.should == next_highest
+      scheduler.choose_next
+      scheduler.choose_next.should == next_highest
     end
     it "should return oldest matching item if multiple r values" do
       scheduler       = Scheduling::HighestPenaltyScheduler.new
@@ -34,7 +34,7 @@ describe Scheduling::HighestPenaltyScheduler do
       scheduler.queue << mock(Scheduling::Process, :r_value => 5, :index => 2)
       scheduler.queue << older
       
-      scheduler.next_process.should == older
+      scheduler.choose_next.should == older
     end
   end
   

@@ -30,7 +30,7 @@ describe Scheduling::ShortestRemainingScheduler do
       @scheduler.preempt?.should be_false
     end
   end
-  describe "next_process" do
+  describe "choose_next" do
     it "should return the process with least remaining time" do
       scheduler       = Scheduling::ShortestRemainingScheduler.new
       shortest        = mock(Scheduling::Process, :remaining_time => 2)
@@ -38,7 +38,7 @@ describe Scheduling::ShortestRemainingScheduler do
       scheduler.queue << shortest
       scheduler.queue << mock(Scheduling::Process, :remaining_time => 4)
       
-      scheduler.next_process.should == shortest
+      scheduler.choose_next.should == shortest
     end
     it "should return next shorted process next time" do
       scheduler       = Scheduling::ShortestRemainingScheduler.new
@@ -47,8 +47,8 @@ describe Scheduling::ShortestRemainingScheduler do
       scheduler.queue << next_shortest
       scheduler.queue << mock(Scheduling::Process, :remaining_time => 2)
       
-      scheduler.next_process
-      scheduler.next_process.should == next_shortest
+      scheduler.choose_next
+      scheduler.choose_next.should == next_shortest
     end
   end
 end

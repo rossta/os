@@ -11,7 +11,7 @@ module Scheduling
       preempt! if preempt?
     end
     
-    def next_process
+    def choose_next
       self.queue = queue_sorted_by_remaining_time
       self.queue.shift
     end

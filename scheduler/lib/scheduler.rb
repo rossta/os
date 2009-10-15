@@ -8,7 +8,7 @@ module Scheduling
 
     def run_next_process
       return unless switch?
-      return unless (ready_process = next_process)
+      return unless (ready_process = choose_next)
       ProcessTable.run(ready_process)
     end
     
@@ -27,10 +27,10 @@ module Scheduling
     end
     
     def preempt!
-      ProcessTable.preempt
+      ProcessTable.preempt_running_process
     end
 
-    def next_process
+    def choose_next
       queue.shift
     end
 

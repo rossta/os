@@ -44,7 +44,7 @@ module Scheduling
       processes.map { |p| format("%12s", p.current_state) }
     end
     
-    def self.preempt
+    def self.preempt_running_process
       if (preempted = running_process)
         preempted.state = ProcessState::Ready
         raise "More than one running process" if !running_process.nil?
