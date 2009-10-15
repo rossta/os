@@ -1,7 +1,7 @@
 module Scheduling
   class OS
-    def self.boot(scheduler, processes)
-      @@instance = new(scheduler, processes)
+    def self.boot(scheduler, processes, flag = nil)
+      @@instance = new(scheduler, processes, flag)
     end
 
     def self.instance
@@ -11,18 +11,19 @@ module Scheduling
     def self.run
       instance.run
     end
-
+    
     def self.random_os(interval, state = nil)
       random = RandomNumberGenerator.number
-      # instance.details << "Burst when choosing #{state.to_s} process to run: #{random}"
+      instance.details << "Burst when choosing #{state.to_s} process to run: #{random}" if instance.verbose?
       1 + (random % interval)
     end
 
     attr_reader :scheduler
     attr_accessor :details, :states
 
-    def initialize(scheduler = nil, processes = [])
-      @scheduler  = scheduler
+    def initialize(scheduler = nil, processes = [], output_flag = nil)
+      @scheduler    = scheduler
+      @output_flag  = output_flag
       ProcessTable.load_processes(processes)
       RandomNumberGenerator.clear!
     end
@@ -30,8 +31,6 @@ module Scheduling
     def run
       Clock.start
       while !terminated? do
-        # require "ruby-debug"; debugger if Clock.time >= 91
-        
         record_details
 
         processes_to_cycle.each { |p| p.cycle }
@@ -52,9 +51,18 @@ module Scheduling
       @states ||= []
     end
     
+    def verbose?
+      @verbose ||= (@output_flag == "-v" || @output_flag == "--verbose")
+    end
+    
+    def detailed?
+      @detailed ||= (@output_flag == "-d" || @output_flag == "--detailed") || verbose?
+    end
+
     protected
     
     def record_details
+      return unless detailed? || verbose?
       states << ProcessTable.current_state.join("")
       details << format("%-24s", "Before cycle #{Clock.time}:") + states.last
     end
@@ -84,15 +92,5 @@ module Scheduling
       ProcessTable.ready_processes
     end
 
-    # def self.included
-    #   [:processes, :terminated?, :running_process, :blocked_processes, :ready_processes].each do |sym|
-    #     class_eval <<-SRC
-    #       def #{sym.to_s}
-    #         ProcessTable.send(#{sym})
-    #       end
-    #     SRC
-    #   end
-    # end
-    # 
   end
 end

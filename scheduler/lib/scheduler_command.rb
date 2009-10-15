@@ -14,9 +14,9 @@ class SchedulerCommand
     parser = parse_processes(file_name)
     scheduler = get_scheduler(strategy)
     
-    Scheduling::OS.boot(scheduler, parser.sorted_processes)
+    Scheduling::OS.boot(scheduler, parser.sorted_processes, flag)
     Scheduling::OS.run
-    self.report = Scheduling::Report.new(Scheduling::OS.instance, parser, flag)
+    self.report = Scheduling::Report.new(Scheduling::OS.instance, parser)
   end
   
   def report_display
