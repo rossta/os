@@ -1,0 +1,5 @@
+#!/usr/bin/ruby
+require File.dirname(__FILE__) + '/lib/env'
+
+app = BankerRunner.new(ARGV, BankerCommand.new)
+app.run
