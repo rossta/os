@@ -9,40 +9,32 @@ module Command
   ]
   
   class Base
-    
+    def name
+      self.class.name.downcase.gsub(/command::/, "")
+    end
   end
   
   class Initiate < Base
     def initialize(resource_type, initial_claim)
       
     end
-    
-    def name
-      INITIATE
-    end
   end
   
   class Terminate < Base
-    def name
-      TERMINATE
-    end
   end
   
   class Request < Base
     def initialize(resource_type, number_requested)
-      
     end
   end
 
   class Release < Base
     def initialize(resource_type, number_released)
-      
     end
   end
 
   class Compute < Base
     def initialize(number_cycles)
-      
     end
   end
 end
