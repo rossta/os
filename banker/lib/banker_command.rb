@@ -18,13 +18,13 @@ protected
   def simulate_optimist(tasks, resources)
     simulator = OptimistSimulator.new(tasks, resources)
     simulator.simulate!
-    simulator.algorithm
+    simulator.manager
   end
   
   def simulate_banker(tasks, resources)
     simulator = BankerSimulator.new(tasks, resources)
     simulator.simulate!
-    simulator.algorithm
+    simulator.manager
   end
   
   def parse_processes(file_name)

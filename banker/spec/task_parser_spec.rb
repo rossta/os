@@ -11,7 +11,7 @@ describe TaskParser do
       describe "initializing task and resources" do
         before(:each) do
           Resource.stub!(:new).and_return(:resource)
-          Task.stub!(:new).and_return(mock(Task, :add_command => nil))
+          Task.stub!(:new).and_return(mock(Task, :add_activity => nil))
         end
         it "should create two tasks" do
           @parser.parse
@@ -30,29 +30,29 @@ describe TaskParser do
         end
       end
       
-      describe "task commands" do
+      describe "task activities" do
         before(:each) do
           Resource.stub!(:new).and_return(mock(Resource))
-          Task.stub!(:new).and_return(@task1 = mock(Task, :add_command => nil), @task2 = mock(Task, :add_command => nil))
-          Command::Initiate.stub!(:new  ).and_return(:command1, :command5)
-          Command::Request.stub!(:new   ).and_return(:command2, :command6)
-          Command::Release.stub!(:new   ).and_return(:command3, :command7)
-          Command::Terminate.stub!(:new ).and_return(:command4, :command8)
+          Task.stub!(:new).and_return(@task1 = mock(Task, :add_activity => nil), @task2 = mock(Task, :add_activity => nil))
+          TaskActivity::Initiate.stub!(:new  ).and_return(:activity1, :activity5)
+          TaskActivity::Request.stub!(:new   ).and_return(:activity2, :activity6)
+          TaskActivity::Release.stub!(:new   ).and_return(:activity3, :activity7)
+          TaskActivity::Terminate.stub!(:new ).and_return(:activity4, :activity8)
         end
         
-        it "should add commands to task 1" do
-          @task1.should_receive(:add_command).with(:command1)
-          @task1.should_receive(:add_command).with(:command2)
-          @task1.should_receive(:add_command).with(:command3)
-          @task1.should_receive(:add_command).with(:command4)
+        it "should add activities to task 1" do
+          @task1.should_receive(:add_activity).with(:activity1)
+          @task1.should_receive(:add_activity).with(:activity2)
+          @task1.should_receive(:add_activity).with(:activity3)
+          @task1.should_receive(:add_activity).with(:activity4)
           @parser.parse
         end
         
-        it "should add commands to task 2" do
-          @task2.should_receive(:add_command).with(:command5)
-          @task2.should_receive(:add_command).with(:command6)
-          @task2.should_receive(:add_command).with(:command7)
-          @task2.should_receive(:add_command).with(:command8)
+        it "should add activities to task 2" do
+          @task2.should_receive(:add_activity).with(:activity5)
+          @task2.should_receive(:add_activity).with(:activity6)
+          @task2.should_receive(:add_activity).with(:activity7)
+          @task2.should_receive(:add_activity).with(:activity8)
           @parser.parse
         end
       end
@@ -62,7 +62,7 @@ describe TaskParser do
       before(:each) do
         @parser = TaskParser.new(FIXTURES + "input_9.txt")
         Resource.stub!(:new).and_return(:resource)
-        Task.stub!(:new).and_return(mock(Task, :add_command => nil))
+        Task.stub!(:new).and_return(mock(Task, :add_activity => nil))
       end
       
       it "should create two tasks" do
@@ -85,40 +85,40 @@ describe TaskParser do
   
 end
 
-describe TaskParser::CommandFactory do
+describe TaskParser::ActivityFactory do
   describe "self.create_for" do
     before(:each) do
       @parser = mock(TaskParser)
       @parser.stub!(:parse_number).and_return(1, 2, 3)
     end
     describe "initiate" do
-      it "should create an initiate command" do
-        Command::Initiate.should_receive(:new).with(1, 2).and_return(:command)
-        TaskParser::CommandFactory.create_for("initiate", @parser).should == :command
+      it "should create an initiate activity" do
+        TaskActivity::Initiate.should_receive(:new).with(1, 2).and_return(:activity)
+        TaskParser::ActivityFactory.create_for("initiate", @parser).should == :activity
       end
     end
     describe "terminate" do
-      it "should create a terminate command" do
-        Command::Terminate.should_receive(:new).with().and_return(:command)
-        TaskParser::CommandFactory.create_for("terminate", @parser).should == :command
+      it "should create a terminate activity" do
+        TaskActivity::Terminate.should_receive(:new).with().and_return(:activity)
+        TaskParser::ActivityFactory.create_for("terminate", @parser).should == :activity
       end
     end
     describe "request" do
-      it "should create a request command" do
-        Command::Request.should_receive(:new).with(1, 2).and_return(:command)
-        TaskParser::CommandFactory.create_for("request", @parser).should == :command
+      it "should create a request activity" do
+        TaskActivity::Request.should_receive(:new).with(1, 2).and_return(:activity)
+        TaskParser::ActivityFactory.create_for("request", @parser).should == :activity
       end
     end
     describe "release" do
-      it "should create a request command" do
-        Command::Release.should_receive(:new).with(1, 2).and_return(:command)
-        TaskParser::CommandFactory.create_for("release", @parser).should == :command
+      it "should create a request activity" do
+        TaskActivity::Release.should_receive(:new).with(1, 2).and_return(:activity)
+        TaskParser::ActivityFactory.create_for("release", @parser).should == :activity
       end
     end
     describe "compute" do
-      it "should create a request command" do
-        Command::Compute.should_receive(:new).with(1).and_return(:command)
-        TaskParser::CommandFactory.create_for("compute", @parser).should == :command
+      it "should create a request activity" do
+        TaskActivity::Compute.should_receive(:new).with(1).and_return(:activity)
+        TaskParser::ActivityFactory.create_for("compute", @parser).should == :activity
       end
     end
   end

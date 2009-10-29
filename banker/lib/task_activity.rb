@@ -1,6 +1,6 @@
-module Command
+module TaskActivity
   
-  COMMANDS = [
+  ACTIVITIES = [
     INITIATE  = "initiate",
     REQUEST   = "request",
     RELEASE   = "release",
@@ -10,7 +10,7 @@ module Command
   
   class Base
     def name
-      self.class.name.downcase.gsub(/command::/, "")
+      self.class.name.downcase.gsub(/(\w+)::/, "")
     end
   end
   

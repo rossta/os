@@ -9,9 +9,9 @@ class TaskParser
     reader.rewind
     @char = reader.next
 
-    initialize_tasks_and_commands
+    initialize_tasks_and_activities
     while @char
-      read_task_command
+      read_task_activity
     end
   end
 
@@ -25,7 +25,7 @@ class TaskParser
 
   protected
   
-  def initialize_tasks_and_commands
+  def initialize_tasks_and_activities
     num_tasks = parse_number
     num_tasks.times { tasks << Task.new }
     
@@ -35,33 +35,33 @@ class TaskParser
     end
   end
   
-  def read_task_command
+  def read_task_activity
     instruction = parse_word
     task_index  = parse_number - 1
     task        = tasks[task_index]
 
-    command = CommandFactory.create_for(instruction, self)
-    task.add_command(command)
+    activity = ActivityFactory.create_for(instruction, self)
+    task.add_activity(activity)
   end
   
   def reader
     @reader ||= Reader.new(@file_name)
   end
 
-  class CommandFactory
+  class ActivityFactory
 
     def self.create_for(instruction, parser)
       case instruction
-      when Command::INITIATE
-        Command::Initiate.new(parser.parse_number, parser.parse_number)
-      when Command::REQUEST
-        Command::Request.new(parser.parse_number, parser.parse_number)
-      when Command::RELEASE
-        Command::Release.new(parser.parse_number, parser.parse_number)
-      when Command::COMPUTE
-        Command::Compute.new(parser.parse_number)
-      when Command::TERMINATE
-        Command::Terminate.new
+      when TaskActivity::INITIATE
+        TaskActivity::Initiate.new(parser.parse_number, parser.parse_number)
+      when TaskActivity::REQUEST
+        TaskActivity::Request.new(parser.parse_number, parser.parse_number)
+      when TaskActivity::RELEASE
+        TaskActivity::Release.new(parser.parse_number, parser.parse_number)
+      when TaskActivity::COMPUTE
+        TaskActivity::Compute.new(parser.parse_number)
+      when TaskActivity::TERMINATE
+        TaskActivity::Terminate.new
       end
     end
   end

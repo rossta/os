@@ -1,13 +1,8 @@
 class Simulator
-  
-  attr_accessor :tasks, :processes
-  
-  def initialize(tasks, processes)
-    @tasks      = tasks
-    @processes  = processes
-  end
+  attr_reader :manager
   
   def simulate!
+    manager.simulate
   end
 
 end
