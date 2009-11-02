@@ -19,8 +19,13 @@ describe Banker do
       banker.safe?.should be_true
     end
     
-    it "should return true if available resources can satisfy all of a task's max requests"
-    it "should return false if available resources cannot satisfy all of a task's max requests"
+    describe "one resource type" do
+      it "should return true if available resources can satisfy all of a task's max requests" do
+        
+      end
+    
+      it "should return false if available resources cannot satisfy all of a task's max requests"
+    end
   end
   
   describe "available_resources" do

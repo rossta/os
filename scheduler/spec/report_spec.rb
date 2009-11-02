@@ -64,8 +64,8 @@ describe "Scheduling::OSReport" do
       Scheduling::ProcessTable.stub!(:sum).with(:turnaround_time).and_return(9)
       Scheduling::ProcessTable.stub!(:sum).with(:wait_time).and_return(0)
       Scheduling::ProcessTable.stub!(:size).and_return(1)
-      Scheduling::Clock.stub!(:time).and_return(9)
-      Scheduling::Clock.stub!(:io_time).and_return(4)
+      Clock.stub!(:time).and_return(9)
+      Clock.stub!(:io_time).and_return(4)
       Scheduling::OSReport.new.report.should == expected_output
     end
   end
@@ -73,15 +73,15 @@ describe "Scheduling::OSReport" do
   describe "cpu_utilization" do
     it "should return floating point total cpu time / finishing time" do
       Scheduling::ProcessTable.stub!(:sum).with(:cpu_time).and_return(8)
-      Scheduling::Clock.stub!(:time).and_return(10)
+      Clock.stub!(:time).and_return(10)
       Scheduling::OSReport.new.cpu_utilization.should == 0.8
     end
   end
 
   describe "io_utilization" do
     it "should return floating point total io time / finishing time" do
-      Scheduling::Clock.stub!(:io_time).and_return(8)
-      Scheduling::Clock.stub!(:time).and_return(10)
+      Clock.stub!(:io_time).and_return(8)
+      Clock.stub!(:time).and_return(10)
       Scheduling::OSReport.new.io_utilization.should == 0.8
     end
   end
@@ -89,7 +89,7 @@ describe "Scheduling::OSReport" do
   describe "throughput" do
     it "should return number of processes * 100 / finishing time" do
       Scheduling::ProcessTable.stub!(:size).and_return(2)
-      Scheduling::Clock.stub!(:time).and_return(10)
+      Clock.stub!(:time).and_return(10)
       Scheduling::OSReport.new.throughput.should == 20.0
     end
   end

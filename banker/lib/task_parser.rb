@@ -10,7 +10,7 @@ class TaskParser
     @char = reader.next
 
     initialize_tasks_and_activities
-    while @char
+    while @char = reader.next
       read_task_activity
     end
   end
@@ -27,11 +27,13 @@ class TaskParser
   
   def initialize_tasks_and_activities
     num_tasks = parse_number
-    num_tasks.times { tasks << Task.new }
+    num_tasks.times { |i| tasks << Task.new(i + 1) }
     
     num_resources = parse_number
-    num_resources.times do 
-      resources << Resource.new(parse_number)
+    num_resources.times do |index|
+      units = parse_number
+      type  = index + 1
+      resources << Resource.new(units, type)
     end
   end
   

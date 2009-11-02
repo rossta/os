@@ -25,7 +25,7 @@ describe TaskParser do
         end
       
         it "should set resource units to 4" do
-          Resource.should_receive(:new).with(4).and_return(mock(Resource))
+          Resource.should_receive(:new).with(4, 1).and_return(mock(Resource))
           @parser.parse
         end
       end
@@ -77,7 +77,8 @@ describe TaskParser do
       end
       
       it "should set resource units to 4" do
-        Resource.should_receive(:new).exactly(2).times.with(4).and_return(mock(Resource))
+        Resource.should_receive(:new).exactly(1).times.with(4, 1).and_return(mock(Resource))
+        Resource.should_receive(:new).exactly(1).times.with(4, 2).and_return(mock(Resource))
         @parser.parse
       end
     end

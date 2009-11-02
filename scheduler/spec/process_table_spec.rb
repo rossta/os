@@ -69,7 +69,7 @@ describe Scheduling::ProcessTable do
 
   describe "ready_processes" do
     it "should return collection including processes in ready state" do
-      Scheduling::Clock.stub!(:time).and_return(0)
+      Clock.stub!(:time).and_return(0)
       ready_process = mock(Scheduling::Process, :ready? => true)
       Scheduling::ProcessTable.load_processes([
         mock(Scheduling::Process, :ready? => false, :arrival_time => 100),
@@ -79,7 +79,7 @@ describe Scheduling::ProcessTable do
     end
 
     it "should return unstarted processes with current arrival time" do
-      Scheduling::Clock.stub!(:time).and_return(3)
+      Clock.stub!(:time).and_return(3)
       created_process = mock(Scheduling::Process, :ready? => false, :arrival_time => 3)
       Scheduling::ProcessTable.load_processes([
         mock(Scheduling::Process, :ready? => false, :arrival_time => 100),

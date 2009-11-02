@@ -5,7 +5,8 @@ class BankerCommand
   def run(arguments)
     parser      = parse_processes(arguments)
     optimist    = simulate_optimist(parser.tasks, parser.resources)
-    banker      = simulate_banker(parser.tasks, parser.resources)
+    # banker      = simulate_banker(parser.tasks, parser.resources)
+    banker = nil
     self.report = create_report(optimist, banker)
     self
   end
@@ -22,6 +23,7 @@ protected
   end
   
   def simulate_banker(tasks, resources)
+    return
     simulator = BankerSimulator.new(tasks, resources)
     simulator.simulate!
     simulator.manager
