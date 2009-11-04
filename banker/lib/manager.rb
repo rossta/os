@@ -1,8 +1,8 @@
 class Manager
-  attr_reader :tasks, :resources, :cycle
-  def initialize(tasks, resources)
+  attr_reader :tasks, :cycle
+  attr_writer :granted
+  def initialize(tasks)
     @tasks      = tasks
-    @resources  = resources
     @cycle = 0
   end
   

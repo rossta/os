@@ -15,14 +15,10 @@ class Task
     activities.detect { |a| !a.processed? }
   end
 
-  def process_activity(resources)
-    @total_time += 1
-    next_activity.process(self, resources)
-  end
-  
   def abort!
-    @aborted = true
+    ResourceTable.replenish(allocation)
     activities.each { |a| a.processed = true }
+    @aborted = true
   end
   
   def aborted?
@@ -70,6 +66,10 @@ class Task
   
   def processable?
     !terminated? && !aborted?
+  end
+  
+  def completed?
+    terminated? && !aborted?
   end
   
   def report

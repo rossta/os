@@ -13,7 +13,7 @@ class BankerReport
   
   def header
     header = format("%-32s", "FIFO")
-    header += "BANKER"
+    # header += "BANKER"
   end
   
   def optimist_report
@@ -42,10 +42,10 @@ class BankerReport
         text << task_text.join
       end
       manager_text = [format("%-9s",  "total")]
-      manager_text << format("%4s",   manager.tasks.inject(0) { |sum, t| sum + t.total_time })
-      manager_text << format("%4s",   manager.tasks.inject(0) { |sum, t| sum + t.wait_time })
-      manager_text << format("%4s\%", manager.tasks.inject(0) { |sum, t| sum + t.percent_waiting })
-      manager_text << format("%34s",  "")
+      manager_text << format("%4s",   manager.completed_tasks.inject(0) { |sum, t| sum + t.total_time })
+      manager_text << format("%4s",   manager.completed_tasks.inject(0) { |sum, t| sum + t.wait_time })
+      manager_text << format("%4s\%", manager.completed_tasks.inject(0) { |sum, t| sum + t.percent_waiting })
+      manager_text << format("%s",  "") #34
       text << manager_text.join
       text.join("\n")
     end

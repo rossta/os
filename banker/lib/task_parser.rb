@@ -42,7 +42,7 @@ class TaskParser
     task_index  = parse_number - 1
     task        = tasks[task_index]
 
-    activity = ActivityFactory.create_for(instruction, self)
+    activity = ActivityFactory.create_for(task, instruction, self)
     task.add_activity(activity)
   end
   
@@ -52,18 +52,18 @@ class TaskParser
 
   class ActivityFactory
 
-    def self.create_for(instruction, parser)
+    def self.create_for(task, instruction, parser)
       case instruction
       when TaskActivity::INITIATE
-        TaskActivity::Initiate.new(parser.parse_number, parser.parse_number)
+        TaskActivity::Initiate.new(task, parser.parse_number, parser.parse_number)
       when TaskActivity::REQUEST
-        TaskActivity::Request.new(parser.parse_number, parser.parse_number)
+        TaskActivity::Request.new(task, parser.parse_number, parser.parse_number)
       when TaskActivity::RELEASE
-        TaskActivity::Release.new(parser.parse_number, parser.parse_number)
+        TaskActivity::Release.new(task, parser.parse_number, parser.parse_number)
       when TaskActivity::COMPUTE
-        TaskActivity::Compute.new(parser.parse_number)
+        TaskActivity::Compute.new(task, parser.parse_number)
       when TaskActivity::TERMINATE
-        TaskActivity::Terminate.new
+        TaskActivity::Terminate.new(task)
       end
     end
   end

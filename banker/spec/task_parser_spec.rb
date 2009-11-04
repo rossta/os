@@ -91,35 +91,36 @@ describe TaskParser::ActivityFactory do
     before(:each) do
       @parser = mock(TaskParser)
       @parser.stub!(:parse_number).and_return(1, 2, 3)
+      @task = mock(Task)
     end
     describe "initiate" do
       it "should create an initiate activity" do
-        TaskActivity::Initiate.should_receive(:new).with(1, 2).and_return(:activity)
-        TaskParser::ActivityFactory.create_for("initiate", @parser).should == :activity
+        TaskActivity::Initiate.should_receive(:new).with(@task, 1, 2).and_return(:activity)
+        TaskParser::ActivityFactory.create_for(@task, "initiate", @parser).should == :activity
       end
     end
     describe "terminate" do
       it "should create a terminate activity" do
-        TaskActivity::Terminate.should_receive(:new).with().and_return(:activity)
-        TaskParser::ActivityFactory.create_for("terminate", @parser).should == :activity
+        TaskActivity::Terminate.should_receive(:new).with(@task).and_return(:activity)
+        TaskParser::ActivityFactory.create_for(@task, "terminate", @parser).should == :activity
       end
     end
     describe "request" do
       it "should create a request activity" do
-        TaskActivity::Request.should_receive(:new).with(1, 2).and_return(:activity)
-        TaskParser::ActivityFactory.create_for("request", @parser).should == :activity
+        TaskActivity::Request.should_receive(:new).with(@task, 1, 2).and_return(:activity)
+        TaskParser::ActivityFactory.create_for(@task, "request", @parser).should == :activity
       end
     end
     describe "release" do
       it "should create a request activity" do
-        TaskActivity::Release.should_receive(:new).with(1, 2).and_return(:activity)
-        TaskParser::ActivityFactory.create_for("release", @parser).should == :activity
+        TaskActivity::Release.should_receive(:new).with(@task, 1, 2).and_return(:activity)
+        TaskParser::ActivityFactory.create_for(@task, "release", @parser).should == :activity
       end
     end
     describe "compute" do
       it "should create a request activity" do
-        TaskActivity::Compute.should_receive(:new).with(1).and_return(:activity)
-        TaskParser::ActivityFactory.create_for("compute", @parser).should == :activity
+        TaskActivity::Compute.should_receive(:new).with(@task, 1).and_return(:activity)
+        TaskParser::ActivityFactory.create_for(@task, "compute", @parser).should == :activity
       end
     end
   end

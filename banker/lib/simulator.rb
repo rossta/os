@@ -3,7 +3,7 @@ class Simulator
   
   def initialize(tasks, resources)
     @tasks = tasks
-    @resources = resources
+    ResourceTable.build(resources)
   end
   
   def simulate!

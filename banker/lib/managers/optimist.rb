@@ -2,42 +2,35 @@ class Optimist < Manager
 
   def simulate
     while !terminated?
-      current_activities = []
-      tasks_to_process.each do |task|
-        puts task.status
-        strategy = management_strategy_for(task)
-        current_activities << strategy.process
+      current_activities = tasks.select { |t| t.processable? }.map { |t| t.next_activity }
+      current_activities.each do |activity|
+        puts activity.task.status
+        activity.process
       end
       
-      if deadlocked?(current_activities)
-        first_task = tasks_to_process.first
-        first_task.abort!
-        first_task.allocation.each do |type, units|
-          if (resource = resources.detect { |r| type == r.resource_type })
-            resource.replenish(units)
-          end
+      if current_activities.all? { |a| !a.processed? }
+        while current_activities.all? { |a| !a.processable? }
+          activity = current_activities.shift
+          activity.task.abort!
+          ResourceTable.reallocate!
         end
       end
-      
+      tasks.each { |t| t.total_time += 1 }
       cycle_clock
     end
     quick_display
   end
   
-  def tasks_to_process
-    tasks.select { |t| t.processable? }
-  end
-  
-  def deadlocked?(current_activities)
-    current_activities.compact.all? { |a| !a.processed? }
+  def completed_tasks
+    tasks.select { |t| t.completed? }
   end
   
   protected
   
-  def management_strategy_for(task)
-    ManagementStrategy::Fifo.new(task, resources)
-  end
-  
+  # def management_strategy_for(task)
+  #   ManagementStrategy::Fifo.new(task)
+  # end
+  # 
   def quick_display
     tasks.each do |task|
       puts task.report
