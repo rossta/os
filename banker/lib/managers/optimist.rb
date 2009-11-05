@@ -2,6 +2,18 @@ class Optimist < Manager
 
   def simulate
     previously_blocked = []
+    available_tasks.each do |task|
+      task.initial_claim.each do |claim|
+        claimed_units   = claim.units
+        resource_units  = ResourceTable.find(claim.resource_type).units
+        if claimed_units > resource_units
+          task.abort!
+          errors << "Banker aborts task #{task.number} before run begins: claim for resource #{claim.resource_type} (#{claimed_units}) exceeds number of units present (#{resource_units})"
+          next
+        end
+      end
+    end
+
     while !terminated?
       # require "ruby-debug"; debugger if Clock.time == 3
       
@@ -23,7 +35,6 @@ class Optimist < Manager
         end while current.all? { |a| a.blocked? }
       else
         available = current - previously_blocked
-        puts "before"
         puts "current:            #{current.map{|a|a.task_number}.join(", ")}"
         puts "available:          #{available.map{|a|a.task_number}.join(", ")}"
         puts "previously blocked: #{previously_blocked.map{|a|a.task_number}.join(", ")}"
@@ -39,9 +50,6 @@ class Optimist < Manager
         end
         previously_blocked += available.select { |a| !a.processed? }
         ResourceTable.reallocate!
-        puts "after"
-        puts "available:          #{available.map{|a|a.task_number}.join(", ")}"
-        puts "previously blocked: #{previously_blocked.map{|a|a.task_number}.join(", ")}"
       end
 
       puts "cycle #{Clock.time} end"

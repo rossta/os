@@ -59,7 +59,7 @@ class Task
   end
 
   def initial_claim
-    @initial_claim ||= initiates.map { |i| i.units }
+    @initial_claim ||= initiates
   end
 
   def percent_waiting

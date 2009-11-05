@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe BankerCommand do
   describe "optimist" do
     describe "run" do
-      [1,2,3,4,5].each do |num|
+      [6].each do |num|
         it "should process input file #{num}" do
           puts "---Input #{num}---"
           command   = simulate_command num

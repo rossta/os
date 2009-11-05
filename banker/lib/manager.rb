@@ -19,4 +19,8 @@ class Manager
     Clock.cycle unless terminated?
   end
   
+  def errors
+    @errors ||= []
+  end
+  
 end
