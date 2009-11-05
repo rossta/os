@@ -9,7 +9,7 @@ module TaskActivity
   ]
 
   class Base
-    attr_accessor :task, :processed
+    attr_accessor :task, :processed, :value_2
     def initialize(task, value_1 = nil, value_2 = nil)
       @task    = task
       @value_1 = value_1
@@ -37,6 +37,10 @@ module TaskActivity
       false
     end
     
+    def status
+      "#{name} #{value_2}"
+    end
+    
   end
 
   class Initiate < Base
@@ -62,6 +66,7 @@ module TaskActivity
     def process
       if blocked?
         task.wait
+        puts "Task #{task_number} wait"
         false
       else
         task.allocate resource_type, resource.request(units)
@@ -87,7 +92,7 @@ module TaskActivity
     end
     def process
       resource = ResourceTable.find(resource_type)
-      resource.replenish task.release(resource.resource_type, units)
+      ResourceTable.replenish task.release(resource.resource_type, units)
       super
     end
   end

@@ -35,8 +35,10 @@ class Task
   end
   
   def release(type, units)
+    release = {}
     allocation[type] -= units
-    units
+    release[type] = units
+    release
   end
   
   def wait
@@ -61,7 +63,7 @@ class Task
   end
 
   def percent_waiting
-    (total_time > 0 ? (wait_time * 100 / total_time) : 0)
+    (total_time > 0 ? (wait_time * 100 / total_time).ceil : 0)
   end
   
   def processable?
@@ -84,7 +86,7 @@ class Task
     if aborted?
       "Task #{number} aborted"
     else
-      "Task #{number} #{next_activity.name}"
+      "Task #{number} #{allocation.inspect}"
     end
   end
   protected

@@ -3,35 +3,49 @@ class Optimist < Manager
   def simulate
     previously_blocked = []
     while !terminated?
-      puts "cycle #{Clock.time} start"
+      # require "ruby-debug"; debugger if Clock.time == 3
       
-      available = available_tasks.map { |t| t.next_activity } - previously_blocked
-      current   = previously_blocked + available
+      puts "cycle #{Clock.time} start"
+      puts  "#{ResourceTable.status}"
+      current = available_tasks.map { |t| t.next_activity }
       
       if current.all? { |a| a.blocked? }
-        while current.all? { |a| a.blocked? }
-          if (activity = current.shift)
+        previously_blocked = current
+        previously_blocked.each { |a| a.process }
+        puts "Blocked"
+        begin
+          if (activity = previously_blocked.shift)
+            puts "Aborting task #{activity.task_number}"
             activity.task.abort!
-            previously_blocked.delete(activity)
             ResourceTable.reallocate!
+            puts "Releasing #{activity.task.allocation.values.join(", ")} units: #{ResourceTable.status}"
           end
-        end
+        end while current.all? { |a| a.blocked? }
       else
+        available = current - previously_blocked
+        puts "before"
+        puts "current:            #{current.map{|a|a.task_number}.join(", ")}"
+        puts "available:          #{available.map{|a|a.task_number}.join(", ")}"
+        puts "previously blocked: #{previously_blocked.map{|a|a.task_number}.join(", ")}"
         previously_blocked.each do |activity|
-          puts activity.task.status + "(previously blocked)"
           activity.process
-          previously_blocked.delete(activity) if activity.processed?
+          puts  "#{activity.task.status} #{activity.status} (previously blocked): #{ResourceTable.status}"
         end
+        previously_blocked = previously_blocked.select { |a| !a.processed? }
 
         available.each do |activity|
-          puts activity.task.status
           activity.process
-          previously_blocked << activity if activity.blocked?
+          puts "#{activity.task.status} #{activity.status}: #{ResourceTable.status}"
         end
+        previously_blocked += available.select { |a| !a.processed? }
+        ResourceTable.reallocate!
+        puts "after"
+        puts "available:          #{available.map{|a|a.task_number}.join(", ")}"
+        puts "previously blocked: #{previously_blocked.map{|a|a.task_number}.join(", ")}"
       end
 
       puts "cycle #{Clock.time} end"
-      tasks.each { |t| t.total_time += 1 }
+      available_tasks.each { |t| t.total_time += 1 }
       cycle_clock
       puts ""
     end

@@ -1,0 +1,4 @@
+FIFO
+Task 1      aborted
+Task 2      5   1  20%
+total       5   1  20%
