@@ -7,9 +7,9 @@ describe Resource do
     end
   end
   
-  describe "total_units" do
+  describe "max" do
     it "should always equal initial units" do
-      Resource.new(4).total_units.should == 4
+      Resource.new(4).max.should == 4
     end
   end
   

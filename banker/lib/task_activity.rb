@@ -16,6 +16,10 @@ module TaskActivity
       @value_2 = value_2
       @processed = false
     end
+    
+    def task_number
+      task.number
+    end
 
     def name
       self.class.name.downcase.gsub(/(\w+)::/, "")
@@ -27,6 +31,10 @@ module TaskActivity
 
     def processed?
       @processed
+    end
+
+    def blocked?
+      false
     end
     
   end
@@ -52,16 +60,17 @@ module TaskActivity
       @value_2
     end
     def process
-      if processable?
-        task.allocate resource.resource_type, resource.request(units)
-        super
-      else
+      if blocked?
         task.wait
         false
+      else
+        task.allocate resource_type, resource.request(units)
+        super
       end
     end
-    def processable?
-      units <= resource.units
+    
+    def blocked?
+      units > resource.units
     end
     
     def resource
