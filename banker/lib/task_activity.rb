@@ -98,8 +98,21 @@ module TaskActivity
   end
 
   class Compute < Base
-    def number_cycles
+    attr_accessor :processed_cycles
+    def initialize(task, value_1)
+      super
+      @processed_cycles = 0
+    end
+    def total_cycles
       @value_1
+    end
+    def process
+      self.processed_cycles +=1
+      if processed_cycles == total_cycles
+        super
+      else
+        false
+      end
     end
   end
 end
