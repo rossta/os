@@ -45,7 +45,7 @@ class BankerReport
       manager_text = [format("%-9s",  "total")]
       manager_text << format("%4s",   overall_total_time)
       manager_text << format("%4s",   overall_wait_time)
-      manager_text << format("%4s\%", (overall_wait_time * 100) / overall_total_time)
+      manager_text << format("%4s\%", (overall_wait_time.to_f * 100).ceil / overall_total_time)
       manager_text << format("%s",  "") #34
       text << manager_text.join
       text.join("\n")
