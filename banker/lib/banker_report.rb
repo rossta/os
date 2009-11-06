@@ -13,7 +13,6 @@ class BankerReport
   
   def header
     header = ""
-    header += optimist.errors.join("\n") + "\n" if optimist.errors.any?
     header += format("%-32s", "FIFO")
     # header += "BANKER"
   end
