@@ -1,28 +1,22 @@
 class ManagerReport
-  attr_reader :optimist, :banker
-  def initialize(optimist, banker)
-    @optimist = optimist
-    @banker = banker
+  attr_reader :manager
+  def initialize(manager)
+    @manager = manager
   end
   
   def to_s
     text = [header]
-    text << optimist_report.to_s
+    text << manager_report.to_s
     text.join("\n")
   end
   
   def header
     header = ""
     header += format("%-32s", "FIFO")
-    # header += "BANKER"
   end
   
-  def banker_report
-    @banker_report ||= ManagerReport.new(banker)
-  end
-  
-  def optimist_report
-    @optimist_report ||= ManagerReport.new(optimist)
+  def manager_report
+    @manager_report ||= ManagerReport.new(manager)
   end
   
   class ManagerReport
