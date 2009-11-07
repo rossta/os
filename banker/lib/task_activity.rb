@@ -26,6 +26,7 @@ module TaskActivity
     end
 
     def process
+      Logger.info "Task #{task_number} processing"
       @processed  = true
     end
 
@@ -35,6 +36,10 @@ module TaskActivity
 
     def blocked?
       false
+    end
+    
+    def safe?
+      true
     end
     
     def status
@@ -66,7 +71,6 @@ module TaskActivity
     def process
       if blocked?
         task.wait
-        puts "Task #{task_number} wait"
         false
       else
         task.allocate resource_type, resource.request(units)
@@ -76,6 +80,10 @@ module TaskActivity
     
     def blocked?
       units > resource.units
+    end
+    
+    def safe?
+      task.safe?
     end
     
     def resource

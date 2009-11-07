@@ -19,7 +19,7 @@ class Task
     safe = true
     initial_claim.each do |initiate|
       available = ResourceTable.available_units(initiate.resource_type)
-      remaining = initiate.units - consumed_units(initiate.resource_type)
+      remaining = initiate.units - (allocation[initiate.resource_type] || 0)
       safe = safe && (available >= remaining)
     end
     safe
@@ -62,6 +62,7 @@ class Task
   end
   
   def wait
+    Logger.info "Task #{number} waiting"
     @wait_time += 1
   end
 
@@ -103,10 +104,11 @@ class Task
   end
 
   def status
+    safe = safe? ? "SAFE" : "UNSAFE"
     if aborted?
       "Task #{number} aborted"
     else
-      "Task #{number} #{allocation.inspect}"
+      "Task #{number} #{safe} #{allocation.inspect}"
     end
   end
   protected

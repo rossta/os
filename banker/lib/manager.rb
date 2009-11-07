@@ -35,7 +35,7 @@ class Manager
 
   def quick_display
     tasks.each do |task|
-      puts task.report
+      Logger.info task.report
     end
   end
   

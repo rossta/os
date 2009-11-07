@@ -26,7 +26,7 @@ protected
     usage =   ["Usage:"]
     usage <<  ["ruby [path...]/run.rb [file name...] [scheduler type ...] [-v |-d | ]"]
     # usage <<  ["optional flags : -d | --detailed | -v | --verbose "]
-    puts usage.join("\n\t")
+    Logger.info usage.join("\n\t")
   end
 
   def process_command

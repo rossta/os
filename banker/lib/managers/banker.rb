@@ -4,36 +4,43 @@ class Banker < Manager
     previously_blocked = []
     
     while !terminated?
-      puts "cycle #{Clock.time} start"
-      puts  "#{ResourceTable.status}"
+      Logger.info "cycle #{Clock.time} start"
+      Logger.info  "#{ResourceTable.status}"
+      # require "ruby-debug"; debugger
       
-      current   = available_tasks.map { |t| t.next_activity }
+      current   = available_tasks.map { |t| t.next_activity }.sort_by { |a| a.task_number }
       requests  = current.select { |a| a.name == TaskActivity::REQUEST }
-      other     = current - requests
+      available = current - previously_blocked
       
-      puts "current:      #{current.map{|a|a.task_number}.join(", ")}"
-      puts "requests:     #{requests.map{|a|a.task_number}.join(", ")}"
-      puts "other:        #{other.map{|a|a.task_number}.join(", ")}"
+      Logger.info "current:            #{current.map{|a|a.task_number}.join(", ")}"
+      Logger.info "available:          #{available.map{|a|a.task_number}.join(", ")}"
+      Logger.info "previously_blocked: #{previously_blocked.map{|a|a.task_number}.join(", ")}"
       
-      requests.each do |activity|
-        puts  "#{activity.task.status} #{activity.status}: #{ResourceTable.status}"
-        if activity.task.safe?
+      previously_blocked.each do |activity|
+        if activity.safe?
           activity.process
         else
           activity.task.wait
         end
+        Logger.info  "#{activity.task.status} #{activity.status}: #{ResourceTable.status}"
       end
+      previously_blocked = previously_blocked.select { |a| !a.processed? }
       
-      other.each do |activity|
-        puts  "#{activity.task.status} #{activity.status}: #{ResourceTable.status}"
-        activity.process
+      available.each do |activity|
+        if activity.safe?
+          activity.process
+        else
+          previously_blocked << activity unless previously_blocked.include? activity
+          activity.task.wait
+        end
+        Logger.info  "#{activity.task.status} #{activity.status}: #{ResourceTable.status}"
       end
       
       ResourceTable.reallocate!
-      puts "cycle #{Clock.time} end"
+      Logger.info "cycle #{Clock.time} end"
       available_tasks.each { |t| t.total_time += 1 }
       cycle_clock
-      puts ""
+      Logger.info ""
     end
     quick_display
     
