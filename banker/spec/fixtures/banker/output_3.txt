@@ -1,5 +1,4 @@
-BANKER
 Task 1        4   0   0%
-Task 2        7   3  43%
+Task 2        7   3  42%
 Task 3       10   6  60%
-total        21   9  43%
+total        21   9  42%
