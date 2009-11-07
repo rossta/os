@@ -1,4 +1,3 @@
-FIFO
 Task 1      9   4   44%
 Task 2      5   1   20%
 Task 3      7   3   42%

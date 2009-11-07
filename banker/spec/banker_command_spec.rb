@@ -8,7 +8,7 @@ describe BankerCommand do
           puts "---Input #{num}---"
           command   = simulate_command num
           puts ""
-          result    = command.report.to_s.gsub(/[ \n]+/, " ")
+          result    = command.report.optimist_report.to_s.gsub(/[ \n]+/, " ")
           expected  = File.open(FIXTURES + "optimist/output_#{num}.txt").read.strip.gsub(/[ \n]+/, " ")
           result.should == expected
         end
