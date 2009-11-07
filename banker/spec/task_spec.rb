@@ -28,20 +28,22 @@ describe Task do
   describe "initial_claim" do
     it "should return initial claim array from initiate commands" do
       task = Task.new
-      task.add_activity(mock(TaskActivity,
+      initiate_1 = mock(TaskActivity,
         :name => TaskActivity::INITIATE,
         :units => 2,
-        :resource_type => 1))
-      task.add_activity(mock(TaskActivity,
-        :name => TaskActivity::INITIATE,
-        :units => 3,
-        :resource_type => 2))
+        :resource_type => 1)
+      initiate_2 = mock(TaskActivity,
+          :name => TaskActivity::INITIATE,
+          :units => 3,
+          :resource_type => 2)
+      task.add_activity(initiate_1)
+      task.add_activity(initiate_2)
       task.add_activity(mock(TaskActivity,
         :name => TaskActivity::REQUEST,
         :units => 3,
         :resource_type => 1))
 
-      task.initial_claim.should == [2, 3]
+      task.initial_claim.should == [initiate_1, initiate_2]
     end
   end
   
@@ -106,6 +108,37 @@ describe Task do
       task.wait_time = 3
       task.total_time = 5
       task.percent_waiting.should == 60
+    end
+  end
+  
+  describe "safe?" do
+    describe "one resource type" do
+      before(:each) do
+        ResourceTable.stub!(:available_units).with(1).and_return(3)
+        @task = Task.new
+        
+      end
+      it "should return true if units needed less than available in resource table" do
+        @task.add_activity(mock(TaskActivity, :name => TaskActivity::INITIATE, :resource_type => 1, :units => 2))
+        @task.add_activity(mock(TaskActivity, 
+          :name => TaskActivity::REQUEST, 
+          :processed? => false, 
+          :resource_type => 1, 
+          :units => 2))
+        @task.safe?.should be_true
+      end
+      it "should return false if units needed more than available in resource table" do
+        @task.add_activity(mock(TaskActivity, :name => TaskActivity::INITIATE, :resource_type => 1, :units => 4))
+        @task.add_activity(mock(TaskActivity, 
+          :name => TaskActivity::REQUEST, 
+          :processed? => false, 
+          :resource_type => 1, 
+          :units => 2))
+        @task.safe?.should be_false
+      end
+    end
+    it "should return true if " do
+      
     end
   end
 end

@@ -23,4 +23,21 @@ class Manager
     @errors ||= []
   end
   
+  def available_tasks
+    tasks.select { |t| t.processable? }
+  end
+
+  def completed_tasks
+    tasks.select { |t| t.completed? }
+  end
+  
+  protected
+
+  def quick_display
+    tasks.each do |task|
+      puts task.report
+    end
+  end
+  
+  
 end

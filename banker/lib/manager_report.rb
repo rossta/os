@@ -1,4 +1,4 @@
-class BankerReport
+class ManagerReport
   attr_reader :optimist, :banker
   def initialize(optimist, banker)
     @optimist = optimist
@@ -17,11 +17,15 @@ class BankerReport
     # header += "BANKER"
   end
   
-  def optimist_report
-    @optimist_report ||= OptimistReport.new(optimist)
+  def banker_report
+    @banker_report ||= ManagerReport.new(banker)
   end
   
-  class OptimistReport
+  def optimist_report
+    @optimist_report ||= ManagerReport.new(optimist)
+  end
+  
+  class ManagerReport
     attr_reader :manager
     def initialize(manager)
       @manager = manager

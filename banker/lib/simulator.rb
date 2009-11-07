@@ -4,6 +4,7 @@ class Simulator
   def initialize(tasks, resources)
     @tasks = tasks
     ResourceTable.build(resources)
+    ResourceTable.reset!
   end
   
   def simulate!

@@ -1,7 +1,7 @@
 class BankerSimulator < Simulator
   
-  def initialize(tasks, resources)
-    @manager = Banker.new(tasks, resources)
+  def manager
+    @manager ||= Banker.new(tasks)
   end
   
 end

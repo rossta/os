@@ -4,8 +4,6 @@ class Optimist < Manager
     previously_blocked = []
 
     while !terminated?
-      # require "ruby-debug"; debugger if Clock.time == 3
-      
       puts "cycle #{Clock.time} start"
       puts  "#{ResourceTable.status}"
       current = available_tasks.map { |t| t.next_activity }
@@ -49,19 +47,4 @@ class Optimist < Manager
     quick_display
   end
 
-  def available_tasks
-    tasks.select { |t| t.processable? }
-  end
-
-  def completed_tasks
-    tasks.select { |t| t.completed? }
-  end
-  
-  protected
-
-  def quick_display
-    tasks.each do |task|
-      puts task.report
-    end
-  end
 end

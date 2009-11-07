@@ -24,6 +24,14 @@ class ResourceTable
     instance.reallocate!
   end
   
+  def self.reset!
+    instance.reset!
+  end
+  
+  def self.available_units(resource_type)
+    find(resource_type).units
+  end
+  
   def self.status
     "Resources(#{resources.map{|r|r.units}.join(", ")})"
   end
@@ -47,5 +55,9 @@ class ResourceTable
   
   def find(resource_type)
     resources.detect { |r| r.resource_type == resource_type }
+  end
+  
+  def reset!
+    resources.each { |r| r.reset! }
   end
 end

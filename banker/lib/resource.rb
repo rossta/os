@@ -18,4 +18,8 @@ class Resource
     @units += units
     @units
   end
+  
+  def reset!
+    @units = max
+  end
 end

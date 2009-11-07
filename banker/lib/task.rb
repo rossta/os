@@ -14,6 +14,26 @@ class Task
   def next_activity
     activities.detect { |a| !a.processed? }
   end
+  
+  def safe?
+    safe = true
+    initial_claim.each do |initiate|
+      available = ResourceTable.available_units(initiate.resource_type)
+      remaining = initiate.units - consumed_units(initiate.resource_type)
+      safe = safe && (available >= remaining)
+    end
+    safe
+  end
+  
+  def remaining_units(type)
+    remaining_requests = requests.select { |r| r.resource_type == type && !r.processed? }
+    remaining_requests.inject(0) { |sum, r| sum + r.units }
+  end
+  
+  def consumed_units(type)
+    remaining_requests = requests.select { |r| r.resource_type == type && r.processed? }
+    remaining_requests.inject(0) { |sum, r| sum + r.units }
+  end
 
   def abort!
     ResourceTable.replenish(allocation)
@@ -28,7 +48,7 @@ class Task
   def allocation
     @allocation ||= {}
   end
-  
+    
   def allocate(type, units)
     allocation[type] = 0 unless allocation[type]
     allocation[type] += units
@@ -93,5 +113,9 @@ class Task
 
   def initiates
     @initiates ||= activities.select { |a| a.name == TaskActivity::INITIATE }.sort_by { |a| a.resource_type }
+  end
+  
+  def requests
+    @requests ||= activities.select { |a| a.name == TaskActivity::REQUEST }.sort_by { |a| a.resource_type }
   end
 end
