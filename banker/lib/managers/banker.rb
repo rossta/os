@@ -2,6 +2,7 @@ class Banker < Manager
   
   def simulate
     previously_blocked = []
+    validate_safe_tasks
     
     while !terminated?
       Logger.info "cycle #{Clock.time} start"
@@ -44,5 +45,21 @@ class Banker < Manager
     end
     quick_display
     
+  end
+  
+  protected
+  
+  def validate_safe_tasks
+    available_tasks.each do |task|
+      task.initial_claim.each do |claim|
+        claimed_units   = claim.units
+        resource_units  = ResourceTable.find(claim.resource_type).units
+        if claimed_units > resource_units
+          task.abort!
+          errors << "Banker aborts task #{task.number} before run begins: claim for resource #{claim.resource_type} (#{claimed_units}) exceeds number of units present (#{resource_units})"
+          next
+        end
+      end
+    end
   end
 end

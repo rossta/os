@@ -31,6 +31,10 @@ class Manager
     tasks.select { |t| t.completed? }
   end
   
+  def name
+    self.class.name.upcase
+  end
+  
   protected
 
   def quick_display

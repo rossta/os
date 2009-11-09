@@ -10,7 +10,7 @@ describe BankerCommand do
   end
   describe "banker" do
     describe "run" do
-      [3,5].each do |num|
+      [6].each do |num|
         it "should process input file #{num}" do
           Logger.info "---Input #{num}---"
           command = BankerCommand.new
@@ -21,7 +21,7 @@ describe BankerCommand do
           result.should == expected
         end
       end
-      [1,2,4].each do |num|
+      [1,2,3,4,5].each do |num|
         it "should process input file #{num}" do
           Logger.info "---Input #{num}---"
           command = BankerCommand.new

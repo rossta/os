@@ -1,7 +1,7 @@
-Banker aborts task 3 before run begins: claim for resourse 1 (5) exceeds number of units present (4)
+Banker aborts task 3 before run begins: claim for resource 1 (5) exceeds number of units present (4)
 BANKER
 Task 1       9   4   44%
 Task 2       4   0    0%
 Task 3       aborted
-Task 4       7   3   43%
+Task 4       7   3   42%
 total       20   7   35%

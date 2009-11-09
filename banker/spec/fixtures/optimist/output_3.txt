@@ -1,3 +1,4 @@
+OPTIMIST
 Task 1      aborted
 Task 2      aborted
 Task 3      5   1  20%

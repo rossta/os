@@ -27,6 +27,8 @@ class ManagerReport
     
     def to_s
       text = []
+      text << manager.errors if manager.errors.any?
+      text << manager.name
       manager.tasks.each do |task|
         task_text = [format("%-9s",   "Task #{task.number}")]
         if task.aborted?
