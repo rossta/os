@@ -10,8 +10,14 @@ class BankerCommand
       file_name = arguments
       Logger.debug(false)
     end
+    Logger.info "\n---OPTIMIST RUN---"
+    Logger.info "\n"
     optimist    = run_optimist(file_name)
+    Logger.info "\n---BANKER RUN---"
+    Logger.info "\n"
     banker      = run_banker(file_name)
+    Logger.info "\n---OUTPUT---"
+    Logger.info "\n"
     puts to_s
   end
   

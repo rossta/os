@@ -10,11 +10,6 @@ class ManagerReport
     text.join("\n")
   end
   
-  def header
-    header = ""
-    header += format("%-32s", "FIFO")
-  end
-  
   def manager_report
     @manager_report ||= ManagerReport.new(manager)
   end

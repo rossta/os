@@ -23,13 +23,14 @@
 
       Usage
 
-          $ ruby banker/run [input file ... ] [scheduler type ... ]
-          $ ruby banker/run [input file ... ] [scheduler type ... ] [-d]
-          $ ruby banker/run [input file ... ] [scheduler type ... ] [-v]
+          $ ruby run [input file ... ] 
+          $ ruby run [input file ... ] [-v|--verbose]
 
       Example
 
-          $ ruby banker/run spec/fixtures/input_1.txt
+          $ ruby ./run spec/fixtures/input_1.txt
+          $ ruby ./run spec/fixtures/input_1.txt -v
+          $ ruby ./run spec/fixtures/input_1.txt --verbose
 
 3. Directory Structure
 
@@ -41,7 +42,7 @@
     - contains the application classes and modules. Each lib file contains one application class or module of the name corresponding to its filename.
 
     spec/
-    - contains the rspec unit tests that describe and test the functionality of the application classes. Each spec file corresponds to an application file in lib/. The spec/ dir contains all input files in the fixtures/ dir. These can be passed to the program, running from the scheduler/ dir as spec/fixtures/input_1.txt and so on. The output files are also present so they can be read for assertions in the test suite. The spec tests also serve as more detailed documentation for discerning the internal logic of each important ruby class method.
+    - contains the rspec unit tests that describe and test the functionality of the application classes. Each spec file corresponds to an application file in lib/. The spec/ dir contains all input files in the fixtures/ dir. These can be passed to the program, running from the banker/ dir as spec/fixtures/input_1.txt and so on. The output files are also present so they can be read for assertions in the test suite. The spec tests also serve as more detailed documentation for discerning the internal logic of each important ruby class method.
 
 4. Description
 
@@ -53,13 +54,13 @@
 
     The BankerCommand orchestrates the parsing of the input file, performed by the TaskParser, which parses the input file and returns an tasks and resources. The command object also creates a new resource managers: the Banker and the Optimist. Each manager initiates its own ResourceTable, which essentially acts as a wrapper for the resources. 
     
-    Each manager implements the #simulate method, which captures the overall logic of the Optimist (FIFO) approach to resource management and the Banker's algorithm respectively.
+    Each manager implements the #simulate method, which captures the overall logic of the Optimist (FIFO) approach to resource management and the Banker's algorithm respectively. The managers try to process each ready process according to spec, checking first for previous blocked activities, attempting to process either non-blocked or safe activities respectively.
     
     At the completion of the simulation, the Report instance constructs the details and summary from the OS, ProcessTable, and TaskParser and outputs the results.
 
 5. Extra credit
 
-  Using the optional -v flag will return the verbose output, which indicates the selected random_os for cpu and io bursts.
+  Using the optional -v flag will return the verbose (detailed) output
 
 6. Spec tests
 
