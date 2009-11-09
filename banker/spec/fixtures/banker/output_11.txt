@@ -1,5 +1,5 @@
 BANKER
-Task 1      19   10   53%
+Task 1      19   10   52%
 Task 2      11    2   18%
 Task 3      15    8   53%
 total       45   20   44%

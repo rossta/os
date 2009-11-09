@@ -10,18 +10,7 @@ describe BankerCommand do
   end
   describe "banker" do
     describe "run" do
-      [].each do |num|
-        it "should process input file #{num}" do
-          Logger.info "---Input #{num}---"
-          command = BankerCommand.new
-          command.run_banker(FIXTURES + "input_#{num}.txt")
-          Logger.info ""
-          result    = command.report.manager_report.to_s.gsub(/[ \n]+/, " ")
-          expected  = File.open(FIXTURES + "banker/output_#{num}.txt").read.strip.gsub(/[ \n]+/, " ")
-          result.should == expected
-        end
-      end
-      [1,2,3,4,5,6,7].each do |num|
+      [1,2,3,4,5,6,7,8,9,10,11,12,13].each do |num|
         it "should process input file #{num}" do
           Logger.info "---Input #{num}---"
           command = BankerCommand.new

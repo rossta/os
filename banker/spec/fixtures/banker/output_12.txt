@@ -1,4 +1,4 @@
 BANKER
 Task 1        7    0    0%
 Task 2        9    3   33%
-total        16    3   19%
+total        16    3   18%
