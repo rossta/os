@@ -1,10 +1,11 @@
 class Logger
   def self.info(text)
-    puts text if debug?
+    return unless debug?
+    puts text 
   end
   
   def self.debug?
-    @@debug = true
+    @@debug ||= false
   end
   
   def self.debug(debug)

@@ -1,0 +1,8 @@
+OPTIMIST
+Task 1       aborted
+Task 2       8    1   12%
+total        8    1   12%
+BANKER
+Task 1       7   0    0%
+Task 2      12   5   41%
+total       19   5   26%

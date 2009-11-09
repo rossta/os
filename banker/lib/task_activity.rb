@@ -33,6 +33,10 @@ module TaskActivity
     def processed?
       @processed
     end
+    
+    def reset!
+      @processed = false
+    end
 
     def blocked?
       false
@@ -122,6 +126,12 @@ module TaskActivity
     def total_cycles
       @value_1
     end
+    
+    def reset!
+      self.processed_cycles = 0
+      super
+    end
+    
     def process
       self.processed_cycles +=1
       if processed_cycles == total_cycles

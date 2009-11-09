@@ -7,7 +7,6 @@ class Banker < Manager
     while !terminated?
       Logger.info "cycle #{Clock.time} start"
       Logger.info  "#{ResourceTable.status}"
-      # require "ruby-debug"; debugger
       
       current   = available_tasks.map { |t| t.next_activity }.sort_by { |a| a.task_number }
       requests  = current.select { |a| a.name == TaskActivity::REQUEST }

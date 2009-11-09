@@ -1,10 +1,18 @@
 class Task
   attr_reader :number
-  attr_accessor :total_time, :wait_time
+  attr_accessor :total_time, :wait_time, :allocation, :aborted
   def initialize(number = nil)
     @number = number
     @total_time = 0
     @wait_time = 0
+  end
+  
+  def reset!
+    activities.each { |a| a.reset! }
+    self.total_time = 0
+    self.wait_time = 0
+    self.allocation = {}
+    self.aborted = false
   end
 
   def add_activity(activity)

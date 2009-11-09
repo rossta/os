@@ -5,7 +5,7 @@ class ManagerReport
   end
   
   def to_s
-    text = [header]
+    text = []
     text << manager_report.to_s
     text.join("\n")
   end

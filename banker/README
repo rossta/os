@@ -3,48 +3,38 @@
   Ross Kaffenberger
   N19663559
 
-  Lab #2 Scheduler (in Ruby)
+  Lab #3 Banker (in Ruby)
   Operating Systems | NYU
-  10.14.09
+  11.08.09
 
 ############################################################################
 
 
 1. Compilation command
 
-  None. My scheduler program is written in Ruby which is interpreted.
+  None.
 
 2. Running Program
 
-  Setup: Unzip the archive, cd into scheduler/
+  Setup: Unzip the archive, cd into banker/
 
   Using ruby
-  -within scheduler/
+  -within banker/
 
       Usage
 
-          $ ruby run.rb [input file ... ] [scheduler type ... ]
-          $ ruby run.rb [input file ... ] [scheduler type ... ] [-d]
-          $ ruby run.rb [input file ... ] [scheduler type ... ] [-v]
+          $ ruby banker/run [input file ... ] [scheduler type ... ]
+          $ ruby banker/run [input file ... ] [scheduler type ... ] [-d]
+          $ ruby banker/run [input file ... ] [scheduler type ... ] [-v]
 
       Example
 
-          $ ruby run.rb spec/fixtures/input_1.txt fifo -d
-
-      Valid scheduler types
-          fcfs      # first in, first out scheduling
-          rr        # round robin scheduling
-          psjf      # shortest process next
-          hprn      # highest penalty ratio next
-
-      Optional flags
-          -d        # detailed
-          -v        # verbose, shows random
+          $ ruby banker/run spec/fixtures/input_1.txt
 
 3. Directory Structure
 
-  scheduler/
-    - contains run.rb, which loads all the Ruby classes in lib/ and ../shared/ and runs the application.
+  banker/
+    - contains run, which loads all the Ruby classes in lib/ and ../shared/ and runs the application.
     - Rakefile for running unit tests (during development)
 
     lib/
@@ -57,15 +47,15 @@
 
   The program flow is as follows:
 
-    When the program is run, the first file, run.rb, loads the class files in lib. A new Runner is created with the arguments available in ARGV, a global variable available from the Ruby process, similar to Perl or Shell scripting.
+    When the program is run, the first file, run, loads the class files in lib. A new Runner is created with the arguments available in ARGV, a global variable available from the Ruby process, similar to Perl or Shell scripting.
 
-    Runner checks the arguments: if valid, it creates a new SchedulerCommand with the command line arguments, which initiates the simulation. If invalid, it will print the usage.
+    Runner checks the arguments: if valid, it creates a new BankerCommand with the command line arguments, which initiates the simulation. If invalid, it will print the usage.
 
-    The SchedulerCommand orchestrates the parsing of the input file, performed by the ProcessParser, which parses the input file and returns an array of sorted Process objects. The command object also creates a new Scheduler. Depending on the second command line argument, the scheduler is one of the following subclasses: FifoScheduler (fcfs), RoundRobinScheduler (rr), ShortestRemainingScheduler (psjf), or HighestPenaltyScheduler (hprn). The scheduler and processes are passed to the OS simulator, which "boots" an instance of the OS class, saves the process list to the ProcessTable and initiates the RandomNumberGenerator, which interprets the random numbers file (located in scheduler/config). The ProcessTable essentially acts as a wrapper for the process list. The key OS method, #run, simulates the cycles for running each process to completion.
+    The BankerCommand orchestrates the parsing of the input file, performed by the TaskParser, which parses the input file and returns an tasks and resources. The command object also creates a new resource managers: the Banker and the Optimist. Each manager initiates its own ResourceTable, which essentially acts as a wrapper for the resources. 
     
-    The OS#run method works as follows: it starts the Clock and enters a loop which continues until all the processes are terminated. The state of the system is recorded at the start of the cycle. Then each of the processes in the ProcessTable are "cycled" in the following order: blocked processes, running process, ready processes. The Process#cycle method delegates to the internal ProcessState of each Process. These transitions are responsible for changing the state of each process when key events occur, such as exhausting the current cpu burst, and for incrementing internal values, like wait time while the process is ready but not yet running. The logic for the ProcessState transitions are defined thoroughly in scheduler/spec/process_spec.rb. The OS then instructs the scheduler to put newly ready processes on its ready queue, and to select the next process to run if a switch is necessary. The logic for scheduling and choosing the next ready process differs depending on the scheduler type. Key scheduler methods include #preempt? and #choose_next which determine when the scheduler should preempt the running process (if ever), and how it should select the next process from the queue, respectively. More details are found in the scheduler/spec/scheduler/*.rb files. At the end of each cycle, the OS instructs the Clock to increment its cycle. Clock#time returns the current cycle. The Clock also tracks io_time when any processes are blocked.
+    Each manager implements the #simulate method, which captures the overall logic of the Optimist (FIFO) approach to resource management and the Banker's algorithm respectively.
     
-    At the completion of the simulation, the Report instance constructs the details and summary from the OS, ProcessTable, and ProcessParser and outputs the results.
+    At the completion of the simulation, the Report instance constructs the details and summary from the OS, ProcessTable, and TaskParser and outputs the results.
 
 5. Extra credit
 

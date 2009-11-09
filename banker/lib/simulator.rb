@@ -1,8 +1,8 @@
 class Simulator
-  attr_reader :manager, :tasks, :resources
+  attr_reader :manager, :resources
   
-  def initialize(tasks, resources)
-    @tasks = tasks
+  def initialize(manager, resources)
+    @manager = manager
     ResourceTable.build(resources)
     ResourceTable.reset!
   end

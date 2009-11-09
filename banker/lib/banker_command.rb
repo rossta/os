@@ -1,42 +1,57 @@
 class BankerCommand
-  attr_accessor :report
+  attr_accessor :reports
   attr_reader   :parser
 
   def run(arguments)
-    parser      = parse_processes(arguments)
-    optimist    = simulate_optimist(parser.tasks, parser.resources)
-    banker      = simulate_banker(parser.tasks, parser.resources)
-    self.report = create_report(optimist, banker)
-    self
+    if arguments.is_a?(Array)
+      file_name = arguments.first
+      Logger.debug(arguments.last == "-v" || arguments.last == "--verbose")
+    else
+      file_name = arguments
+      Logger.debug(false)
+    end
+    optimist    = run_optimist(file_name)
+    banker      = run_banker(file_name)
+    puts to_s
   end
   
   def run_banker(arguments)
     parser      = parse_processes(arguments)
     banker      = simulate_banker(parser.tasks, parser.resources)
-    self.report = create_report(banker)
-    self
+    report      = create_report(banker)
+    self.reports << report
   end
   
   def run_optimist(arguments)
     parser      = parse_processes(arguments)
     optimist    = simulate_optimist(parser.tasks, parser.resources)
-    self.report = create_report(optimist)
-    self
+    report      = create_report(optimist)
+    self.reports << report
   end
 
   def create_report(manager)
     ManagerReport.new(manager)
   end
   
+  def reports
+    @reports ||= []
+  end
+  
+  def to_s
+    reports.map{ |r| r.to_s }.join("\n\n")
+  end
+  
 protected
   def simulate_optimist(tasks, resources)
-    simulator = OptimistSimulator.new(tasks, resources)
+    optimist = Optimist.new(tasks)
+    simulator = Simulator.new(optimist, resources)
     simulator.simulate!
     simulator.manager
   end
   
   def simulate_banker(tasks, resources)
-    simulator = BankerSimulator.new(tasks, resources)
+    banker = Banker.new(tasks)
+    simulator = Simulator.new(banker, resources)
     simulator.simulate!
     simulator.manager
   end
