@@ -82,6 +82,10 @@ class Task
   def initial_claim
     @initial_claim ||= initiates
   end
+  
+  def initial_claim_for(type)
+    initial_claim.detect { |i| i.resource_type == type }.units
+  end
 
   def percent_waiting
     (total_time > 0 ? (wait_time * 100 / total_time).ceil : 0)

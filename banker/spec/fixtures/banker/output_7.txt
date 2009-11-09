@@ -1,4 +1,5 @@
+BANKER
 Task 1       9   4   44%
 Task 2       aborted
-Task 3       7   3   43%
-total       16   7   44%
+Task 3       7   3   42%
+total       16   7   43%

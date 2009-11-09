@@ -18,7 +18,9 @@ class Banker < Manager
       Logger.info "previously_blocked: #{previously_blocked.map{|a|a.task_number}.join(", ")}"
       
       previously_blocked.each do |activity|
-        if activity.safe?
+        if activity.greedy?
+          activity.task.abort!
+        elsif activity.safe?
           activity.process
         else
           activity.task.wait
@@ -28,7 +30,9 @@ class Banker < Manager
       previously_blocked = previously_blocked.select { |a| !a.processed? }
       
       available.each do |activity|
-        if activity.safe?
+        if activity.greedy?
+          activity.task.abort!
+        elsif activity.safe?
           activity.process
         else
           previously_blocked << activity unless previously_blocked.include? activity

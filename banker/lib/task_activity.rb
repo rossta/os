@@ -46,6 +46,10 @@ module TaskActivity
       "#{name} #{value_2}"
     end
     
+    def greedy?
+      false
+    end
+    
   end
 
   class Initiate < Base
@@ -80,6 +84,10 @@ module TaskActivity
     
     def blocked?
       units > resource.units
+    end
+    
+    def greedy?
+      (task.allocation[resource_type] || 0) + units > task.initial_claim_for(resource_type)
     end
     
     def safe?
