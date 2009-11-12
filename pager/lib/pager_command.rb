@@ -11,9 +11,9 @@ class PagerCommand
     end
     to_s
   end
-  
-  def create_report(manager)
-    PagerReport.new(manager)
+
+  def create_report(pager)
+    PagerReport.new(pager)
   end
     
   def to_s
