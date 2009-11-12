@@ -20,10 +20,6 @@ describe Scheduling::Report do
       report.os_summary.should == "Summary Data:\nos report"
     end
     
-    describe "verbose" do
-      it "should also report process state for each cycle"
-      it "should also report remaining burst for each cycle"
-    end
   end
   
 end

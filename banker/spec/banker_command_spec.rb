@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe BankerCommand do
   before(:each) do
-    Logger.debug true
+    Logger.debug false
   end
   
   after(:each) do

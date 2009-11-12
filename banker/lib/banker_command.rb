@@ -18,7 +18,7 @@ class BankerCommand
     banker      = run_banker(file_name)
     Logger.info "\n---OUTPUT---"
     Logger.info "\n"
-    puts to_s
+    to_s
   end
   
   def run_banker(arguments)
