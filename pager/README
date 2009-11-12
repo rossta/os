@@ -1,0 +1,69 @@
+############################################################################
+
+  Ross Kaffenberger
+  N19663559
+
+  Lab #4 Pager (in Ruby)
+  Operating Systems | NYU
+  11.25.09
+
+############################################################################
+
+
+1. Compilation command
+
+  None.
+
+2. Running Program
+
+  Setup: Unzip the archive, cd into pager/
+
+  Using ruby
+  -within pager/
+
+      Usage
+
+          $ ruby run [input file ... ] 
+          $ ruby run [input file ... ] [-v|--verbose]
+
+      Example
+
+          $ ruby ./run spec/fixtures/input_1.txt
+          $ ruby ./run spec/fixtures/input_1.txt -v
+          $ ruby ./run spec/fixtures/input_1.txt --verbose
+
+3. Directory Structure
+
+  pager/
+    - contains run, which loads all the Ruby classes in lib/ and ../shared/ and runs the application.
+    - Rakefile for running unit tests (during development)
+
+    lib/
+    - contains the application classes and modules. Each lib file contains one application class or module of the name corresponding to its filename.
+
+    spec/
+    - contains the rspec unit tests that describe and test the functionality of the application classes. Each spec file corresponds to an application file in lib/. The spec/ dir contains all input files in the fixtures/ dir. These can be passed to the program, running from the pager/ dir as spec/fixtures/input_1.txt and so on. The output files are also present so they can be read for assertions in the test suite. The spec tests also serve as more detailed documentation for discerning the internal logic of each important ruby class method.
+
+4. Description
+
+  The program flow is as follows:
+
+    When the program is run, the first file, run, loads the class files in lib. A new Runner is created with the arguments available in ARGV, a global variable available from the Ruby process, similar to Perl or Shell scripting.
+
+    Runner checks the arguments: if valid, it creates a new pagerCommand with the command line arguments, which initiates the simulation. If invalid, it will print the usage.
+
+    The PagerCommand orchestrates the parsing of the input file, performed by the TaskParser, which parses the input file and returns an tasks and resources. The command object also creates a new resource managers: the pager and the Optimist. Each manager initiates its own ResourceTable, which essentially acts as a wrapper for the resources. 
+    
+5. Extra credit
+
+  Using the optional -v flag will return the verbose (detailed) output
+
+6. Spec tests
+
+  I created this program using test-driven development: Write a failing unit test. Write code to make it pass. Refactor. Repeat. The test library is RSpec, which is included in the zip file. The RSpec code is open source and is not used at any time during the execution of the program. I've left the tests in for inspection. The Rspec library is several MB, so I've not included in the zip archive.
+
+7. Dependencies
+
+  Running the program
+
+    Ruby >= version 1.8.6. The school servers on which I've run this program have all had ruby installations.
