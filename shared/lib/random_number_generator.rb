@@ -1,5 +1,4 @@
 class RandomNumberGenerator
-  RANDOM_NUMBERS_FILE = File.dirname(__FILE__) + '/../config/random_numbers'
   
   def self.number
     instance.number
@@ -14,7 +13,7 @@ class RandomNumberGenerator
   end
   
   def initialize
-    @reader = Reader.new(RANDOM_NUMBERS_FILE)
+    @reader = Reader.new(Configuration.random_numbers_file)
   end
   
   def number
