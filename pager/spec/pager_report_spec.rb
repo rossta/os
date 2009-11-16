@@ -1,9 +1,9 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe PagerReport do
+describe Paging::PagerReport do
 
   describe "base_report" do
-    it "should match expected output" do
+    it "should summarize pager inputs" do
       pager = mock(Pager,
         :machine_size => 20,
         :page_size    => 10,
@@ -22,22 +22,28 @@ The replacement algorithm is random.
 The level of debugging output is 0
 REPORT
 
-      report = PagerReport.new(pager)
+      report = Paging::PagerReport.new(pager)
       report.base_report.should == expected.chomp
     end
   end
 
   describe "process_report" do
-    it "should description" do
+    it "should summarize process faults and residency" do
+      Paging::ProcessTable.stub!(:processes).and_return([
+        mock(Process, :faults => 2, :average_residency => 15.5),
+        mock(Process, :faults => 4, :average_residency => 4.5)
+      ])
+      expected = <<-REPORT
+Process 1 had 2 faults and 15.5 average residency.
+Process 2 had 4 faults and 4.5 average residency.
 
+The total number of faults is 6 and the overall average residency is 10.0.
+REPORT
+      
+      report = Paging::PagerReport.new(mock(Pager))
+      report.process_report.should == expected.chomp
     end
   end
 end
 
 
-# Process 1 had 2 faults and 15.5 average residency.
-# Process 2 had 4 faults and 5.0 average residency.
-# Process 3 had 4 faults and 2.5 average residency.
-# Process 4 had 4 faults and 5.666666666666667 average residency.
-#
-# The total number of faults is 14 and the overall average residency is 6.083333333333333.
