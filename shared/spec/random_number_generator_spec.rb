@@ -2,8 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe RandomNumberGenerator do
   before(:each) do
-    scheduler_random_numbers_file = File.dirname(__FILE__) + '/../config/scheduler/random_numbers'
-    Configuration.stub!(:random_numbers_file).and_return(scheduler_random_numbers_file)
+    Configuration.random_numbers_file = Configuration::DUMMY_RANDOM_NUMBERS_FILE
     RandomNumberGenerator.clear!
   end
   describe "self.number" do

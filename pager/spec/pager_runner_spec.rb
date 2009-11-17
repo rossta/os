@@ -26,7 +26,7 @@ describe PagerRunner do
       runner.send(:arguments_valid?).should be_false
     end
     it "should be false if replacement algorithm not valid" do
-      runner = PagerRunner.new(["foo", "bar", "400", "4", "5000", "foobar", "0"], mock(PagerCommand))
+      runner = PagerRunner.new(["800", "40", "400", "4", "5000", "foobar", "0"], mock(PagerCommand))
       runner.send(:arguments_valid?).should be_false
     end
     it "should be true if replacement algorithm if valid upcase" do

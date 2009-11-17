@@ -14,16 +14,13 @@ module Paging
     
     def self.random_os(interval, state = nil)
       random = RandomNumberGenerator.number
-      instance.details << "Burst when choosing #{state.to_s} process to run: #{random}" if instance.verbose?
+      Logger.info "Burst when choosing #{state.to_s} process to run: #{random}"
       1 + (random % interval)
     end
 
-    attr_reader :scheduler
-    attr_accessor :details, :states
+    attr_accessor :details
 
-    def initialize(scheduler = nil, processes = [], output_flag = nil)
-      @scheduler    = scheduler
-      @output_flag  = output_flag
+    def initialize(processes = [])
       ProcessTable.load_processes(processes)
       RandomNumberGenerator.clear!
     end
@@ -46,19 +43,6 @@ module Paging
     def details
       @details ||= []
     end
-
-    def states
-      @states ||= []
-    end
-    
-    def verbose?
-      @verbose ||= (@output_flag == "-v" || @output_flag == "--verbose")
-    end
-    
-    def detailed?
-      @detailed ||= (@output_flag == "-d" || @output_flag == "--detailed") || verbose?
-    end
-
     protected
     
     def record_details

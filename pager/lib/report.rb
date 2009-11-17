@@ -1,5 +1,5 @@
 module Paging
-  class PagerReport
+  class Report
     attr_reader :pager
   
     def initialize(pager)
@@ -8,13 +8,13 @@ module Paging
   
     def base_report
       text = []
-      text << "The machine size is 20."
-      text << "The page size is 10."
-      text << "The process size is 10."
-      text << "The job mix number is 2."
-      text << "The number of references per process is 10."
-      text << "The replacement algorithm is random."
-      text << "The level of debugging output is 0"
+      text << "The machine size is #{@pager.machine_size}."
+      text << "The page size is #{@pager.page_size}."
+      text << "The process size is #{@pager.process_size}."
+      text << "The job mix number is #{@pager.job_mix}."
+      text << "The number of references per process is #{@pager.reference_rate}."
+      text << "The replacement algorithm is #{@pager.replacement_algorithm}."
+      text << "The level of debugging output is #{@pager.debug_level}"
       text.join("\n")
     end
   

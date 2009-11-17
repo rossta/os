@@ -1,7 +1,5 @@
 #!/usr/bin/ruby
 require File.dirname(__FILE__) + '/lib/env'
-require 'rubygems'
-
 
 app = PagerRunner.new(ARGV, PagerCommand.new)
 puts app.run
