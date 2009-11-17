@@ -15,6 +15,13 @@ module Paging
       @job_mix      = arguments.shift.to_i
       @reference_rate = arguments.shift.to_i
       @replacement_algorithm = arguments.shift.downcase
+      
+      @page_frame_table = PageFrameTable.new(@machine_size/@page_size)
     end
+    
+    def run
+      
+    end
+    
   end
 end
