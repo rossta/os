@@ -3,12 +3,12 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe Paging::Report do
 
   describe "base_report" do
-    it "should summarize pager inputs" do
-      pager = mock(Pager,
+    it "should summarize simulator inputs" do
+      simulator = mock(Paging::Simulator,
         :machine_size => 20,
         :page_size    => 10,
         :process_size => 10,
-        :job_mix      => 2,
+        :job_mix_number => 2,
         :reference_rate => 10,
         :replacement_algorithm => "random",
         :debug_level    => 0)
@@ -22,7 +22,7 @@ The replacement algorithm is random.
 The level of debugging output is 0
 REPORT
 
-      report = Paging::Report.new(pager)
+      report = Paging::Report.new(simulator)
       report.base_report.should == expected.chomp
     end
   end
@@ -40,7 +40,7 @@ Process 2 had 4 faults and 4.5 average residency.
 The total number of faults is 6 and the overall average residency is 10.0.
 REPORT
       
-      report = Paging::Report.new(mock(Pager))
+      report = Paging::Report.new(mock(Paging::Simulator))
       report.process_report.should == expected.chomp
     end
   end

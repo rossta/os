@@ -3,15 +3,12 @@ class PagerCommand
 
   def run(arguments)
     simulator = Paging::Simulator.new(arguments)
-    to_s
+    self.report = create_report(simulator)
+    report.to_s
   end
 
-  def create_report(pager)
-    self.report = Paging::Report.new(pager)
-  end
-    
-  def to_s
-    report.to_s
+  def create_report(simulator)
+    self.report = Paging::Report.new(simulator)
   end
   
 end

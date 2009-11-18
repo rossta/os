@@ -1,20 +1,20 @@
 module Paging
   class Report
-    attr_reader :pager
+    attr_reader :simulator
   
-    def initialize(pager)
-      @pager = pager
+    def initialize(simulator)
+      @simulator = simulator
     end
   
     def base_report
       text = []
-      text << "The machine size is #{@pager.machine_size}."
-      text << "The page size is #{@pager.page_size}."
-      text << "The process size is #{@pager.process_size}."
-      text << "The job mix number is #{@pager.job_mix}."
-      text << "The number of references per process is #{@pager.reference_rate}."
-      text << "The replacement algorithm is #{@pager.replacement_algorithm}."
-      text << "The level of debugging output is #{@pager.debug_level}"
+      text << "The machine size is #{@simulator.machine_size}."
+      text << "The page size is #{@simulator.page_size}."
+      text << "The process size is #{@simulator.process_size}."
+      text << "The job mix number is #{@simulator.job_mix_number}."
+      text << "The number of references per process is #{@simulator.reference_rate}."
+      text << "The replacement algorithm is #{@simulator.replacement_algorithm}."
+      text << "The level of debugging output is #{@simulator.debug_level}"
       text.join("\n")
     end
   

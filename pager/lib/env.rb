@@ -4,4 +4,4 @@ Dir.glob(File.join(File.dirname(__FILE__), '/*/*.rb')).each {|f| require f }
 
 require 'rubygems'
 
-Configuration.random_numbers_file = File.dirname(__FILE__) + '/../../shared/config/pager/random_numbers'
+Configuration.random_numbers_file = File.dirname(__FILE__) + '/../../pager/config/random_numbers'
