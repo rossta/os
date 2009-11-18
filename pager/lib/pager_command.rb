@@ -3,6 +3,9 @@ class PagerCommand
 
   def run(arguments)
     simulator = Paging::Simulator.new(arguments)
+    
+    simulator.run
+    
     self.report = create_report(simulator)
     report.to_s
   end

@@ -20,17 +20,31 @@ module Paging
       @replacement_algorithm = arguments.shift.downcase
       @debug_level  = arguments.shift.to_i || 0
       
-      @word = 111
       initialize_processes
       RandomNumberGenerator.clear!
     end
     
     def run
       Clock.start
+      process = ProcessTable.processes.first
+      
+      word = (111 * process.number).modulo(self.process_size)
+      
       while !terminated? do
         # select process
+        
+        
+        # select page frame, determine fault/hit
+        frame = page_frames.select_frame(word)
+        page  = process.page_reference(word)
+
+        Logger.record "#{process.number} references word #{self.word} (page #{page}) at time 1: Fault, using free frame #{frame}."
+                      # 1 references word 12 (page 1) at time 2: Hit in frame 0
+        
         # calculate word reference using random quotient
-        # determine fault/hit and page frame
+        
+        word = (word + 1).modulo(self.process_size) # case 1
+        
         cycle_clock
       end
     end
@@ -58,7 +72,7 @@ module Paging
     end
     
     def initialize_processes
-      processes = Array.new(self.job_mix.size) { |i| Process.new(i, self.process_size, self.reference_rate) }
+      processes = Array.new(self.job_mix.size) { |i| Process.new(self.process_size, self.page_size, self.reference_rate, i) }
       ProcessTable.load_processes(processes)
     end
   end
