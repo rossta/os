@@ -3,8 +3,8 @@ class Logger
   def self.init(arg)
     d = arg.slice(0..0).to_i
     v = arg.slice(1..1).to_i
-    debug   = d != 0
-    verbose = v != 0
+    @@debug   = d != 0
+    @@verbose = v != 0
     @@recorder = []
   end
   
@@ -27,15 +27,15 @@ class Logger
     @@verbose ||= false
   end
 
-  def self.verbose=(verbose)
+  def self.verbose(verbose)
     @@verbose = verbose
   end
   
-  def self.debug=(debug)
+  def self.debug(debug)
     @@debug = debug
   end
   
-  def self.spec=(spec)
+  def self.spec(spec)
     @@spec = spec
   end
   

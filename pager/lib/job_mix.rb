@@ -13,7 +13,6 @@ module Paging
       @number = number
     end
 
-
     def size
       1
     end

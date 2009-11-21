@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe PagerCommand do
   before(:each) do
-    # Logger.spec = true
+    # Logger.spec true
   end
   describe "base_report" do
     before(:each) do

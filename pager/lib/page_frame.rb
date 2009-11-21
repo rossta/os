@@ -22,8 +22,8 @@ class PageFrame
   end
   
   def load_page(page)
-    @page = page
-    @page.load!
+    self.page = page
+    self.page.load!
   end
   
 end

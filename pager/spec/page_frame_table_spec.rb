@@ -13,9 +13,9 @@ describe PageFrameTable do
       it "should return page frame 0 if free" do
         @table.free_frame.index.should == 0
       end
-      it "should nil if frame 0 occupied" do
+      it "should return nil if frame 0 occupied" do
         @table.frames.first.stub!(:free?).and_return(false)
-        @table.free_frame.index.should == 0
+        @table.free_frame.should be_nil
       end
     end
   end

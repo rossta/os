@@ -21,7 +21,6 @@ protected
   def arguments_valid?
     integer_list  = @arguments.slice(0..4)
     algorithm     = @arguments.slice(5)
-    Logger.debug(@arguments.slice(6).to_i > 0)
 
     return false if integer_list.size != 5
     return false if algorithm.nil?
