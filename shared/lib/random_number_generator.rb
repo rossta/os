@@ -1,5 +1,4 @@
 class RandomNumberGenerator
-  DENOMINATOR = 2147483648
   
   def self.number
     instance.number
@@ -11,10 +10,6 @@ class RandomNumberGenerator
   
   def self.instance
     @@instance ||= RandomNumberGenerator.new
-  end
-  
-  def self.quotient
-    number / DENOMINATOR.to_f
   end
   
   def initialize

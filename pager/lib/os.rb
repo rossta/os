@@ -14,7 +14,7 @@ module Paging
     
     def self.random_os(interval, state = nil)
       random = RandomNumberGenerator.number
-      Logger.info "Burst when choosing #{state.to_s} process to run: #{random}"
+      Logger.record "Burst when choosing #{state.to_s} process to run: #{random}"
       1 + (random % interval)
     end
 

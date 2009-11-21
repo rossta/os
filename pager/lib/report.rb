@@ -17,6 +17,10 @@ module Paging
       text << "The level of debugging output is #{@simulator.debug_level}"
       text.join("\n")
     end
+    
+    def debug_report
+      Logger.recorder.join("\n")
+    end
   
     def process_report
       text = []
@@ -25,6 +29,10 @@ module Paging
       end
       text << "\nThe total number of faults is #{fault_sum} and the overall average residency is #{overall_avg_residency}."
       text.join("\n")
+    end
+    
+    def to_s
+      base_report
     end
     
     protected

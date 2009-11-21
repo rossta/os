@@ -7,24 +7,25 @@ module Paging
     def self.create(number)
       new(number)
     end
-    
+
     attr_reader :number
     def initialize(number)
       @number = number
     end
-    
+
+
     def size
-      4
+      1
     end
-    
+
     def a
       1.0
     end
-    
+
     def b
       0
     end
-    
+
     def c
       0
     end
