@@ -37,7 +37,7 @@ module Paging
       end
       summary_text = "\nThe total number of faults is #{fault_sum}"
       if eviction_sum > 0
-        summary_text += " and the overall average residency is #{overall_avg_residency}."
+        summary_text += " and the overall average residency is #{format("%.1f", overall_avg_residency)}."
       else
         summary_text += ".\n\t"
         summary_text += "With no evictions, the overall average residence is undefined."

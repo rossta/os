@@ -9,13 +9,16 @@ describe Paging::Process do
       @process = Paging::Process.new(size, page_size, 5)
     end
     it "should return page 0 referenced for word 5" do
-      @process.page_reference(5).number.should == 0
+      @process.word = 5
+      @process.page_reference.number.should == 0
     end
     it "should return page 1 references for word 11" do
-      @process.page_reference(11).number.should == 1
+      @process.word = 11
+      @process.page_reference.number.should == 1
     end
     it "should increment reference counter" do
-      @process.page_reference(11).number.should == 1
+      @process.word = 11
+      @process.page_reference.number.should == 1
       @process.references.should == 1
     end
   end

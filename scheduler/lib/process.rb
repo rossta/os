@@ -23,6 +23,10 @@ module Scheduling
       text = "( #{arrival_time} #{max_cpu} #{cpu_time} #{max_io} )"
     end
     
+    def number
+      self.index + 1
+    end
+    
     def turnaround_time
       finishing_time - arrival_time
     end

@@ -1,21 +1,21 @@
 module Paging
   class Process
     attr_reader :index, :size, :page_size, :reference_total, :pages
-    attr_accessor :references, :faults
+    attr_accessor :references, :faults, :word
     def initialize(size, page_size, reference_total, index = 0)
-      @index = index
-      @size  = size
-      @page_size = page_size
+      @index      = index
+      @size       = size
+      @page_size  = page_size
       @reference_total = reference_total
       @references = 0
-      @faults = 0
-      
-      @pages = Array.new(@size/@page_size) { |i| Page.new(i, self) }
+      @faults     = 0
+      @word       = (111 * number).modulo(size)
+      @pages      = Array.new(@size/@page_size) { |i| Page.new(i, self) }
     end
     
-    def page_reference(word)
+    def page_reference
       self.references += 1
-      raise "Error: reference total exceeded" if self.references > self.reference_total
+      raise "Error: reference total exceeded for process #{number}" if self.references > self.reference_total
       pages.detect { |p| p.number == (word / page_size) }
     end
     

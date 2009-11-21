@@ -1,5 +1,6 @@
 module Paging
   class Simulator
+    QUANTUM = 3
 
     attr_reader :machine_size, :page_size, :process_size, :job_mix, :reference_rate, :replacement_algorithm, :debug_level
     attr_accessor :word
@@ -15,7 +16,7 @@ module Paging
       @machine_size = arguments.shift.to_i
       @page_size    = arguments.shift.to_i
       @process_size = arguments.shift.to_i
-      @job_mix      = Paging::JobMix.create(arguments.shift.to_i)
+      @job_mix      = JobMix.create(arguments.shift.to_i)
       @reference_rate = arguments.shift.to_i
       @replacement_algorithm = arguments.shift.downcase
       @debug_level  = arguments.shift || "0"
@@ -29,16 +30,14 @@ module Paging
       Clock.start
       process = ProcessTable.processes.first
 
-      word = (111 * process.number).modulo(self.process_size)
-
       while !terminated? do
         cycle_clock
-        # select process
 
         # select page frame, determine fault/hit
-        page    = process.page_reference(word)
+        word    = process.word
+        page    = process.page_reference
         result  = ["#{process.number} references word #{word} (page #{page.number}) at time #{Clock.time}:"]
-        
+
         if (frame = page_frames.find_frame(page))
           result << "Hit in frame #{frame.index}."
         else
@@ -58,8 +57,12 @@ module Paging
         # calculate word reference using random quotient
         quotient = random_quotient(process.number)
 
-        word = (word + 1).modulo(self.process_size) # case 1
-
+        process.word = (process.word + 1).modulo(self.process_size) # case 1
+        
+        if context_switch?(process)
+          process = switch(process)
+          process.word = (process.word + 1).modulo(self.process_size) # case 1
+        end
       end
     end
 
@@ -85,9 +88,18 @@ module Paging
       Logger.record "#{process_num} uses random number: #{number}", :level => :verbose
       number / DENOMINATOR.to_f
     end
-    
+
     def random_quotient(process_num = 1)
       self.class.random_quotient(process_num)
+    end
+
+    def switch(process)
+      ProcessTable.rotate(process)
+    end
+
+    def context_switch?(process)
+      return false if self.job_mix.size == 1
+      Clock.time.modulo(QUANTUM) == 0 || process.terminated?
     end
 
     protected

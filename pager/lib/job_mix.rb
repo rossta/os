@@ -14,7 +14,12 @@ module Paging
     end
 
     def size
-      1
+      case number
+      when 2
+        4
+      else
+        1
+      end
     end
 
     def a
