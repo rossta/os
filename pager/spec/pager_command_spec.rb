@@ -97,10 +97,10 @@ The total number of faults is 2 and the overall average residency is 9.0.
         INPUTS
         @inputs = @inputs.split("\n")
       end
-      [0,1,2].each do |line|
-        it "should process input line #{line}" do
-          num = line + 1
-          Logger.info "---Input #{line}---"
+      [1,2,3,4].each do |num|
+        it "should process input #{num}" do
+          line = num - 1
+          Logger.info "---Input #{num}---"
           Logger.info @inputs[line]
           Logger.info ""
           command = PagerCommand.new

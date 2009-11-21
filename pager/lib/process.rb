@@ -16,7 +16,9 @@ module Paging
     def page_reference
       self.references += 1
       raise "Error: reference total exceeded for process #{number}" if self.references > self.reference_total
-      pages.detect { |p| p.number == (word / page_size) }
+      page = pages.detect { |p| p.number == (word / page_size) }
+      page.reference!
+      page
     end
     
     def terminated?

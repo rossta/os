@@ -18,7 +18,7 @@ class PageFrameTable
   end
 
   def load_new_frame(page)
-    frame = frames.first
+    frame = frames.reverse.detect { |f| f.free? }
     load_frame(frame, page)
   end
   
@@ -27,9 +27,9 @@ class PageFrameTable
     frame
   end
 
-  def find_page_evict_frame
+  def find_eviction_frame
     return nil if free_frame?
-    frames.first
+    frames.sort.first
   end
 
   private

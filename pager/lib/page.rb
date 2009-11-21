@@ -1,7 +1,7 @@
 module Paging
   class Page
     attr_reader :process
-    attr_accessor :number, :load_time, :evict_time, :residency, :evictions
+    attr_accessor :number, :load_time, :evict_time, :residency, :evictions, :reference
     def initialize(number, process)
       @number   = number
       @process  = process
@@ -23,6 +23,10 @@ module Paging
 
     def size
       process.page_size
+    end
+    
+    def reference!
+      @reference = Clock.time
     end
 
   end

@@ -26,4 +26,9 @@ class PageFrame
     self.page.load!
   end
   
+  def <=>(other)
+    return -1 if self.page.reference < other.page.reference
+    return 1  if self.page.reference > other.page.reference
+    return 0
+  end
 end

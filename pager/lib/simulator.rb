@@ -2,6 +2,45 @@ module Paging
   class Simulator
     QUANTUM = 3
 
+    def run
+      Clock.start
+      process = ProcessTable.processes.first
+
+      while !terminated? do
+        cycle_clock
+
+        # select page frame, determine fault/hit
+        word    = process.word
+        page    = process.page_reference
+        result  = ["#{process.number} references word #{word} (page #{page.number}) at time #{Clock.time}:"]
+
+        if (frame = page_frames.find_frame(page))
+          result << "Hit in frame #{frame.index}."
+        else
+          if (frame = page_frames.find_eviction_frame)
+            result << "Fault, evicting page #{frame.page_number} of #{frame.process_number} from frame #{frame.index}."
+            frame.evict_page!
+            page_frames.load_frame(frame, page)
+          else
+            frame = page_frames.load_new_frame(page)
+            result << "Fault, using free frame #{frame.index}."
+          end
+          process.increment_faults
+        end
+
+        Logger.record result.join(" ")
+
+        # calculate word reference using random quotient
+        quotient = random_quotient(process.number)
+
+        process.word = (process.word + 1).modulo(self.process_size) # case 1
+        
+        if context_switch?(process)
+          process = switch(process)
+        end
+      end
+    end
+
     attr_reader :machine_size, :page_size, :process_size, :job_mix, :reference_rate, :replacement_algorithm, :debug_level
     attr_accessor :word
 
@@ -24,46 +63,6 @@ module Paging
       initialize_processes
       RandomNumberGenerator.clear!
       Logger.init(@debug_level)
-    end
-
-    def run
-      Clock.start
-      process = ProcessTable.processes.first
-
-      while !terminated? do
-        cycle_clock
-
-        # select page frame, determine fault/hit
-        word    = process.word
-        page    = process.page_reference
-        result  = ["#{process.number} references word #{word} (page #{page.number}) at time #{Clock.time}:"]
-
-        if (frame = page_frames.find_frame(page))
-          result << "Hit in frame #{frame.index}."
-        else
-          if (frame = page_frames.find_page_evict_frame)
-            result << "Fault, evicting page #{frame.page_number} of #{frame.process_number} from frame #{frame.index}."
-            frame.evict_page!
-            page_frames.load_frame(frame, page)
-          else
-            frame = page_frames.load_new_frame(page)
-            result << "Fault, using free frame #{frame.index}."
-          end
-          process.increment_faults
-        end
-
-        Logger.record result.join(" ")
-
-        # calculate word reference using random quotient
-        quotient = random_quotient(process.number)
-
-        process.word = (process.word + 1).modulo(self.process_size) # case 1
-        
-        if context_switch?(process)
-          process = switch(process)
-          process.word = (process.word + 1).modulo(self.process_size) # case 1
-        end
-      end
     end
 
     def page_frames
