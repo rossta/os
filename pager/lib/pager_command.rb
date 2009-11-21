@@ -7,6 +7,10 @@ class PagerCommand
     simulator.run
     
     self.report = create_report(simulator)
+    to_s
+  end
+  
+  def to_s
     report.to_s
   end
 

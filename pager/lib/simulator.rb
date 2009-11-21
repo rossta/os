@@ -82,7 +82,7 @@ module Paging
     DENOMINATOR = 2147483648
     def self.random_quotient(process_num = 1)
       number = RandomNumberGenerator.number
-      Logger.record "#{process_num} uses random number: #{number}"
+      Logger.record "#{process_num} uses random number: #{number}", :level => :verbose
       number / DENOMINATOR.to_f
     end
     

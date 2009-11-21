@@ -4,6 +4,44 @@ describe PagerCommand do
   before(:each) do
     # Logger.spec true
   end
+  
+  describe "inputs" do
+    before(:each) do
+      @inputs = <<-INPUTS
+10 10 20 1 10 lru 0
+10 10 10 1 100 lru 0
+10 10 10 2 10 lru 0
+20 10 10 2 10 lru 0
+20 10 10 2 10 random 0
+20 10 10 2 10 lifo 0
+20 10 10 3 10 lru 0
+20 10 10 3 10 lifo 0
+20 10 10 4 10 lru 0
+20 10 10 4 10 random 0
+90 10 40 4 100 lru 0
+40 10 90 1 100 lru 0
+40 10 90 1 100 lifo 0
+800 40 400 4 5000 lru 0
+10 5 30 4 3 random 0
+      INPUTS
+      @inputs = @inputs.split("\n")
+    end
+    [0,1].each do |line|
+      it "should process input line #{line}" do
+        num = line + 1
+        Logger.info "---Input #{line}---"
+        Logger.info @inputs[line]
+        Logger.info ""
+        command = PagerCommand.new
+        command.run(@inputs[line].split(" "))
+        Logger.info ""
+        result    = command.to_s.gsub(/[ \n\t]+/, " ")
+        expected  = File.open(FIXTURES + "output_#{num}.txt").read.strip.gsub(/[ \n\t]+/, " ")
+        result.should == expected
+      end
+    end
+  end
+  
   describe "base_report" do
     before(:each) do
       @command = PagerCommand.new

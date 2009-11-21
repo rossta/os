@@ -9,12 +9,13 @@ class Logger
   end
   
   def self.info(text)
-    return unless debug?
+    return unless debug? || spec?
     puts text 
   end
   
-  def self.record(text, verbose_only = false)
-    return if verbose_only && !verbose?
+  def self.record(text, options = {})
+    return unless debug?
+    return if options[:level] == :verbose && !verbose?
     puts        text if spec?
     recorder << text
   end
