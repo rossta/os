@@ -86,17 +86,6 @@ module Paging
       Logger.record "#{process.number} uses random number: #{number}", :level => :verbose
     end
 
-    # TODO deprecated
-    DENOMINATOR = 2147483648
-    def self.random_quotient(process)
-      ("%0.1f" % (RandomNumberGenerator.number / DENOMINATOR.to_f)).to_f
-    end
-
-    # TODO deprecated
-    def random_quotient(process_num = 1)
-      self.class.random_quotient(process_num)
-    end
-
     def switch(process)
       ProcessTable.rotate(process)
     end
@@ -126,6 +115,11 @@ module Paging
       when :lru
         PageFrameTable.new(size) do |frames|
           frames.sort.first
+        end
+      when :random
+        PageFrameTable.new(size) do |frames|
+          index = RandomNumberGenerator.number.modulo size
+          frames[index]
         end
       else
         raise "Replacement algorithm not recognized"

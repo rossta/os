@@ -30,8 +30,10 @@ REPORT
   describe "process_report" do
     it "should summarize process faults and residency" do
       Paging::ProcessTable.stub!(:processes).and_return([
-        mock(Process, :faults => 2, :average_residency => 15.5, :total_evictions => 1),
-        mock(Process, :faults => 4, :average_residency => 4.5, :total_evictions => 1)
+        mock(Process, 
+        :faults => 2, :average_residency => 15.5, :total_evictions => 1, :total_residency => 10),
+        mock(Process, 
+        :faults => 4, :average_residency => 4.5,  :total_evictions => 1, :total_residency => 10)
       ])
       expected = <<-REPORT
 Process 1 had 2 faults and 15.5 average residency.

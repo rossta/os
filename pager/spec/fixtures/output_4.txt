@@ -11,4 +11,4 @@ Process 2 had 4 faults and 5.0 average residency.
 Process 3 had 4 faults and 6.0 average residency.
 Process 4 had 4 faults and 5.33333333333333 average residency.
 
-The total number of faults is 16 and the overall average residency is 5.3.
+The total number of faults is 16 and the overall average residency is 5.28571428571429.

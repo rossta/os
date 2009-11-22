@@ -37,7 +37,8 @@ module Paging
       end
       summary_text = "\nThe total number of faults is #{fault_sum}"
       if eviction_sum > 0
-        summary_text += " and the overall average residency is #{format("%.1f", overall_avg_residency)}."
+        # format("%.1f", overall_avg_residency)
+        summary_text += " and the overall average residency is #{overall_avg_residency}."
       else
         summary_text += ".\n\t"
         summary_text += "With no evictions, the overall average residence is undefined."
@@ -57,11 +58,15 @@ module Paging
     end
     
     def eviction_sum
-      ProcessTable.processes.inject(0) { |sum, p| sum + p.total_evictions }
+      @eviction_sum ||= ProcessTable.processes.inject(0) { |sum, p| sum + p.total_evictions }
+    end
+    
+    def residency_sum
+      @residency_sum ||= ProcessTable.processes.inject(0) { |sum, p| sum + p.total_residency }
     end
     
     def overall_avg_residency
-      ProcessTable.processes.map { |p| p.average_residency }.inject(0) { |sum, val| sum + val } / ProcessTable.size
+      residency_sum.to_f / eviction_sum
     end
   end
 end

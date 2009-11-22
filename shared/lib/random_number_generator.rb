@@ -18,7 +18,8 @@ class RandomNumberGenerator
 
   DENOMINATOR = 2147483648
   def self.quotient
-    ("%0.1f" % (number / DENOMINATOR.to_f)).to_f
+    num = number
+    (num.to_f / DENOMINATOR * 10).to_i / 10.0
   end
 
   def initialize
@@ -26,13 +27,13 @@ class RandomNumberGenerator
   end
 
   def number
-    number = @reader.readline.strip.to_i
-    notify_observers(number)
-    number
+    num = @reader.readline.strip.to_i
+    notify_observers(num)
+    num
   end
 
-  def notify_observers(number)
-    observers.each { |o| o.random_number_used(number) }
+  def notify_observers(num)
+    observers.each { |o| o.random_number_used(num) }
   end
   
   def register(observer)

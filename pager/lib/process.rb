@@ -34,8 +34,11 @@ module Paging
     end
     
     def average_residency
-      total_residency = self.pages.inject(0) { |sum, p| sum + p.residency }
       total_residency.to_f / total_evictions.to_f
+    end
+    
+    def total_residency
+      self.pages.inject(0) { |sum, p| sum + p.residency }
     end
     
     def total_evictions
