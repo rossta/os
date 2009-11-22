@@ -4,7 +4,7 @@ module Paging
 
     def run
       Clock.start
-      process = ProcessTable.processes.first
+      self.process = ProcessTable.processes.first
 
       while !terminated? do
         cycle_clock
@@ -31,18 +31,18 @@ module Paging
         Logger.record result.join(" ")
 
         # calculate word reference using random quotient
-        quotient = random_quotient(process.number)
+        quotient = RandomNumberGenerator.quotient
 
-        process.word = (process.word + 1).modulo(self.process_size) # case 1
-        
+        process.word = (process.word + 1).modulo(process_size) # case 1
+
         if context_switch?(process)
-          process = switch(process)
+          self.process = switch(process)
         end
       end
     end
 
     attr_reader :machine_size, :page_size, :process_size, :job_mix, :reference_rate, :replacement_algorithm, :debug_level
-    attr_accessor :word
+    attr_accessor :process
 
     def initialize(arguments)
       # M, the machine size in words.
@@ -62,11 +62,12 @@ module Paging
 
       initialize_processes
       RandomNumberGenerator.clear!
+      RandomNumberGenerator.register_observer(self)
       Logger.init(@debug_level)
     end
 
     def page_frames
-      @page_frames ||= PageFrameTable.new(self.machine_size/self.page_size)
+      @page_frames ||= initialize_page_frame_table
     end
 
     def word_reference(&block)
@@ -81,13 +82,17 @@ module Paging
       self.job_mix.number
     end
 
-    DENOMINATOR = 2147483648
-    def self.random_quotient(process_num = 1)
-      number = RandomNumberGenerator.number
-      Logger.record "#{process_num} uses random number: #{number}", :level => :verbose
-      number / DENOMINATOR.to_f
+    def random_number_used(number)
+      Logger.record "#{process.number} uses random number: #{number}", :level => :verbose
     end
 
+    # TODO deprecated
+    DENOMINATOR = 2147483648
+    def self.random_quotient(process)
+      ("%0.1f" % (RandomNumberGenerator.number / DENOMINATOR.to_f)).to_f
+    end
+
+    # TODO deprecated
     def random_quotient(process_num = 1)
       self.class.random_quotient(process_num)
     end
@@ -109,8 +114,22 @@ module Paging
 
     def initialize_processes
       ProcessTable.clear!
-      processes = Array.new(self.job_mix.size) { |i| Process.new(self.process_size, self.page_size, self.reference_rate, i) }
+      processes = Array.new(self.job_mix.size) do |i|
+        Process.new(self.process_size, self.page_size, self.reference_rate, i)
+      end
       ProcessTable.load_processes(processes)
+    end
+
+    def initialize_page_frame_table
+      size = self.machine_size/self.page_size
+      case replacement_algorithm.to_sym
+      when :lru
+        PageFrameTable.new(size) do |frames|
+          frames.sort.first
+        end
+      else
+        raise "Replacement algorithm not recognized"
+      end
     end
   end
 end

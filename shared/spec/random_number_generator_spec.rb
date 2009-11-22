@@ -22,4 +22,14 @@ describe RandomNumberGenerator do
       RandomNumberGenerator.number.should == 1804289383
     end
   end
+  
+  describe "self.random_quotient" do
+    it "should return random_number / DENOMINATOR" do
+      number      = 1804289383
+      denominator = 2147483648.to_f
+      result      = ("%0.1f" % (number / denominator)).to_f
+      RandomNumberGenerator.quotient.should == result
+    end
+  end
+  
 end

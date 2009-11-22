@@ -1,8 +1,9 @@
 class PageFrameTable
-  attr_reader :frames
-  def initialize(size)
+  attr_reader :frames, :replacement_strategy
+  def initialize(size, &block)
     @size = size
     @frames = Array.new(@size) { |i| PageFrame.new(i) }
+    @replacement_strategy = block
   end
 
   def free_frame
@@ -29,9 +30,7 @@ class PageFrameTable
 
   def find_eviction_frame
     return nil if free_frame?
-    frames.sort.first
+    replacement_strategy.call frames
   end
-
-  private
 
 end
