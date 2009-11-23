@@ -97,7 +97,7 @@ The total number of faults is 2 and the overall average residency is 9.0.
         INPUTS
         @inputs = @inputs.split("\n")
       end
-      [1,2,3,4,5,6,7,8].each do |num|
+      [1,2,3,4,5,6,7,8,9].each do |num|
         it "should process input #{num}" do
           line = num - 1
           Logger.info "---Input #{num}---"

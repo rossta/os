@@ -30,7 +30,7 @@ module Paging
 
         Logger.record result.join(" ")
 
-        process.word = memory_referencer.calculate(process.word)
+        process.word = memory_referencer.calculate(process)
 
         if context_switch?(process)
           self.process = switch(process)
@@ -56,7 +56,7 @@ module Paging
       @reference_rate = arguments.shift.to_i
       @replacement_algorithm = arguments.shift.downcase
       @debug_level  = arguments.shift || "0"
-
+      
       initialize_processes
       @memory_referencer = MemoryReferencer.new(@process_size, @job_mix)
       RandomNumberGenerator.clear!
@@ -126,7 +126,7 @@ module Paging
         end
       when :lifo
         PageFrameTable.new(size) do |frames|
-          frames.sort { |a,b| 
+          frames.sort { |a,b|
             sort = 0
             sort = -1 if a.page.load_time > b.page.load_time
             sort = 1  if a.page.load_time < b.page.load_time
@@ -137,14 +137,18 @@ module Paging
         raise "Replacement algorithm not recognized"
       end
     end
-    
+
     class MemoryReferencer
       attr_reader :job_mix, :process_size
       def initialize(process_size, job_mix)
         @process_size = process_size
-        @job_mix = job_mix
+        @job_mix      = job_mix
       end
-      def calculate(word)
+
+      def calculate(process)
+        job_mix.process = process
+        word = process.word
+
         # calculate word reference using random quotient
         quotient = RandomNumberGenerator.quotient
         if quotient < job_mix.a
