@@ -27,7 +27,9 @@ describe RandomNumberGenerator do
     it "should return random_number / DENOMINATOR" do
       number      = 1804289383
       denominator = 2147483648.to_f
-      result      = ("%0.1f" % (number / denominator)).to_f
+      
+      result      = (number.to_f / denominator * 1000).to_i / 1000.0
+      
       RandomNumberGenerator.quotient.should == result
     end
   end
