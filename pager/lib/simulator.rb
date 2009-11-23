@@ -114,12 +114,26 @@ module Paging
       case replacement_algorithm.to_sym
       when :lru
         PageFrameTable.new(size) do |frames|
-          frames.sort.first
+          frames.sort { |a,b|
+            sort = 0
+            sort = -1 if a.page.reference < b.page.reference
+            sort = 1  if a.page.reference > b.page.reference
+            sort
+          }.first
         end
       when :random
         PageFrameTable.new(size) do |frames|
           index = RandomNumberGenerator.number.modulo size
           frames[index]
+        end
+      when :lifo
+        PageFrameTable.new(size) do |frames|
+          frames.sort { |a,b| 
+            sort = 0
+            sort = -1 if a.page.load_time > b.page.load_time
+            sort = 1  if a.page.load_time < b.page.load_time
+            sort
+          }.first
         end
       else
         raise "Replacement algorithm not recognized"

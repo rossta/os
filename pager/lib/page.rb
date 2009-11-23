@@ -24,7 +24,7 @@ module Paging
     def size
       process.page_size
     end
-    
+
     def reference!
       @reference = Clock.time
     end
