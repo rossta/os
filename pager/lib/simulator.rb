@@ -30,10 +30,7 @@ module Paging
 
         Logger.record result.join(" ")
 
-        # calculate word reference using random quotient
-        quotient = RandomNumberGenerator.quotient
-
-        process.word = (process.word + 1).modulo(process_size) # case 1
+        process.word = memory_referencer.calculate(process.word)
 
         if context_switch?(process)
           self.process = switch(process)
@@ -41,7 +38,7 @@ module Paging
       end
     end
 
-    attr_reader :machine_size, :page_size, :process_size, :job_mix, :reference_rate, :replacement_algorithm, :debug_level
+    attr_reader :machine_size, :page_size, :process_size, :job_mix, :reference_rate, :replacement_algorithm, :debug_level, :memory_referencer
     attr_accessor :process
 
     def initialize(arguments)
@@ -61,6 +58,7 @@ module Paging
       @debug_level  = arguments.shift || "0"
 
       initialize_processes
+      @memory_referencer = MemoryReferencer.new(@process_size, @job_mix)
       RandomNumberGenerator.clear!
       RandomNumberGenerator.register_observer(self)
       Logger.init(@debug_level)
@@ -137,6 +135,27 @@ module Paging
         end
       else
         raise "Replacement algorithm not recognized"
+      end
+    end
+    
+    class MemoryReferencer
+      attr_reader :job_mix, :process_size
+      def initialize(process_size, job_mix)
+        @process_size = process_size
+        @job_mix = job_mix
+      end
+      def calculate(word)
+        # calculate word reference using random quotient
+        quotient = RandomNumberGenerator.quotient
+        if quotient < job_mix.a
+          (word + 1).modulo(process_size) # case 1
+        elsif quotient < job_mix.a_b
+          (word - 5).modulo(process_size) # case 2
+        elsif quotient < job_mix.a_b_c
+          (word + 4).modulo(process_size) # case 3
+        else
+          RandomNumberGenerator.number.modulo process_size
+        end
       end
     end
   end
