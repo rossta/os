@@ -34,12 +34,13 @@ module Paging
 
         if context_switch?(process)
           self.process = switch(process)
+          self.q = 0
         end
       end
     end
 
     attr_reader :machine_size, :page_size, :process_size, :job_mix, :reference_rate, :replacement_algorithm, :debug_level, :memory_referencer
-    attr_accessor :process
+    attr_accessor :process, :q
 
     def initialize(arguments)
       # M, the machine size in words.
@@ -57,6 +58,7 @@ module Paging
       @replacement_algorithm = arguments.shift.downcase
       @debug_level  = arguments.shift || "0"
       
+      @q = 0
       initialize_processes
       @memory_referencer = MemoryReferencer.new(@process_size, @job_mix)
       RandomNumberGenerator.clear!
@@ -90,13 +92,14 @@ module Paging
 
     def context_switch?(process)
       return false if self.job_mix.size == 1
-      Clock.time.modulo(QUANTUM) == 0 || process.terminated?
+      q == QUANTUM || process.terminated?
     end
-
+    
     protected
 
     def cycle_clock
-      Clock.cycle       unless terminated?
+      self.q += 1
+      Clock.cycle unless terminated?
     end
 
     def initialize_processes

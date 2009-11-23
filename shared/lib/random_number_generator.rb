@@ -19,7 +19,7 @@ class RandomNumberGenerator
   DENOMINATOR = 2147483648
   def self.quotient
     num = number
-    (num.to_f / DENOMINATOR * 10).to_i / 10.0
+    (num.to_f / DENOMINATOR * 1000).to_i / 1000.0
   end
 
   def initialize
